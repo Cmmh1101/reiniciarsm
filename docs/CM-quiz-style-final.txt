@@ -1,0 +1,199 @@
+<style>
+  #ny-quiz, #ny-quiz * { box-sizing: border-box; }
+
+  #ny-quiz {
+    display: none;
+    --ny-ink: #14192B;
+    --ny-paper: #EDE6D8;
+    --ny-terracotta: #BE5A34;
+    --ny-sage: #6E7F5C;
+    --ny-ochre: #E1D6C2;
+
+    width: 100%;
+    padding: 96px 8vw 100px;
+    background: var(--ny-ink);
+    color: var(--ny-paper);
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+
+  #ny-quiz.ny-quiz--visible { display: block; }
+  #ny-quiz link, #ny-quiz style { display: none; }
+
+  #ny-quiz .ny-screen {
+    display: none;
+    max-width: 640px;
+    margin: 0 auto;
+    animation: ny-fade 0.35s ease;
+  }
+
+  #ny-quiz .ny-screen--active { display: block; }
+
+  @keyframes ny-fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  #ny-quiz .ny-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ny-terracotta);
+    margin: 0 0 12px;
+  }
+
+  #ny-quiz .ny-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(26px, 5vw, 36px);
+    line-height: 1.15;
+    margin: 0 0 16px;
+    font-weight: 600;
+    color: var(--ny-paper);
+  }
+
+  #ny-quiz .ny-title--sm { font-size: clamp(22px, 4vw, 28px); }
+
+  #ny-quiz .ny-lead {
+    font-size: 16px;
+    line-height: 1.55;
+    color: rgba(237,230,216,0.8);
+    margin: 0 0 28px;
+  }
+
+  #ny-quiz .ny-btn {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 14px 28px;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  #ny-quiz .ny-btn--primary {
+    background: var(--ny-terracotta) !important;
+    color: #ffffff !important;
+  }
+
+  #ny-quiz .ny-btn--primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(190,90,52,0.5);
+  }
+
+  #ny-quiz .ny-progress {
+    max-width: 640px;
+    margin: 0 auto 32px;
+    height: 4px;
+    background: rgba(237,230,216,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    display: none;
+  }
+
+  #ny-quiz[data-screen="questions"] .ny-progress { display: block; }
+
+  #ny-quiz .ny-progress__bar {
+    height: 100%;
+    width: 0%;
+    background: var(--ny-sage);
+    transition: width 0.3s ease;
+  }
+
+  #ny-quiz .ny-question__count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--ny-sage);
+    margin: 0 0 8px;
+  }
+
+  #ny-quiz .ny-question__text {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(20px, 4vw, 26px);
+    color: var(--ny-paper);
+    margin: 0 0 24px;
+    font-weight: 600;
+  }
+
+  #ny-quiz .ny-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  #ny-quiz .ny-option {
+    text-align: left;
+    background: #ffffff !important;
+    color: var(--ny-ink) !important;
+    border: 1px solid rgba(20,25,43,0.15);
+    border-radius: 3px;
+    padding: 14px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  #ny-quiz .ny-option:hover {
+    border-color: var(--ny-terracotta);
+    background: #fdf1ec !important;
+    color: var(--ny-ink) !important;
+  }
+
+  #ny-quiz .ny-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 420px;
+  }
+
+  #ny-quiz .ny-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ny-paper);
+  }
+
+  #ny-quiz .ny-field input {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    padding: 12px 14px;
+    border: 1px solid rgba(237,230,216,0.25);
+    border-radius: 3px;
+    background: #ffffff !important;
+    color: var(--ny-ink) !important;
+  }
+
+  #ny-quiz .ny-field--hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  #ny-quiz .ny-error {
+    color: var(--ny-terracotta);
+    font-size: 14px;
+    margin: 0;
+    min-height: 1.1em;
+  }
+
+  #ny-quiz .ny-result__pillar {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--ny-ochre);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 16px;
+  }
+
+  @media (max-width: 480px) {
+    #ny-quiz { padding: 60px 6vw 70px; }
+  }
+</style>

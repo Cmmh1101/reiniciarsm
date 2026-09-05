@@ -1,0 +1,538 @@
+<div id="ny-quiz" class="ny-quiz" data-screen="questions">
+
+  <!-- Barra de progreso (solo visible durante las preguntas) -->
+  <div class="ny-progress" aria-hidden="true">
+    <div class="ny-progress__bar" id="ny-progress-bar"></div>
+  </div>
+
+  <!-- Pantallas 1-8: Preguntas (generadas por JS) -->
+  <section class="ny-screen ny-screen--active" data-screen-id="questions">
+    <div class="ny-question">
+      <p class="ny-question__count" id="ny-q-count"></p>
+      <h2 class="ny-question__text" id="ny-q-text"></h2>
+      <div class="ny-options" id="ny-q-options"></div>
+    </div>
+  </section>
+
+  <!-- Pantalla: Captura -->
+  <section class="ny-screen" data-screen-id="capture">
+    <p class="ny-eyebrow">Ya casi tienes tu resultado</p>
+    <h2 class="ny-title ny-title--sm">¿A dónde te enviamos tu diagnóstico?</h2>
+    <form class="ny-form" id="ny-capture-form" novalidate>
+      <label class="ny-field">
+        <span>Nombre</span>
+        <input type="text" name="name" id="ny-name" autocomplete="given-name" required>
+      </label>
+      <label class="ny-field">
+        <span>Correo electrónico</span>
+        <input type="email" name="email" id="ny-email" autocomplete="email" required>
+      </label>
+      <!-- Honeypot anti-spam: campo oculto, un bot lo rellenará, un humano no lo ve -->
+      <label class="ny-field ny-field--hp" aria-hidden="true">
+        <span>No llenar este campo</span>
+        <input type="text" name="empresa" id="ny-hp" tabindex="-1" autocomplete="off">
+      </label>
+      <p class="ny-error" id="ny-form-error" role="alert"></p>
+      <button type="submit" class="ny-btn ny-btn--primary" id="ny-submit-btn">Ver mi resultado</button>
+    </form>
+  </section>
+
+  <!-- Pantalla: Resultado -->
+  <section class="ny-screen" data-screen-id="result">
+    <p class="ny-eyebrow">Tu arquetipo Next You</p>
+    <h2 class="ny-title ny-title--sm" id="ny-result-archetype"></h2>
+    <p class="ny-result__pillar" id="ny-result-pillar"></p>
+    <p class="ny-lead" id="ny-result-description"></p>
+    <a class="ny-btn ny-btn--primary" id="ny-result-cta" href="/comunidad-next-you/">Únete a la Comunidad Next You</a>
+  </section>
+
+</div>
+
+<style>
+  #ny-quiz, #ny-quiz * { box-sizing: border-box; }
+
+  /* Oculto por defecto: se revela al hacer clic en el botón nativo de portada.
+     Ocupa todo el ancho de la sección, igual que el resto del sitio —
+     el ancho máximo de lectura se controla en .ny-screen, no aquí. */
+  #ny-quiz {
+    display: none;
+    --ny-ink: #14192B;
+    --ny-paper: #14192b;
+    --ny-terracotta: #BE5A34;
+    --ny-sage: #6E7F5C;
+    --ny-ochre: #e1d6c2;
+
+    width: 100%;
+    padding: 96px 8vw 100px;
+    background: var(--ny-paper);
+    color: var(--ny-ink);
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+
+  #ny-quiz.ny-quiz--visible { display: block; }
+
+  #ny-quiz link, #ny-quiz style { display: none; }
+
+  .ny-screen {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .ny-eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ny-terracotta);
+    margin: 0 0 0.75rem;
+  }
+
+  .ny-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.6rem, 5vw, 2.25rem);
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    font-weight: 600;
+  }
+
+  .ny-title--sm { font-size: clamp(1.35rem, 4vw, 1.75rem); }
+
+  .ny-lead {
+    font-size: 1rem;
+    line-height: 1.55;
+    color: rgba(237,230,216,0.8);
+    margin: 0 0 1.75rem;
+  }
+
+  .ny-btn {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .ny-btn--primary {
+    background: var(--ny-terracotta);
+    color: var(--ny-paper);
+  }
+
+  .ny-btn--primary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(190,90,52,0.35); }
+
+  .ny-screen-inner { display: none; animation: ny-fade 0.35s ease; }
+  .ny-screen--active { display: block; }
+
+  @keyframes ny-fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .ny-progress {
+    max-width: 640px;
+    margin: 0 auto 2rem;
+    height: 4px;
+    background: rgba(237,230,216,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+    display: none;
+  }
+
+  #ny-quiz[data-screen="questions"] .ny-progress { display: block; }
+
+  .ny-progress__bar {
+    height: 100%;
+    width: 0%;
+    background: var(--ny-sage);
+    transition: width 0.3s ease;
+  }
+
+  .ny-question__count {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--ny-sage);
+    margin: 0 0 0.5rem;
+  }
+
+  .ny-question__text {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(1.25rem, 4vw, 1.6rem);
+    color: var(--ny-ochre);
+    margin: 0 0 1.5rem;
+    font-weight: 600;
+  }
+
+  .ny-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .ny-option {
+    text-align: left;
+    background: #fff;
+    border: 1px solid rgba(20,25,43,0.15);
+    border-radius: 3px;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+
+  .ny-option:hover {
+    border-color: var(--ny-terracotta);
+    background: rgba(190,90,52,0.06);
+  }
+
+  .ny-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 420px;
+  }
+
+  .ny-field { display: flex; flex-direction: column; gap: 0.35rem; font-size: 0.9rem; font-weight: 600; color: var(--ny-ochre); }
+
+  .ny-field input {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid rgba(237,230,216,0.25);
+    border-radius: 3px;
+    background: #fff;
+    color: var(--ny-ink);
+  }
+
+  .ny-field--hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .ny-error {
+    color: var(--ny-terracotta);
+    font-size: 0.85rem;
+    margin: 0;
+    min-height: 1.1em;
+  }
+
+  .ny-result__pillar {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--ny-ochre);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 1rem;
+  }
+
+  @media (max-width: 480px) {
+    #ny-quiz { padding: 60px 6vw 70px; }
+  }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  // -------------------------------------------------------------------
+  // 1. DATOS: preguntas, opciones (con puntaje 1-4) y arquetipos
+  //    IMPORTANTE: el orden de este array define el desempate. Si dos
+  //    pilares empatan en puntaje máximo, gana el primero en esta lista.
+  // -------------------------------------------------------------------
+  var PILLARS = [
+    {
+      key: 'mentalidad',
+      question: 'Cuando piensas en cambiar de rumbo profesional, ¿qué es lo primero que sientes?',
+      options: [
+        { label: 'Confianza', score: 1 },
+        { label: 'Curiosidad con duda', score: 2 },
+        { label: 'Miedo a fallar otra vez', score: 3 },
+        { label: 'Culpa por no haberlo hecho antes', score: 4 }
+      ],
+      archetype: 'La Reinventora Silenciosa',
+      tag: 'diagnostico-mentalidad',
+      description: 'Tienes más claridad de la que te reconoces, pero una voz interna sigue frenando el primer paso. Tu prioridad es tomar decisiones sin pedirle permiso al miedo.'
+    },
+    {
+      key: 'direccion',
+      question: '¿Qué tan clara tienes tu próxima meta profesional?',
+      options: [
+        { label: 'Muy clara', score: 1 },
+        { label: 'Idea general', score: 2 },
+        { label: 'Varias ideas, no sé cuál elegir', score: 3 },
+        { label: 'Ninguna idea todavía', score: 4 }
+      ],
+      archetype: 'La Multipotencial Atascada',
+      tag: 'diagnostico-direccion',
+      description: 'Tienes talento e intereses de sobra, y eso mismo es lo que te dispersa. Tu prioridad es elegir una dirección concreta y darle foco, aunque signifique soltar otras opciones por ahora.'
+    },
+    {
+      key: 'tecnologia',
+      question: '¿Cómo describirías tu relación con la tecnología y la IA hoy?',
+      options: [
+        { label: 'La uso a mi favor', score: 1 },
+        { label: 'La uso poco, quiero aprender más', score: 2 },
+        { label: 'Me intimida', score: 3 },
+        { label: 'La evito por completo', score: 4 }
+      ],
+      archetype: 'La Analógica en Transición',
+      tag: 'diagnostico-tecnologia',
+      description: 'No te falta capacidad, te falta práctica y confianza con las herramientas que hoy definen el mercado laboral. Tu prioridad es perderle el miedo a la IA con pasos pequeños y guiados.'
+    },
+    {
+      key: 'empleabilidad',
+      question: '¿Qué tan preparado(a) sientes tu perfil profesional hoy?',
+      options: [
+        { label: 'Listo para postular', score: 1 },
+        { label: 'Necesita ajustes', score: 2 },
+        { label: 'Desactualizado hace tiempo', score: 3 },
+        { label: 'No sé por dónde empezar', score: 4 }
+      ],
+      archetype: 'La Profesional Invisible',
+      tag: 'diagnostico-empleabilidad',
+      description: 'Tu experiencia vale, pero tu perfil no la está comunicando. Tu prioridad es reconstruir cómo te presentas para que el mercado vea lo que realmente sabes hacer.'
+    },
+    {
+      key: 'ingles',
+      question: '¿Cómo te sientes usando inglés en un contexto laboral?',
+      options: [
+        { label: 'Lo domino', score: 1 },
+        { label: 'Cómodo con margen de mejora', score: 2 },
+        { label: 'Me pongo nervioso/a', score: 3 },
+        { label: 'Es una barrera real', score: 4 }
+      ],
+      archetype: 'La Migrante en Pausa',
+      tag: 'diagnostico-ingles',
+      description: 'El idioma se ha convertido en la razón que usas para no avanzar. Tu prioridad es ganar fluidez profesional para dejar de posponer las oportunidades que ya podrías tomar.'
+    },
+    {
+      key: 'productividad',
+      question: '¿Qué tan bien organizas tu tiempo entre trabajo, familia y tu crecimiento?',
+      options: [
+        { label: 'Tengo un sistema', score: 1 },
+        { label: 'Voy resolviendo semana a semana', score: 2 },
+        { label: 'El tiempo se me escapa', score: 3 },
+        { label: 'No encuentro tiempo para mí', score: 4 }
+      ],
+      archetype: 'La Ocupada Sin Avance',
+      tag: 'diagnostico-productividad',
+      description: 'Tienes agenda llena, pero poco que mostrar de lo que realmente te importa. Tu prioridad es diseñar un sistema que le dé espacio real a tu reinvención, no solo a lo urgente.'
+    },
+    {
+      key: 'bienestar',
+      question: '¿Cómo está tu energía/salud mientras persigues este cambio?',
+      options: [
+        { label: 'Cuido mi descanso', score: 1 },
+        { label: 'Podría cuidarme más', score: 2 },
+        { label: 'Cansado/a la mayoría del tiempo', score: 3 },
+        { label: 'Agotado/a, al límite', score: 4 }
+      ],
+      archetype: 'La Guerrera Agotada',
+      tag: 'diagnostico-bienestar',
+      description: 'Estás sosteniendo el cambio a pura fuerza de voluntad, y el cuerpo ya está pasando la factura. Tu prioridad es recuperar energía antes de seguir empujando.'
+    },
+    {
+      key: 'comunidad',
+      question: '¿Con quién cuentas hoy para acompañarte en este proceso?',
+      options: [
+        { label: 'Red de apoyo sólida', score: 1 },
+        { label: '1-2 personas cercanas', score: 2 },
+        { label: 'Casi siempre solo/a', score: 3 },
+        { label: 'Completamente solo/a', score: 4 }
+      ],
+      archetype: 'La Reinventora en Solitario',
+      tag: 'diagnostico-comunidad',
+      description: 'Estás cargando este proceso sin la red que mereces tener. Tu prioridad es rodearte de personas que entiendan lo que estás viviendo, para dejar de reinventarte a solas.'
+    }
+  ];
+
+  // -------------------------------------------------------------------
+  // 2. ESTADO
+  // -------------------------------------------------------------------
+  var root = document.getElementById('ny-quiz');
+  var currentQuestion = 0;
+  var scores = {};
+
+  var screens = {
+    questions: root.querySelector('[data-screen-id="questions"]'),
+    capture: root.querySelector('[data-screen-id="capture"]'),
+    result: root.querySelector('[data-screen-id="result"]')
+  };
+
+  var progressBar = document.getElementById('ny-progress-bar');
+  var qCount = document.getElementById('ny-q-count');
+  var qText = document.getElementById('ny-q-text');
+  var qOptions = document.getElementById('ny-q-options');
+
+  function showScreen(name) {
+    Object.keys(screens).forEach(function (key) {
+      screens[key].classList.toggle('ny-screen--active', key === name);
+    });
+    root.setAttribute('data-screen', name);
+  }
+
+  // -------------------------------------------------------------------
+  // 3. ARRANQUE DEL QUIZ — llamado desde el botón nativo de Bricks.
+  //    Oculta la sección de portada nativa y revela el quiz en su lugar.
+  // -------------------------------------------------------------------
+  window.nyStartQuiz = function () {
+    // IMPORTANTE: ponle id="ny-cover-section" al CONTENEDOR COMPLETO de tu
+    // portada nativa en Bricks (la sección/div que envuelve el eyebrow +
+    // título + párrafo + botón) — no solo al botón. Así se oculta todo el
+    // bloque de portada cuando arranca el quiz.
+    var cover = document.getElementById('ny-cover-section');
+    if (cover) cover.style.display = 'none';
+
+    currentQuestion = 0;
+    scores = {};
+    root.classList.add('ny-quiz--visible');
+    renderQuestion();
+    showScreen('questions');
+    root.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  function renderQuestion() {
+    var pillar = PILLARS[currentQuestion];
+    qCount.textContent = 'Pregunta ' + (currentQuestion + 1) + ' de ' + PILLARS.length;
+    qText.textContent = pillar.question;
+    qOptions.innerHTML = '';
+
+    pillar.options.forEach(function (opt) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ny-option';
+      btn.textContent = opt.label;
+      btn.addEventListener('click', function () {
+        scores[pillar.key] = opt.score;
+        advance();
+      });
+      qOptions.appendChild(btn);
+    });
+
+    progressBar.style.width = (currentQuestion / PILLARS.length * 100) + '%';
+  }
+
+  function advance() {
+    currentQuestion++;
+    if (currentQuestion < PILLARS.length) {
+      renderQuestion();
+    } else {
+      progressBar.style.width = '100%';
+      showScreen('capture');
+    }
+  }
+
+  // -------------------------------------------------------------------
+  // 4. CÁLCULO DEL ARQUETIPO GANADOR
+  // -------------------------------------------------------------------
+  function computeWinner() {
+    var winner = PILLARS[0];
+    var winnerScore = scores[PILLARS[0].key] || 0;
+
+    for (var i = 1; i < PILLARS.length; i++) {
+      var p = PILLARS[i];
+      var s = scores[p.key] || 0;
+      if (s > winnerScore) {
+        winner = p;
+        winnerScore = s;
+      }
+    }
+    return winner;
+  }
+
+  // -------------------------------------------------------------------
+  // 5. CAPTURA + ENVÍO AL ENDPOINT REST DE WORDPRESS
+  // -------------------------------------------------------------------
+  var form = document.getElementById('ny-capture-form');
+  var submitBtn = document.getElementById('ny-submit-btn');
+  var errorEl = document.getElementById('ny-form-error');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorEl.textContent = '';
+
+    var name = document.getElementById('ny-name').value.trim();
+    var email = document.getElementById('ny-email').value.trim();
+    var honeypot = document.getElementById('ny-hp').value.trim();
+
+    if (honeypot) {
+      showResultScreen(computeWinner());
+      return;
+    }
+
+    if (!name) {
+      errorEl.textContent = 'Por favor escribe tu nombre.';
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errorEl.textContent = 'Por favor escribe un correo válido.';
+      return;
+    }
+
+    var winner = computeWinner();
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+
+    fetch('/wp-json/nextyou/v1/quiz-submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        scores: scores,
+        archetype: winner.archetype,
+        tag: winner.tag
+      })
+    })
+      .then(function (res) {
+        if (!res.ok) { throw new Error('Request failed'); }
+        return res.json();
+      })
+      .then(function () {
+        showResultScreen(winner);
+      })
+      .catch(function () {
+        console.error('nextyou quiz-submit: no se pudo guardar el lead.');
+        showResultScreen(winner);
+      })
+      .finally(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Ver mi resultado';
+      });
+  });
+
+  function showResultScreen(winner) {
+    document.getElementById('ny-result-archetype').textContent = winner.archetype;
+    document.getElementById('ny-result-pillar').textContent = 'Pilar prioritario: ' + winner.key;
+    document.getElementById('ny-result-description').textContent = winner.description;
+    showScreen('result');
+  }
+
+  // -------------------------------------------------------------------
+  // 6. CONEXIÓN CON EL BOTÓN NATIVO DE BRICKS
+  //    Ponle id="ny-start-btn" a tu botón "Empezar diagnóstico" nativo
+  //    (Settings del elemento en Bricks → campo "ID").
+  // -------------------------------------------------------------------
+  document.addEventListener('DOMContentLoaded', function () {
+    var startBtn = document.getElementById('ny-start-btn');
+    if (startBtn) {
+      startBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        window.nyStartQuiz();
+      });
+    } else {
+      console.warn('nextyou quiz: no se encontró #ny-start-btn. Revisa el ID del botón nativo en Bricks.');
+    }
+  });
+
+})();
+</script>

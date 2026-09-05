@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentoría Next You | Carla Montaño — Reiniciar Sin Mapa</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,440;0,9..144,560;0,9..144,650;1,9..144,440&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root{
+  --ink:#14192B; --ink-soft:#212844; --ink-line:rgba(237,230,216,0.14);
+  --paper:#EDE6D8; --paper-soft:#E1D6C2; --paper-line:rgba(20,25,43,0.12);
+  --clay:#BE5A34; --clay-soft:#D98A66; --sage:#6E7F5C; --gold:#C9A227;
+  --font-display:'Fraunces', serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--paper); color:var(--ink); font-family:var(--font-body); line-height:1.6; -webkit-font-smoothing:antialiased;}
+img,svg{display:block; max-width:100%;}
+a{color:inherit;}
+.eyebrow{font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; opacity:0.6; display:flex; align-items:center; gap:10px; margin-bottom:16px;}
+.eyebrow::before{content:""; width:22px; height:1px; background:currentColor; opacity:0.6;}
+h1,h2,h3{font-family:var(--font-display); font-weight:560; letter-spacing:-0.01em;}
+.btn{font-family:var(--font-mono); font-size:12px; letter-spacing:0.06em; text-transform:uppercase; padding:15px 26px; border-radius:2px; display:inline-flex; align-items:center; gap:10px; text-decoration:none; border:1px solid transparent; transition:transform .18s ease, opacity .18s ease;}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--clay); color:var(--paper);}
+.btn-ghost{border-color:currentColor; opacity:0.85;}
+.btn-ghost:hover{opacity:1;}
+
+/* NAV */
+nav{position:sticky; top:0; z-index:50; display:flex; justify-content:space-between; align-items:center; padding:18px 8vw; background:rgba(237,230,216,0.9); backdrop-filter:blur(10px); border-bottom:1px solid var(--paper-line);}
+.nav-mark{display:flex; align-items:center; gap:10px; font-family:var(--font-display); font-weight:560; font-size:16px;}
+.nav-mark svg{width:20px; height:20px;}
+.nav-links{display:flex; gap:28px; font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.04em; text-transform:uppercase;}
+.nav-links a{text-decoration:none; opacity:0.65;}
+.nav-links a:hover, .nav-links a.active{opacity:1;}
+@media (max-width:900px){.nav-links{display:none;}}
+
+section{padding:96px 8vw;}
+.section-head{max-width:640px; margin-bottom:52px;}
+.section-title{font-size:clamp(28px,3.2vw,40px); margin-bottom:14px;}
+.section-sub{opacity:0.72; font-size:16px;}
+
+/* HERO */
+.hero{background:var(--ink); color:var(--paper); position:relative; overflow:hidden; padding:80px 8vw 90px; display:flex; flex-direction:column; justify-content:center; min-height:76vh;}
+.hero-path{position:absolute; inset:0; z-index:1; opacity:0.9;}
+.hero-path .grid-line{stroke:var(--paper); opacity:0.05; stroke-width:1;}
+.hero-path path{fill:none; stroke:var(--clay); stroke-width:1.4; stroke-linecap:round; stroke-dasharray:1500; stroke-dashoffset:1500; animation:draw 3s ease-out forwards .2s;}
+.hero-path circle{fill:var(--paper); opacity:0; animation:dot .5s ease-out forwards;}
+@keyframes draw{to{stroke-dashoffset:0;}}
+@keyframes dot{to{opacity:1;}}
+@media (prefers-reduced-motion:reduce){.hero-path path{animation:none; stroke-dashoffset:0;} .hero-path circle{animation:none; opacity:1;}}
+.hero-inner{position:relative; z-index:2; max-width:780px;}
+.hero-inner .eyebrow{color:var(--clay-soft); opacity:1;}
+.hero-title{font-size:clamp(32px,4.6vw,54px); line-height:1.1; margin-bottom:18px;}
+.hero-title em{font-style:italic; color:var(--clay-soft); font-weight:440;}
+.hero-sub{font-size:17px; max-width:56ch; opacity:0.78; margin-bottom:30px;}
+.hero-ctas{display:flex; gap:16px; flex-wrap:wrap; margin-bottom:30px;}
+.hero-meta{display:flex; gap:26px; flex-wrap:wrap; font-family:var(--font-mono); font-size:11px; opacity:0.55;}
+.hero-meta span{padding-left:14px; border-left:1px solid var(--ink-line);}
+.hero-meta span:first-child{padding-left:0; border-left:none;}
+
+/* SIGNS */
+.signs-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--paper-line);}
+@media (max-width:860px){.signs-grid{grid-template-columns:1fr;}}
+.sign-card{background:var(--paper); padding:34px 28px;}
+.sign-card h4{font-size:17px; margin-bottom:8px; line-height:1.3;}
+.sign-card p{font-size:14px; opacity:0.7;}
+
+/* PILLARS WORK */
+.pillars-work{background:var(--paper-soft);}
+.pw-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+@media (max-width:900px){.pw-grid{grid-template-columns:repeat(2,1fr);}}
+.pw-card{background:var(--paper); border:1px solid var(--paper-line); border-radius:2px; padding:20px 18px; display:flex; flex-direction:column; gap:10px;}
+.pw-card .pw-num{font-family:var(--font-mono); font-size:10px; opacity:0.4;}
+.pw-card h4{font-size:14.5px; font-weight:600;}
+.pw-card p{font-size:12.5px; opacity:0.62;}
+
+/* HOW IT WORKS */
+.how-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--paper-line);}
+@media (max-width:860px){.how-grid{grid-template-columns:1fr;}}
+.how-card{background:var(--paper); padding:36px 28px;}
+.how-num{font-family:var(--font-mono); font-size:26px; color:var(--clay); opacity:0.5; margin-bottom:14px;}
+.how-card h4{font-size:18px; margin-bottom:8px;}
+.how-card p{font-size:14px; opacity:0.7;}
+
+/* IDEAL FOR */
+.ideal-list{border-top:1px solid var(--paper-line);}
+.ideal-item{display:grid; grid-template-columns:32px 1fr; gap:16px; padding:22px 0; border-bottom:1px solid var(--paper-line); align-items:flex-start;}
+.ideal-mark{font-family:var(--font-mono); color:var(--clay); font-size:14px; padding-top:2px;}
+.ideal-item h4{font-size:16px; font-weight:600; margin-bottom:4px;}
+.ideal-item p{font-size:13.5px; opacity:0.65;}
+
+/* BOOKING */
+.booking{background:var(--ink); color:var(--paper);}
+.booking-grid{display:grid; grid-template-columns:0.9fr 1.1fr; gap:48px; align-items:start;}
+@media (max-width:900px){.booking-grid{grid-template-columns:1fr;}}
+.booking-list{list-style:none; display:flex; flex-direction:column; gap:14px; margin-top:22px;}
+.booking-list li{font-size:14.5px; padding-left:20px; position:relative; opacity:0.85;}
+.booking-list li::before{content:"—"; position:absolute; left:0; color:var(--clay-soft);}
+.booking-cal{background:var(--ink-soft); border:1px solid var(--ink-line); border-radius:2px; min-height:340px; display:flex; align-items:center; justify-content:center; font-family:var(--font-mono); font-size:12px; opacity:0.5; text-align:center; padding:24px;}
+
+/* FAQ */
+.faq-list{border-top:1px solid var(--paper-line);}
+.faq-item{padding:24px 0; border-bottom:1px solid var(--paper-line);}
+.faq-item h4{font-size:16px; font-weight:600; margin-bottom:8px;}
+.faq-item p{font-size:14.5px; opacity:0.7; max-width:66ch;}
+
+/* FINAL CTA */
+.final-cta{background:var(--clay); color:var(--paper); text-align:center;}
+.final-cta h2{font-size:clamp(26px,3.4vw,42px); max-width:22ch; margin:0 auto 16px;}
+.final-cta p{opacity:0.85; max-width:50ch; margin:0 auto 26px;}
+.final-cta .btn-primary{background:var(--ink);}
+
+footer{background:var(--ink); color:var(--paper); padding:40px 8vw; display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px; opacity:0.55; flex-wrap:wrap; gap:12px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-mark">
+    <svg viewBox="0 0 24 24" fill="none"><path d="M3 19 C 7 14, 6 8, 12 8 C 18 8, 15 15, 21 15" stroke="var(--clay)" stroke-width="1.6" stroke-linecap="round"/><circle cx="3" cy="19" r="1.6" fill="var(--ink)"/><circle cx="21" cy="15" r="1.6" fill="var(--clay)"/></svg>
+    Carla Montaño
+  </div>
+  <div class="nav-links">
+    <a href="/">Inicio</a>
+    <a href="/historiasguias/">Recursos</a>
+    <a href="/mentorias/" class="active">Mentorías</a>
+    <a href="https://www.skool.com/tu-camino-tech-3945/about">Comunidad</a>
+    <a href="/mi-historia/">Sobre mí</a>
+    <a href="/contacto/">Contacto</a>
+  </div>
+  <a href="#agenda" class="btn btn-primary" style="padding:10px 18px;">Agenda tu sesión</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <svg class="hero-path" viewBox="0 0 1200 700" preserveAspectRatio="none">
+    <line class="grid-line" x1="0" y1="175" x2="1200" y2="175"/><line class="grid-line" x1="0" y1="350" x2="1200" y2="350"/>
+    <line class="grid-line" x1="0" y1="525" x2="1200" y2="525"/><line class="grid-line" x1="800" y1="0" x2="800" y2="700"/>
+    <path d="M 700 600 C 780 630, 830 560, 860 500 S 960 400, 930 340 S 850 260, 940 220 S 1080 210, 1120 140"/>
+    <circle cx="700" cy="600" r="5" style="animation-delay:.4s"/><circle cx="860" cy="500" r="5" style="animation-delay:1s"/>
+    <circle cx="930" cy="340" r="5" style="animation-delay:1.6s"/><circle cx="1120" cy="140" r="6" fill="var(--clay)" style="animation-delay:2.4s"/>
+  </svg>
+  <div class="hero-inner">
+    <div class="eyebrow">Mentoría Next You · 1:1</div>
+    <h1 class="hero-title">No necesitas otro curso.<br>Necesitas un <em>plan claro</em> y alguien que lo camine contigo.</h1>
+    <p class="hero-sub">Sesiones 1:1 personalizadas donde trabajamos tu próximo paso concreto — sea mentalidad, dirección, tecnología, empleabilidad o cualquiera de los 8 pilares de NEXT YOU™. Sin genéricos, sin listas interminables de recursos: un plan hecho para tu situación real.</p>
+    <div class="hero-ctas">
+      <a href="#agenda" class="btn btn-primary">Agenda tu sesión →</a>
+      <a href="#faq" class="btn btn-ghost">Ver preguntas frecuentes</a>
+    </div>
+    <div class="hero-meta">
+      <span>Sesiones online · 60 minutos</span>
+      <span>Cupos limitados cada semana</span>
+      <span>100% personalizado a tu pilar prioritario</span>
+    </div>
+  </div>
+</header>
+
+<!-- ¿ES PARA TI? -->
+<section>
+  <div class="section-head">
+    <div class="eyebrow">¿Es para ti?</div>
+    <h2 class="section-title">Tres señales de que necesitas esta mentoría</h2>
+  </div>
+  <div class="signs-grid">
+    <div class="sign-card">
+      <h4>Estás avanzando sola/o</h4>
+      <p>Y no sabes si lo que estás haciendo realmente te acerca a tu próxima versión o solo te mantiene ocupada/o.</p>
+    </div>
+    <div class="sign-card">
+      <h4>Tienes demasiada información</h4>
+      <p>Cursos, videos, consejos de todos lados — y ninguna claridad real sobre cuál es tu siguiente paso concreto.</p>
+    </div>
+    <div class="sign-card">
+      <h4>Ya empezaste, pero no avanzas</h4>
+      <p>Sabes qué pilar te está frenando (mentalidad, dirección, empleabilidad...) pero no logras moverlo solo/a.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUÉ TRABAJAMOS — 8 PILARES -->
+<section class="pillars-work">
+  <div class="section-head">
+    <div class="eyebrow">¿Qué trabajamos juntas/os?</div>
+    <h2 class="section-title">Un plan hecho para tu pilar prioritario</h2>
+    <p class="section-sub">Cada sesión parte de dónde estás realmente — no de un temario genérico. Estas son las áreas donde más acompaño a mis mentees:</p>
+  </div>
+  <div class="pw-grid">
+    <div class="pw-card"><span class="pw-num">01</span><h4>Mentalidad y creencias límite</h4><p>Identificar qué historia te estás contando que te frena.</p></div>
+    <div class="pw-card"><span class="pw-num">02</span><h4>Dirección y siguiente proyecto</h4><p>Definir un roadmap claro, no una lista infinita de opciones.</p></div>
+    <div class="pw-card"><span class="pw-num">03</span><h4>Tecnología e IA aplicada</h4><p>Usar IA y herramientas actuales para aprender y avanzar más rápido.</p></div>
+    <div class="pw-card"><span class="pw-num">04</span><h4>Empleabilidad</h4><p>CV, LinkedIn, portafolio y preparación real para entrevistas.</p></div>
+    <div class="pw-card"><span class="pw-num">05</span><h4>Revisión técnica</h4><p>Código, proyectos y buenas prácticas, si tu camino es tecnología.</p></div>
+    <div class="pw-card"><span class="pw-num">06</span><h4>Productividad</h4><p>Cómo sostener el cambio sin sacrificar trabajo, familia y descanso.</p></div>
+    <div class="pw-card"><span class="pw-num">07</span><h4>Organización del aprendizaje</h4><p>Qué estudiar primero, qué dejar para después, y por qué.</p></div>
+    <div class="pw-card"><span class="pw-num">08</span><h4>Siguiente paso en la comunidad</h4><p>Cómo complementar la mentoría con acompañamiento continuo.</p></div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section>
+  <div class="section-head">
+    <div class="eyebrow">Cómo funciona</div>
+    <h2 class="section-title">Tres pasos, sin complicaciones</h2>
+  </div>
+  <div class="how-grid">
+    <div class="how-card"><div class="how-num">01</div><h4>Agenda tu sesión</h4><p>Elige el día y la hora que mejor se adapte a ti. Confirmación y enlace de videollamada automáticos.</p></div>
+    <div class="how-card"><div class="how-num">02</div><h4>Nos reunimos</h4><p>Hablamos de tu situación real, identificamos tu pilar prioritario y resolvemos tus dudas concretas.</p></div>
+    <div class="how-card"><div class="how-num">03</div><h4>Sales con un plan</h4><p>Claro, práctico y enfocado en tu siguiente paso — no en una lista interminable de cosas por hacer.</p></div>
+  </div>
+</section>
+
+<!-- IDEAL PARA TI SI -->
+<section style="background:var(--paper-soft);">
+  <div class="section-head">
+    <div class="eyebrow">Ideal para ti si...</div>
+    <h2 class="section-title">Reconoces alguna de estas situaciones</h2>
+  </div>
+  <div class="ideal-list">
+    <div class="ideal-item"><span class="ideal-mark">—</span><div><h4>Quieres cambiar de carrera profesional</h4><p>Y necesitas un plan realista, no solo motivación para intentarlo otra vez.</p></div></div>
+    <div class="ideal-item"><span class="ideal-mark">—</span><div><h4>Quieres conseguir tu próximo empleo</h4><p>En tecnología o en cualquier área donde sientas que tu perfil no se está mostrando bien.</p></div></div>
+    <div class="ideal-item"><span class="ideal-mark">—</span><div><h4>Quieres aprender a usar la tecnología e IA a tu favor</h4><p>Sin necesidad de convertirte en programador/a si no es tu camino.</p></div></div>
+    <div class="ideal-item"><span class="ideal-mark">—</span><div><h4>Quieres organizar tu reinicio, no solo tu aprendizaje</h4><p>Porque sientes que el desorden no es solo de información, es de tiempo, energía y dirección.</p></div></div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="agenda" class="booking">
+  <div class="booking-grid">
+    <div>
+      <div class="eyebrow" style="color:var(--clay-soft); opacity:1;">Agenda tu sesión</div>
+      <h2 class="section-title">Elige tu día y hora, y da tu siguiente paso</h2>
+      <ul class="booking-list">
+        <li>Sesiones online por Google Meet</li>
+        <li>60 minutos, 100% personalizados</li>
+        <li>Atención cercana y práctica</li>
+        <li>Cupos limitados cada semana</li>
+      </ul>
+    </div>
+    <div class="booking-cal">[ Widget de calendario / booking embebido aquí ]</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-head">
+    <div class="eyebrow">Preguntas frecuentes</div>
+    <h2 class="section-title">Antes de agendar</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item"><h4>¿Necesito saber programar para agendar una sesión?</h4><p>No. La mentoría cubre los 8 pilares de NEXT YOU™, no solo tecnología. Muchas personas llegan sin saber por dónde empezar, en cualquier área de su reinicio profesional.</p></div>
+    <div class="faq-item"><h4>¿La sesión queda grabada?</h4><p>Sí, si lo deseas. Así puedes revisarla después con calma, sin preocuparte por tomar notas durante la conversación.</p></div>
+    <div class="faq-item"><h4>¿Con qué herramientas trabajamos?</h4><p>Depende de tu pilar y tus objetivos: puede ser VS Code, GitHub, IA generativa, LinkedIn, o herramientas de organización y productividad. La sesión se adapta completamente a ti.</p></div>
+    <div class="faq-item"><h4>¿Cuánto dura la sesión?</h4><p>Aproximadamente 60 minutos — tiempo suficiente para resolver dudas, revisar tu situación actual y salir con un plan claro.</p></div>
+    <div class="faq-item"><h4>¿Puedo reagendar si no puedo asistir?</h4><p>Sí, con anticipación, usando el enlace del correo de confirmación.</p></div>
+    <div class="faq-item"><h4>¿En qué se diferencia esto de la Comunidad Next You?</h4><p>La Comunidad es tu espacio diario de acompañamiento y pertenencia, a menor costo. La Mentoría es una transformación más estructurada y personalizada, con seguimiento directo conmigo.</p></div>
+    <div class="faq-item"><h4>¿Qué hace diferente esta mentoría?</h4><p>No te doy una lista interminable de cursos. Identificamos juntas/os tu pilar prioritario, resolvemos tus dudas reales y sales con un plan de acción — con la misma metodología que yo usé para reiniciar seis veces.</p></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="eyebrow" style="justify-content:center; color:var(--ink); opacity:0.7;">No tienes que hacerlo sola/o</div>
+  <h2>Agenda tu sesión y empecemos a construir tu siguiente paso.</h2>
+  <p>Cupos limitados cada semana.</p>
+  <a href="#agenda" class="btn btn-primary">Agenda tu sesión 1:1 →</a>
+</section>
+
+<footer>
+  <span>Reiniciar Sin Mapa · Mentoría Next You™</span>
+  <span>carlamontano.io/mentorias</span>
+</footer>
+
+</body>
+</html>
