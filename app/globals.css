@@ -31,3 +31,83 @@ body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
+
+/* Hero "route" line-drawing animation (app/page.tsx) */
+.hero-path .grid-line {
+  stroke: var(--paper);
+  opacity: 0.05;
+  stroke-width: 1;
+}
+.hero-path path {
+  fill: none;
+  stroke: var(--clay);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1500;
+  stroke-dashoffset: 1500;
+  animation: draw 3s ease-out forwards 0.2s;
+}
+.hero-path circle {
+  fill: var(--paper);
+  opacity: 0;
+  animation: dot 0.5s ease-out forwards;
+}
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes dot {
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-path path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+  .hero-path circle {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Blog post body (app/blog/[slug]/page.tsx) — rendered from blog_posts.content HTML */
+.prose-post p {
+  margin-bottom: 22px;
+  font-size: 17px;
+  opacity: 0.88;
+}
+.prose-post h2 {
+  font-size: 26px;
+  margin: 44px 0 18px;
+  line-height: 1.25;
+}
+.prose-post h3 {
+  font-size: 22px;
+  margin: 36px 0 16px;
+}
+.prose-post blockquote {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  color: var(--clay);
+  border-left: 3px solid var(--clay);
+  padding-left: 24px;
+  margin: 36px 0;
+  line-height: 1.4;
+}
+.prose-post ul,
+.prose-post ol {
+  margin: 0 0 22px 22px;
+}
+.prose-post li {
+  margin-bottom: 10px;
+  font-size: 17px;
+  opacity: 0.88;
+}
+.prose-post a {
+  color: var(--clay);
+  text-decoration: underline;
+}

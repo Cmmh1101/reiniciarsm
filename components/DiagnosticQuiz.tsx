@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { PILLARS, computeWinner, type Pillar, type QuizScores } from "@/lib/diagnostic";
+import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 
 type Screen = "cover" | "questions" | "capture" | "result";
 
@@ -204,7 +205,9 @@ export default function DiagnosticQuiz() {
             </p>
             <p className="text-[rgba(237,230,216,0.8)] mb-7">{winner.description}</p>
             <a
-              href="/comunidad"
+              href={SKOOL_COMMUNITY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform"
             >
               Únete a la Comunidad Next You
