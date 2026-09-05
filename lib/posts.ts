@@ -43,3 +43,11 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
   if (error) return null;
   return data as BlogPost;
 }
+
+/** Admin-only — unlike getPostBySlug, returns drafts too. */
+export async function getPostById(id: string): Promise<BlogPost | null> {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase.from("blog_posts").select("*").eq("id", id).single();
+  if (error) return null;
+  return data as BlogPost;
+}
