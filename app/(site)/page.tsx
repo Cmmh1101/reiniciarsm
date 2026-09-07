@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { getPublishedPosts } from "@/lib/posts";
-import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 import { NewsletterFormHome } from "@/components/NewsletterForm";
 
 // Blog posts publish through the admin CMS at runtime, not via a redeploy —
@@ -135,14 +134,12 @@ export default async function Home() {
                 </li>
               ))}
             </ul>
-            <a
-              href={SKOOL_COMMUNITY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/comunidad"
               className="font-mono text-xs tracking-wide uppercase text-clay inline-flex items-center gap-1.5"
             >
               Entrar a la comunidad →
-            </a>
+            </Link>
           </div>
           <div className="bg-paper p-10 flex flex-col gap-4 min-h-[340px]">
             <span className="font-mono text-xs text-clay opacity-90">03</span>
@@ -269,14 +266,12 @@ export default async function Home() {
           </p>
           <h2 className="font-display text-[clamp(26px,3vw,38px)] max-w-[16ch]">No vas a reiniciar sola.</h2>
         </div>
-        <a
-          href={SKOOL_COMMUNITY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Link
+          href="/comunidad"
           className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-ink text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform"
         >
           Entrar a la comunidad →
-        </a>
+        </Link>
       </section>
 
       {/* BLOG PREVIEW */}

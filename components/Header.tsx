@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 
 export default function Header() {
   return (
@@ -27,14 +26,9 @@ export default function Header() {
         <Link href="/mentorias" className="opacity-65 hover:opacity-100 transition-opacity">
           Mentorías
         </Link>
-        <a
-          href={SKOOL_COMMUNITY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="opacity-65 hover:opacity-100 transition-opacity"
-        >
+        <Link href="/comunidad" className="opacity-65 hover:opacity-100 transition-opacity">
           Comunidad
-        </a>
+        </Link>
         <Link href="/mi-historia" className="opacity-65 hover:opacity-100 transition-opacity">
           Sobre mí
         </Link>
