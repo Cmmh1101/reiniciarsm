@@ -6,13 +6,30 @@ import type { MentoriaSlot } from "@/lib/mentorias";
 
 type Plan = "session" | "pack";
 
+// Groups by the viewer's own local calendar day — consistent with how each
+// slot's time is already displayed (in the viewer's browser timezone).
+function groupByDay(slots: MentoriaSlot[]) {
+  const groups = new Map<string, { date: Date; slots: MentoriaSlot[] }>();
+  for (const slot of slots) {
+    const date = new Date(slot.start_time);
+    const key = date.toDateString();
+    if (!groups.has(key)) groups.set(key, { date, slots: [] });
+    groups.get(key)!.slots.push(slot);
+  }
+  return [...groups.values()];
+}
+
 export default function BookingWidget({ slots }: { slots: MentoriaSlot[] }) {
   const [plan, setPlan] = useState<Plan>("session");
+  const dayGroups = groupByDay(slots);
+  const [selectedDay, setSelectedDay] = useState<string>(dayGroups[0]?.date.toDateString() ?? "");
   const [slotId, setSlotId] = useState<string>("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const timesForSelectedDay = dayGroups.find((g) => g.date.toDateString() === selectedDay)?.slots ?? [];
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -77,8 +94,8 @@ export default function BookingWidget({ slots }: { slots: MentoriaSlot[] }) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-3.5" noValidate>
         {plan === "session" && (
           <div>
-            <span className="text-sm font-semibold block mb-2">Elige un horario</span>
-            {slots.length === 0 ? (
+            <span className="text-sm font-semibold block mb-2">Elige un día</span>
+            {dayGroups.length === 0 ? (
               <p className="text-sm opacity-60">
                 No hay horarios disponibles ahora mismo — escríbeme a{" "}
                 <a href={`mailto:${ALT_PAYMENT_EMAIL}`} className="text-clay-soft underline">
@@ -87,35 +104,53 @@ export default function BookingWidget({ slots }: { slots: MentoriaSlot[] }) {
                 y coordinamos.
               </p>
             ) : (
-              <div className="flex flex-col gap-2 max-h-56 overflow-y-auto">
-                {slots.map((slot) => {
-                  const date = new Date(slot.start_time);
-                  const label = date.toLocaleString("es", {
-                    weekday: "short",
-                    day: "numeric",
-                    month: "short",
-                    hour: "numeric",
-                    minute: "2-digit",
-                  });
-                  return (
-                    <label
-                      key={slot.id}
-                      className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-[3px] border text-sm cursor-pointer ${
-                        slotId === slot.id ? "border-clay bg-[rgba(190,90,52,0.12)]" : "border-[rgba(237,230,216,0.2)]"
-                      }`}
-                    >
-                      <input
-                        type="radio"
-                        name="slot"
-                        value={slot.id}
-                        checked={slotId === slot.id}
-                        onChange={() => setSlotId(slot.id)}
-                      />
-                      {label}
-                    </label>
-                  );
-                })}
-              </div>
+              <>
+                <div className="flex flex-wrap gap-2 mb-3.5">
+                  {dayGroups.map(({ date }) => {
+                    const key = date.toDateString();
+                    const active = key === selectedDay;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => {
+                          setSelectedDay(key);
+                          setSlotId("");
+                        }}
+                        className={`flex flex-col items-center px-3 py-2 rounded-[3px] border text-xs min-w-[56px] ${
+                          active ? "border-clay bg-[rgba(190,90,52,0.12)]" : "border-[rgba(237,230,216,0.2)]"
+                        }`}
+                      >
+                        <span className="opacity-60 uppercase">{date.toLocaleDateString("es", { weekday: "short" })}</span>
+                        <span className="font-semibold text-sm">{date.getDate()}</span>
+                        <span className="opacity-60 uppercase">{date.toLocaleDateString("es", { month: "short" })}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <span className="text-sm font-semibold block mb-2">Elige una hora</span>
+                <div className="flex flex-wrap gap-2">
+                  {timesForSelectedDay.map((slot) => {
+                    const label = new Date(slot.start_time).toLocaleTimeString("es", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                    });
+                    return (
+                      <button
+                        key={slot.id}
+                        type="button"
+                        onClick={() => setSlotId(slot.id)}
+                        className={`px-3.5 py-2 rounded-[3px] border text-sm ${
+                          slotId === slot.id ? "border-clay bg-[rgba(190,90,52,0.12)]" : "border-[rgba(237,230,216,0.2)]"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
             )}
           </div>
         )}
