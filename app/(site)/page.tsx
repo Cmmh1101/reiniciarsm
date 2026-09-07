@@ -3,6 +3,10 @@ import { getPublishedPosts } from "@/lib/posts";
 import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 import { NewsletterFormHome } from "@/components/NewsletterForm";
 
+// Blog posts publish through the admin CMS at runtime, not via a redeploy —
+// this page must fetch fresh on every request, not bake posts into the build.
+export const dynamic = "force-dynamic";
+
 const PILLARS = [
   { num: "01", name: "Mentalidad", icon: <><circle cx="16" cy="16" r="10" /><path d="M16 10v6l4 3" /></> },
   { num: "02", name: "Dirección", icon: <><circle cx="16" cy="16" r="11" /><path d="M16 9l3 6-3 2-3-2z" /></> },

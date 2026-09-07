@@ -3,6 +3,9 @@ import type { Metadata } from "next";
 import { getPublishedPosts } from "@/lib/posts";
 import { NewsletterFormCompact } from "@/components/NewsletterForm";
 
+// Posts publish through the admin CMS at runtime — fetch fresh every request.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Recursos — Carla Montaño",
   description: "Historias, guías y método para tu reinicio, organizados por pilar.",

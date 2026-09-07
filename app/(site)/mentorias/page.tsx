@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import { getAvailableSlots } from "@/lib/mentorias";
 import BookingWidget from "@/components/BookingWidget";
 
+// Slots are added/booked at runtime (manually in Supabase, or via a booking) —
+// fetch fresh every request rather than baking availability into the build.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Mentoría Next You — Carla Montaño",
   description:
