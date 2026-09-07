@@ -1,4 +1,6 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { getAvailableSlots } from "@/lib/mentorias";
+import GenerateSlotsForm from "@/components/admin/GenerateSlotsForm";
 
 interface BookingRow {
   id: string;
@@ -23,12 +25,38 @@ async function getBookings(): Promise<BookingRow[]> {
 }
 
 export default async function AdminMentoriasPage() {
-  const bookings = await getBookings();
+  const [bookings, availableSlots] = await Promise.all([getBookings(), getAvailableSlots()]);
 
   return (
     <main className="p-10">
-      <h1 className="font-display text-2xl mb-6">Mentorías — Reservas</h1>
+      <h1 className="font-display text-2xl mb-1">Mentorías</h1>
+      <p className="text-xs opacity-60 mb-6">Horarios en hora de Venezuela (UTC-4).</p>
 
+      <GenerateSlotsForm />
+
+      <h2 className="font-semibold mb-3">
+        Horarios disponibles <span className="opacity-50 font-normal">({availableSlots.length})</span>
+      </h2>
+      {availableSlots.length === 0 ? (
+        <p className="opacity-60 mb-8">No hay horarios disponibles.</p>
+      ) : (
+        <div className="flex flex-wrap gap-2 mb-8">
+          {availableSlots.map((slot) => (
+            <span key={slot.id} className="text-xs px-3 py-1.5 rounded-full border border-[rgba(20,25,43,0.15)]">
+              {new Date(slot.start_time).toLocaleString("es", {
+                timeZone: "America/Caracas",
+                weekday: "short",
+                day: "numeric",
+                month: "short",
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <h2 className="font-semibold mb-3">Reservas</h2>
       {bookings.length === 0 ? (
         <p className="opacity-60">Todavía no hay reservas.</p>
       ) : (
@@ -50,6 +78,7 @@ export default async function AdminMentoriasPage() {
                 <td className="py-3 opacity-70">
                   {b.mentoria_slots
                     ? new Date(b.mentoria_slots.start_time).toLocaleString("es", {
+                        timeZone: "America/Caracas",
                         weekday: "short",
                         day: "numeric",
                         month: "short",

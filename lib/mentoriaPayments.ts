@@ -68,6 +68,7 @@ export async function recordMentoriaPayment({
         });
 
         const slotLabel = new Date(updatedSlots[0].start_time).toLocaleString("es", {
+          timeZone: "America/Caracas",
           weekday: "long",
           day: "numeric",
           month: "long",

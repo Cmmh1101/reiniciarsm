@@ -27,6 +27,7 @@ export async function POST(request: Request) {
   }
 
   const slotLabel = new Date(slot.start_time).toLocaleString("es", {
+    timeZone: "America/Caracas",
     weekday: "long",
     day: "numeric",
     month: "long",

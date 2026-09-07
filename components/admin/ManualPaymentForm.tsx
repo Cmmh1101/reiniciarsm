@@ -145,6 +145,7 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
               {availableSlots.map((slot) => (
                 <option key={slot.id} value={slot.id}>
                   {new Date(slot.start_time).toLocaleString("es", {
+                    timeZone: "America/Caracas",
                     weekday: "short",
                     day: "numeric",
                     month: "short",
