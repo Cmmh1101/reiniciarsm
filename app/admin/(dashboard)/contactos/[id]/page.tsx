@@ -12,6 +12,9 @@ function eventCaption(event: ContactEvent): string | null {
     const method = m.payment_method === "stripe" ? "Stripe" : String(m.payment_method);
     return `Vía ${method}`;
   }
+  if ((event.event_type === "sequence_email_sent" || event.event_type === "newsletter_sent") && m.subject) {
+    return `"${m.subject}"`;
+  }
   return null;
 }
 

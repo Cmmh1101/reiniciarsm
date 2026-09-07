@@ -17,6 +17,8 @@ export const EVENT_TYPE_INFO: Record<string, { label: string; source: string }> 
   newsletter_signup: { label: "Se suscribió al newsletter", source: "Newsletter" },
   booking_created: { label: "Reservó una sesión de Mentoría", source: "Mentoría" },
   payment_completed: { label: "Compró el paquete de Mentoría", source: "Mentoría" },
+  sequence_email_sent: { label: "Recibió un email de la secuencia automática", source: "Secuencia" },
+  newsletter_sent: { label: "Recibió un newsletter", source: "Newsletter" },
 };
 
 export interface Contact {

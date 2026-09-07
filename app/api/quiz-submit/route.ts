@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { computeWinner, isValidScores, type QuizScores } from "@/lib/diagnostic";
+import { enrollInSequence } from "@/lib/sequenceEngine";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -49,27 +50,19 @@ export async function POST(request: Request) {
     console.error("quiz-submit: failed to insert contact_event", eventError);
   }
 
-  // Hand off to n8n for the immediate result email + the delayed nurture
-  // sequence (Resend is only ever called from n8n, never directly from here —
-  // see docs/plan-migracion-stack-tecnico.md §5, Flujo 1). Best-effort: a
-  // failed/missing n8n webhook shouldn't block the lead from seeing their result.
-  const webhookUrl = process.env.N8N_QUIZ_WEBHOOK_URL;
-  if (webhookUrl) {
-    fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(process.env.N8N_WEBHOOK_SECRET ? { "x-webhook-secret": process.env.N8N_WEBHOOK_SECRET } : {}),
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        archetype: winner.archetype,
-        pillar: winner.key,
-        tag: winner.tag,
-        scores,
-      }),
-    }).catch((err) => console.error("quiz-submit: n8n webhook failed", err));
+  // Native automation (Netlify Scheduled Functions + Resend + Supabase state,
+  // same pattern as Montano-system-launch's nurture-nudge) replaces the n8n
+  // plan — sends the immediate result email now and enrolls the contact in
+  // the archetype-specific drip; delayed steps are sent by
+  // netlify/functions/send-sequence-emails.mts. Awaited (not fire-and-forget):
+  // a serverless function can freeze right after `return`, so an un-awaited
+  // async call risks never actually completing. Errors are swallowed rather
+  // than failing the request — the lead should still see their result even
+  // if the confirmation email couldn't be sent.
+  try {
+    await enrollInSequence(contact.id, email, name, `quiz_${winner.key}`);
+  } catch (err) {
+    console.error("quiz-submit: enrollInSequence failed", err);
   }
 
   return NextResponse.json({ pillar: winner.key, archetype: winner.archetype });
