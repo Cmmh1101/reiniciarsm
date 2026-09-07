@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendHtmlEmail } from "@/lib/resend";
-import { wrapEmailShell, escapeHtml, htmlToPlainTextFallback } from "@/lib/emailHtml";
+import { wrapEmailShell, escapeHtml, htmlToPlainTextFallback, styleTiptapHtml } from "@/lib/emailHtml";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
@@ -25,6 +25,7 @@ export async function POST(request: Request) {
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const styledContentHtml = styleTiptapHtml(html);
   let sent = 0;
 
   for (const contact of recipients ?? []) {
@@ -32,8 +33,8 @@ export async function POST(request: Request) {
     const greetingHtml = `<p style="margin:0 0 20px;">${contact.name?.trim() ? `Hola ${escapeHtml(contact.name.trim())},` : "Hola,"}</p>`;
     const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
     const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.</p>`;
-    const fullHtml = wrapEmailShell(greetingHtml + html + signatureHtml + unsubscribeHtml);
-    const textFallback = htmlToPlainTextFallback(greetingHtml + html + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
+    const fullHtml = wrapEmailShell(greetingHtml + styledContentHtml + signatureHtml + unsubscribeHtml);
+    const textFallback = htmlToPlainTextFallback(greetingHtml + styledContentHtml + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
 
     try {
       await sendHtmlEmail(contact.email, subject, fullHtml, textFallback);
