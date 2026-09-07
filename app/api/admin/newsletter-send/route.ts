@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { sendConfirmationEmail } from "@/lib/resend";
+import { sendHtmlEmail } from "@/lib/resend";
+import { wrapEmailShell, escapeHtml, htmlToPlainTextFallback } from "@/lib/emailHtml";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
@@ -9,9 +10,9 @@ export async function POST(request: Request) {
 
   const body = await request.json().catch(() => null);
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
-  const content = typeof body?.content === "string" ? body.content.trim() : "";
+  const html = typeof body?.html === "string" ? body.html.trim() : "";
 
-  if (!subject || !content) {
+  if (!subject || !html) {
     return NextResponse.json({ error: "Asunto y contenido son requeridos." }, { status: 400 });
   }
 
@@ -28,13 +29,14 @@ export async function POST(request: Request) {
 
   for (const contact of recipients ?? []) {
     const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(contact.email)}`;
-    const greeting = contact.name?.trim() ? `Hola ${contact.name.trim()},\n\n` : "Hola,\n\n";
+    const greetingHtml = `<p style="margin:0 0 20px;">${contact.name?.trim() ? `Hola ${escapeHtml(contact.name.trim())},` : "Hola,"}</p>`;
+    const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
+    const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.</p>`;
+    const fullHtml = wrapEmailShell(greetingHtml + html + signatureHtml + unsubscribeHtml);
+    const textFallback = htmlToPlainTextFallback(greetingHtml + html + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
+
     try {
-      await sendConfirmationEmail(
-        contact.email,
-        subject,
-        `${greeting}${content}\n\n—\nCarla\n\n¿No quieres recibir más correos? Date de baja aquí: ${unsubscribeUrl}`
-      );
+      await sendHtmlEmail(contact.email, subject, fullHtml, textFallback);
       await supabase.from("contact_events").insert({
         contact_id: contact.id,
         event_type: "newsletter_sent",
@@ -46,7 +48,7 @@ export async function POST(request: Request) {
     }
   }
 
-  await supabase.from("newsletter_issues").insert({ subject, content, recipient_count: sent });
+  await supabase.from("newsletter_issues").insert({ subject, content: html, recipient_count: sent });
 
   return NextResponse.json({ sent, total: recipients?.length ?? 0 });
 }
