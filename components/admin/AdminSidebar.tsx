@@ -12,6 +12,12 @@ export default function AdminSidebar() {
         <Link href="/admin/blog" className="opacity-75 hover:opacity-100 transition-opacity">
           Blog
         </Link>
+        <Link href="/admin/mentorias" className="opacity-75 hover:opacity-100 transition-opacity">
+          Mentorías
+        </Link>
+        <Link href="/admin/pagos" className="opacity-75 hover:opacity-100 transition-opacity">
+          Pagos
+        </Link>
       </nav>
       <form action={logout} className="mt-auto">
         <button type="submit" className="font-mono text-xs uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity">
