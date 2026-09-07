@@ -1,5 +1,6 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
+import { recordEmailSend } from "@/lib/emailTracking";
 import { getSequenceSteps, type SequenceStep } from "@/lib/sequences";
 
 type SupabaseAdmin = ReturnType<typeof createSupabaseAdminClient>;
@@ -19,7 +20,8 @@ async function sendStepAndAdvance(
   stepIndex: number
 ) {
   const step = steps[stepIndex];
-  await sendConfirmationEmail(email, step.subject, step.body(name, unsubscribeUrl(email)));
+  const resendId = await sendConfirmationEmail(email, step.subject, step.body(name, unsubscribeUrl(email)));
+  await recordEmailSend({ resendId, contactId, emailType: "sequence", subject: step.subject });
 
   const nextIndex = stepIndex + 1;
   const update =

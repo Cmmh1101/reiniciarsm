@@ -1,5 +1,6 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
+import { recordEmailSend } from "@/lib/emailTracking";
 import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT } from "@/lib/pricing";
 
 interface RecordPaymentInput {
@@ -76,11 +77,13 @@ export async function recordMentoriaPayment({
           minute: "2-digit",
           timeZoneName: "short",
         });
-        await sendConfirmationEmail(
+        const subject = "Confirmación de tu sesión — Mentoría Next You";
+        const resendId = await sendConfirmationEmail(
           email,
-          "Confirmación de tu sesión — Mentoría Next You",
+          subject,
           `Hola ${name},\n\nConfirmamos tu sesión el ${slotLabel} — te comparto el enlace de Google Meet antes de la sesión.\n\n¿Necesitas reagendar? Escríbeme a hello@carlamontano.io.\n\nNos vemos pronto,\nCarla`
         );
+        await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
       } else {
         console.error("recordMentoriaPayment: slot already booked at payment time", slotId);
       }
@@ -98,10 +101,12 @@ export async function recordMentoriaPayment({
       metadata: { product, stripe_payment_id: stripePaymentId, payment_method: paymentMethod, includes: "1 mes de Comunidad Next You" },
     });
 
-    await sendConfirmationEmail(
+    const subject = "Confirmación de tu paquete de 4 sesiones — Mentoría Next You";
+    const resendId = await sendConfirmationEmail(
       email,
-      "Confirmación de tu paquete de 4 sesiones — Mentoría Next You",
+      subject,
       `Hola ${name},\n\n¡Gracias por tu compra! Confirmamos tu paquete de 4 sesiones de Mentoría Next You, que incluye 1 mes de membresía Comunidad Next You de regalo.\n\nTe escribo pronto para coordinar tus horarios.\n\nSaludos,\nCarla`
     );
+    await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
   }
 }
