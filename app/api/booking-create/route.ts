@@ -26,6 +26,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Ese horario ya no está disponible." }, { status: 409 });
   }
 
+  const slotLabel = new Date(slot.start_time).toLocaleString("es", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  });
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const stripe = createStripeClient();
   const session = await stripe.checkout.sessions.create({
@@ -36,7 +45,10 @@ export async function POST(request: Request) {
         price_data: {
           currency: "usd",
           unit_amount: MENTORIA_SESSION_PRICE_CENTS,
-          product_data: { name: "Mentoría Next You — Sesión 1:1 (60 min)" },
+          product_data: {
+            name: "Mentoría Next You — Sesión 1:1 (60 min)",
+            description: `Sesión online por Google Meet — ${slotLabel}.`,
+          },
         },
         quantity: 1,
       },
