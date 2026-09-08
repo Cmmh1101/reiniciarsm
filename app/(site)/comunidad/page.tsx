@@ -4,6 +4,16 @@ import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Comunidad Next You — Carla Montaño",
   description: "El hogar de quienes están reiniciando en paralelo a ti — retos mensuales, sesiones en vivo y acompañamiento real.",
+  openGraph: {
+    title: "Comunidad Next You — Carla Montaño",
+    description: "El hogar de quienes están reiniciando en paralelo a ti — retos mensuales, sesiones en vivo y acompañamiento real.",
+    url: "/comunidad",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Comunidad Next You — Carla Montaño",
+    description: "El hogar de quienes están reiniciando en paralelo a ti — retos mensuales, sesiones en vivo y acompañamiento real.",
+  },
 };
 
 const REASONS = [

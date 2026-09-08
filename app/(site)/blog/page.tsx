@@ -9,6 +9,16 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Recursos — Carla Montaño",
   description: "Historias, guías y método para tu reinicio, organizados por pilar.",
+  openGraph: {
+    title: "Recursos — Carla Montaño",
+    description: "Historias, guías y método para tu reinicio, organizados por pilar.",
+    url: "/blog",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Recursos — Carla Montaño",
+    description: "Historias, guías y método para tu reinicio, organizados por pilar.",
+  },
 };
 
 export default async function BlogArchivePage() {

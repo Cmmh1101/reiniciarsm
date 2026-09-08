@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 
+// Still a placeholder ("en construcción") — keep it out of search results until real content ships.
 export const metadata: Metadata = {
   title: "Mi historia — Carla Montaño",
+  robots: { index: false, follow: true },
 };
 
 export default function MiHistoriaPage() {

@@ -9,9 +9,13 @@ export const dynamic = "force-dynamic";
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
+  const title = `${post.title} — Carla Montaño`;
+  const description = post.excerpt ?? undefined;
   return {
-    title: `${post.title} — Carla Montaño`,
-    description: post.excerpt ?? undefined,
+    title,
+    description,
+    openGraph: { title, description, url: `/blog/${post.slug}`, type: "article" },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 

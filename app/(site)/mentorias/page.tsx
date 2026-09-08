@@ -6,10 +6,15 @@ import BookingWidget from "@/components/BookingWidget";
 // fetch fresh every request rather than baking availability into the build.
 export const dynamic = "force-dynamic";
 
+const MENTORIAS_TITLE = "Mentoría Next You — Carla Montaño";
+const MENTORIAS_DESCRIPTION =
+  "Sesiones 1:1 personalizadas para trabajar tu próximo paso concreto en cualquiera de los 8 pilares de NEXT YOU™.";
+
 export const metadata: Metadata = {
-  title: "Mentoría Next You — Carla Montaño",
-  description:
-    "Sesiones 1:1 personalizadas para trabajar tu próximo paso concreto en cualquiera de los 8 pilares de NEXT YOU™.",
+  title: MENTORIAS_TITLE,
+  description: MENTORIAS_DESCRIPTION,
+  openGraph: { title: MENTORIAS_TITLE, description: MENTORIAS_DESCRIPTION, url: "/mentorias" },
+  twitter: { card: "summary_large_image", title: MENTORIAS_TITLE, description: MENTORIAS_DESCRIPTION },
 };
 
 const SIGNS = [
