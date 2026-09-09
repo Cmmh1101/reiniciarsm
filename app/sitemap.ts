@@ -5,8 +5,7 @@ import { getPublishedPosts } from "@/lib/posts";
 // Home/Blog/Mentorías need this (see app/(site)/blog/page.tsx).
 export const dynamic = "force-dynamic";
 
-// /mi-historia is excluded — still a "página en construcción" placeholder, not ready to index.
-const STATIC_ROUTES = ["", "/blog", "/mentorias", "/diagnostico-next-you", "/comunidad"];
+const STATIC_ROUTES = ["", "/blog", "/mentorias", "/diagnostico-next-you", "/comunidad", "/mi-historia"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://carlamontano.io";
