@@ -47,6 +47,9 @@ const ResizableImage = Image.extend({
       },
     };
   },
+  // Used only for HTML export (getHTML()) — ProseMirror serializes from the schema's toDOM
+  // regardless of what addNodeView() below renders, so the <a> wrap only ever reaches the actual
+  // email HTML, never the live editing surface.
   renderHTML({ node, HTMLAttributes }) {
     const merged = mergeAttributes(this.options.HTMLAttributes, HTMLAttributes);
     const href = node.attrs.href as string | null;
@@ -54,6 +57,44 @@ const ResizableImage = Image.extend({
       return ["a", { href, target: "_blank", rel: "noopener noreferrer" }, ["img", merged]];
     }
     return ["img", merged];
+  },
+  // The live editing DOM must stay a single plain <img> — image is a leaf/atom node, and wrapping
+  // its rendered DOM in an extra <a> (as renderHTML does for export) breaks ProseMirror's
+  // position mapping around it: the image becomes unselectable/unable to navigate past, typing
+  // and Enter stop working, and clicking away no longer deselects it. A dedicated NodeView keeps
+  // editing visuals (width/align, a dashed outline standing in for the link) independent of the
+  // exported markup.
+  addNodeView() {
+    return ({ node }) => {
+      const img = document.createElement("img");
+      const apply = (n: typeof node) => {
+        img.setAttribute("src", n.attrs.src);
+        if (n.attrs.alt) img.setAttribute("alt", n.attrs.alt);
+        else img.removeAttribute("alt");
+
+        let style = "";
+        if (n.attrs.width) style += `width:${n.attrs.width};`;
+        if (n.attrs.align && ALIGN_STYLES[n.attrs.align]) style += ALIGN_STYLES[n.attrs.align];
+        if (n.attrs.href) {
+          style += "outline:2px dashed #BE5A34;outline-offset:2px;";
+          img.setAttribute("title", `Enlaza a: ${n.attrs.href}`);
+        } else if (n.attrs.title) {
+          img.setAttribute("title", n.attrs.title);
+        } else {
+          img.removeAttribute("title");
+        }
+        img.setAttribute("style", style);
+      };
+      apply(node);
+      return {
+        dom: img,
+        update: (updatedNode) => {
+          if (updatedNode.type.name !== "image") return false;
+          apply(updatedNode as typeof node);
+          return true;
+        },
+      };
+    };
   },
 });
 
