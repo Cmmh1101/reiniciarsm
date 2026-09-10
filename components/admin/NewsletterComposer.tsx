@@ -3,15 +3,25 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
+import { mergeAttributes } from "@tiptap/core";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 
-// Adds a `width` attribute (rendered as inline style) on top of the stock Image extension, so a
-// selected image can be resized from the toolbar. Kept local to this composer rather than shared
-// with the blog editor — the newsletter's HTML goes through styleTiptapHtml's email-safe styling,
-// which the blog post editor doesn't need.
+// Images need their own width/align/href handling — none of this works out of the box:
+// - TextAlign only targets text-bearing nodes (paragraph/heading); an image is its own block
+//   node with no text content for text-align to apply to.
+// - The Link mark can't attach to a non-text node like an image, so "select image, click Link"
+//   silently does nothing.
+// Kept local to this composer rather than shared with the blog editor — the newsletter's HTML
+// goes through styleTiptapHtml's email-safe styling, which the blog post editor doesn't need.
+const ALIGN_STYLES: Record<string, string> = {
+  left: "display:block;margin:0 auto 0 0;",
+  center: "display:block;margin:0 auto;",
+  right: "display:block;margin:0 0 0 auto;",
+};
+
 const ResizableImage = Image.extend({
   addAttributes() {
     return {
@@ -23,7 +33,27 @@ const ResizableImage = Image.extend({
           return { style: `width: ${attributes.width}` };
         },
       },
+      align: {
+        default: null,
+        renderHTML: (attributes: { align?: string | null }) => {
+          if (!attributes.align || !ALIGN_STYLES[attributes.align]) return {};
+          return { style: ALIGN_STYLES[attributes.align] };
+        },
+      },
+      href: {
+        default: null,
+        parseHTML: (element: HTMLElement) => element.closest("a")?.getAttribute("href") ?? null,
+        renderHTML: () => ({}),
+      },
     };
+  },
+  renderHTML({ node, HTMLAttributes }) {
+    const merged = mergeAttributes(this.options.HTMLAttributes, HTMLAttributes);
+    const href = node.attrs.href as string | null;
+    if (href) {
+      return ["a", { href, target: "_blank", rel: "noopener noreferrer" }, ["img", merged]];
+    }
+    return ["img", merged];
   },
 });
 
@@ -32,6 +62,12 @@ const IMAGE_SIZES: { label: string; value: string }[] = [
   { label: "M", value: "50%" },
   { label: "L", value: "75%" },
   { label: "100%", value: "100%" },
+];
+
+const IMAGE_ALIGNS: { label: string; value: string }[] = [
+  { label: "⇤", value: "left" },
+  { label: "⇹", value: "center" },
+  { label: "⇥", value: "right" },
 ];
 
 export default function NewsletterComposer({ subscriberCount }: { subscriberCount: number }) {
@@ -80,6 +116,14 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
     const url = window.prompt("URL del enlace:");
     if (!url) return;
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
+  }
+
+  function handleImageLink() {
+    if (!editor) return;
+    const current = (editor.getAttributes("image").href as string | null) ?? "";
+    const url = window.prompt("URL del enlace para esta imagen (déjalo vacío para quitarlo):", current);
+    if (url === null) return;
+    editor.chain().focus().updateAttributes("image", { href: url.trim() || null }).run();
   }
 
   function getComposedContent(): { subject: string; html: string } | null {
@@ -235,6 +279,19 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
                         {size.label}
                       </ToolbarButton>
                     ))}
+                    <span className="text-[10px] font-mono opacity-50 mx-0.5">Alinear</span>
+                    {IMAGE_ALIGNS.map((align) => (
+                      <ToolbarButton
+                        key={align.value}
+                        active={editor.getAttributes("image").align === align.value}
+                        onClick={() => editor.chain().focus().updateAttributes("image", { align: align.value }).run()}
+                      >
+                        {align.label}
+                      </ToolbarButton>
+                    ))}
+                    <ToolbarButton active={!!editor.getAttributes("image").href} onClick={handleImageLink}>
+                      Enlace de imagen
+                    </ToolbarButton>
                   </>
                 )}
               </div>
