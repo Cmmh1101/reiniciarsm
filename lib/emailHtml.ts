@@ -54,24 +54,41 @@ export function wrapEmailShell(bodyHtml: string): string {
 </html>`;
 }
 
-// Tiptap's raw output (h2, p, ul/li, blockquote, a, img) carries no inline
-// styles, so it'd render with each email client's bare defaults. Inject brand
-// styling onto the tags that need it — safe as simple string replacement
-// since Tiptap's own output never sets a `style` attribute on these itself.
+// Merges `defaultCss` onto every `<tagName ...>` in html, regardless of what attributes Tiptap
+// already put there (src/alt on img, an existing style from TextAlign or the image-width
+// attribute, etc.) or what order they're in — a blind string replace on the bare "<p>" form
+// breaks the moment Tiptap adds its own style attribute (e.g. a centered paragraph).
+function addDefaultStyle(html: string, tagName: string, defaultCss: string): string {
+  const tagRe = new RegExp(`<${tagName}\\b([^>]*)>`, "g");
+  return html.replace(tagRe, (_match, attrs: string) => {
+    const styleMatch = attrs.match(/style="([^"]*)"/);
+    if (styleMatch) {
+      const merged = `${defaultCss} ${styleMatch[1]}`;
+      return `<${tagName}${attrs.replace(/style="[^"]*"/, `style="${merged}"`)}>`;
+    }
+    return `<${tagName}${attrs} style="${defaultCss}">`;
+  });
+}
+
+// Tiptap's raw output (h2, p, ul/li, blockquote, a, img) carries no brand styling of its own —
+// only what extensions like TextAlign or the image width control add — so it'd otherwise render
+// with each email client's bare defaults.
 export function styleTiptapHtml(html: string): string {
-  return html
-    .replace(/<h2>/g, '<h2 style="font-family:Georgia,serif;font-size:22px;margin:28px 0 12px;color:#14192B;">')
-    .replace(/<h3>/g, '<h3 style="font-family:Georgia,serif;font-size:19px;margin:24px 0 10px;color:#14192B;">')
-    .replace(/<p>/g, '<p style="margin:0 0 18px;">')
-    .replace(/<ul>/g, '<ul style="margin:0 0 18px;padding-left:22px;">')
-    .replace(/<ol>/g, '<ol style="margin:0 0 18px;padding-left:22px;">')
-    .replace(/<li>/g, '<li style="margin-bottom:8px;">')
-    .replace(
-      /<blockquote>/g,
-      '<blockquote style="font-family:Georgia,serif;font-style:italic;color:#BE5A34;border-left:3px solid #BE5A34;padding-left:18px;margin:20px 0;">'
-    )
-    .replace(/<img /g, '<img style="max-width:100%;border-radius:4px;margin:12px 0;" ')
-    .replace(/<a /g, '<a style="color:#BE5A34;" ');
+  let out = html;
+  out = addDefaultStyle(out, "h2", "font-family:Georgia,serif;font-size:22px;margin:28px 0 12px;color:#14192B;");
+  out = addDefaultStyle(out, "h3", "font-family:Georgia,serif;font-size:19px;margin:24px 0 10px;color:#14192B;");
+  out = addDefaultStyle(out, "p", "margin:0 0 18px;");
+  out = addDefaultStyle(out, "ul", "margin:0 0 18px;padding-left:22px;");
+  out = addDefaultStyle(out, "ol", "margin:0 0 18px;padding-left:22px;");
+  out = addDefaultStyle(out, "li", "margin-bottom:8px;");
+  out = addDefaultStyle(
+    out,
+    "blockquote",
+    "font-family:Georgia,serif;font-style:italic;color:#BE5A34;border-left:3px solid #BE5A34;padding-left:18px;margin:20px 0;"
+  );
+  out = addDefaultStyle(out, "img", "max-width:100%;border-radius:4px;margin:12px 0;");
+  out = addDefaultStyle(out, "a", "color:#BE5A34;");
+  return out;
 }
 
 export function textToEmailHtml(text: string): string {
