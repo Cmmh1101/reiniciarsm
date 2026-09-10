@@ -105,7 +105,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           <div className="grid md:grid-cols-3 gap-6">
             {related.map((r) => (
               <Link key={r.id} href={`/blog/${r.slug}`} className="flex flex-col gap-2.5">
-                <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#6E7F5C] to-[#2f3a26]" />
+                {r.featured_image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={r.featured_image_url} alt="" className="w-full aspect-[4/3] rounded-[2px] object-cover" />
+                ) : (
+                  <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#6E7F5C] to-[#2f3a26]" />
+                )}
                 <span className="font-mono text-[10px] uppercase text-clay">{r.pillar}</span>
                 <h4 className="text-base leading-snug">{r.title}</h4>
               </Link>

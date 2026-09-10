@@ -41,7 +41,12 @@ export default async function BlogArchivePage() {
         <div className="grid md:grid-cols-3 gap-7 px-[8vw] py-16">
           {posts.map((post) => (
             <Link key={post.id} href={`/blog/${post.slug}`} className="flex flex-col gap-3.5">
-              <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#8a7458] to-[#3a4562]" />
+              {post.featured_image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={post.featured_image_url} alt="" className="w-full aspect-[4/3] rounded-[2px] object-cover" />
+              ) : (
+                <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#8a7458] to-[#3a4562]" />
+              )}
               <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{post.pillar}</span>
               <h3 className="text-[19px] leading-snug">{post.title}</h3>
               {post.excerpt && <p className="text-[13.5px] opacity-65">{post.excerpt}</p>}

@@ -188,10 +188,9 @@ export default async function Home() {
       {/* HISTORIA (TEASER) */}
       <section id="historia" className="px-[8vw] py-24">
         <div className="grid md:grid-cols-[0.85fr_1.15fr] gap-16 items-center">
-          <div className="aspect-[4/5] rounded-[2px] bg-gradient-to-br from-[#8a7458] to-[#3a4562] relative overflow-hidden">
-            <span className="absolute bottom-3.5 left-3.5 font-mono text-[10px] text-paper opacity-70">
-              Foto documental — Carla en proceso
-            </span>
+          <div className="aspect-[4/5] rounded-[2px] relative overflow-hidden">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/carla/hero-home.jpg" alt="Carla Montaño" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">Hola, soy Carla</p>
@@ -290,7 +289,12 @@ export default async function Home() {
                 href={`/blog/${post.slug}`}
                 className="border border-[rgba(20,25,43,0.12)] rounded-[2px] overflow-hidden flex flex-col"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
+                {post.featured_image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={post.featured_image_url} alt="" className="w-full aspect-[4/3] object-cover" />
+                ) : (
+                  <div className="aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
+                )}
                 <div className="p-4.5 flex flex-col gap-2.5 flex-1">
                   <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{post.pillar}</span>
                   <h4 className="text-[15.5px] leading-snug">{post.title}</h4>

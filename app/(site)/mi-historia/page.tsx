@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CONTIGO_VENEZUELA_URL } from "@/lib/constants";
 
-// Images are hotlinked from the live WordPress site for now — carlamontano.io stays up until
-// the migration's own cutover condition is met, so this is safe short-term. Replace with
-// self-hosted copies (e.g. in /public) once Carla supplies the original files.
-const HERO_IMAGE_URL = "https://carlamontano.io/wp-content/uploads/2025/09/9-1.png";
+const HERO_IMAGE_URL = "/images/carla/hero-mi-historia.jpg";
+
+// Still hotlinked from the live WordPress site — carlamontano.io stays up until the migration's
+// own cutover condition is met, so this is safe short-term. Replace once Carla supplies the file.
 const CONTIGO_IMAGE_URL =
   "https://carlamontano.io/wp-content/uploads/2026/07/ChatGPT-Image-Jul-10-2026-11_34_43-AM-1-200x300.png";
 
