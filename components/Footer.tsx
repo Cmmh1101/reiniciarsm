@@ -39,22 +39,42 @@ export default function Footer() {
             <h5 className="font-mono text-[10.5px] tracking-widest uppercase opacity-50 mb-3.5">Conecta</h5>
             <ul className="flex flex-col gap-2">
               <li>
-                <a href="#" className="no-underline opacity-75 text-[13.5px]">
+                <a
+                  href="https://www.youtube.com/@carlamontanotech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline opacity-75 text-[13.5px]"
+                >
                   YouTube
                 </a>
               </li>
               <li>
-                <a href="#" className="no-underline opacity-75 text-[13.5px]">
+                <a
+                  href="https://www.instagram.com/carlamontanotech/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline opacity-75 text-[13.5px]"
+                >
                   Instagram
                 </a>
               </li>
               <li>
-                <a href="#" className="no-underline opacity-75 text-[13.5px]">
+                <a
+                  href="https://www.tiktok.com/@carlamontanotech"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline opacity-75 text-[13.5px]"
+                >
                   TikTok
                 </a>
               </li>
               <li>
-                <a href="#" className="no-underline opacity-75 text-[13.5px]">
+                <a
+                  href="https://www.linkedin.com/in/carla-montano/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="no-underline opacity-75 text-[13.5px]"
+                >
                   LinkedIn
                 </a>
               </li>
