@@ -24,6 +24,9 @@ export default function AdminSidebar() {
         <Link href="/admin/newsletter" className="opacity-75 hover:opacity-100 transition-opacity">
           Newsletter
         </Link>
+        <Link href="/admin/analytics" className="opacity-75 hover:opacity-100 transition-opacity">
+          Analytics
+        </Link>
       </nav>
       <form action={logout} className="mt-auto">
         <button type="submit" className="font-mono text-xs uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity">
