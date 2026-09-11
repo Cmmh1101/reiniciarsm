@@ -16,6 +16,9 @@ function eventCaption(event: ContactEvent): string | null {
   if ((event.event_type === "sequence_email_sent" || event.event_type === "newsletter_sent") && m.subject) {
     return `"${m.subject}"`;
   }
+  if (event.event_type === "contact_form_submitted" && m.subject) {
+    return `"${m.subject}"`;
+  }
   return null;
 }
 

@@ -33,6 +33,11 @@ export default function Footer() {
                   Sobre mí
                 </Link>
               </li>
+              <li>
+                <Link href="/contacto" className="no-underline opacity-75 text-[13.5px]">
+                  Contacto
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

@@ -32,6 +32,9 @@ export default function Header() {
         <Link href="/mi-historia" className="opacity-65 hover:opacity-100 transition-opacity">
           Sobre mí
         </Link>
+        <Link href="/contacto" className="opacity-65 hover:opacity-100 transition-opacity">
+          Contacto
+        </Link>
       </div>
       <Link
         href="/diagnostico-next-you"

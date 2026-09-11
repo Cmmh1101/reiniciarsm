@@ -4,9 +4,10 @@ const nextConfig = {
 
   // Preserves SEO and existing links from the old WordPress site once carlamontano.io's DNS
   // points here. Built from a full crawl of WordPress's own wp-sitemap.xml — see the migration
-  // memory notes for the source list. `/herramientas`, `/contacto`, and the paid product at
+  // memory notes for the source list. `/herramientas` and the paid product at
   // `/products/empieza-en-tecnologia-con-claridad` were deliberately left out — those need
-  // Carla's decision on a destination before redirecting, not a silent guess.
+  // Carla's decision on a destination before redirecting, not a silent guess. `/contacto` needs
+  // no redirect entry — the new site has a real page at that same path now.
   async redirects() {
     return [
       // Blog posts that already lived on WordPress under a different slug.
