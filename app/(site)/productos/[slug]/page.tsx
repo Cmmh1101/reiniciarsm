@@ -30,8 +30,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
           <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{product.category}</p>
           <h1 className="font-display text-[clamp(28px,3.6vw,40px)] leading-[1.1] mb-5">{product.name}</h1>
           {product.description && <p className="text-base opacity-90 mb-6 max-w-[48ch]">{product.description}</p>}
-          <p className="font-display text-3xl text-clay mb-8">${(product.price_cents / 100).toFixed(2)}</p>
-          <ProductBuyForm productId={product.id} />
+          <p className="font-display text-3xl text-clay mb-8">
+            {product.price_cents === 0 ? "Gratis" : `$${(product.price_cents / 100).toFixed(2)}`}
+          </p>
+          <ProductBuyForm productId={product.id} priceCents={product.price_cents} />
         </div>
       </div>
     </main>

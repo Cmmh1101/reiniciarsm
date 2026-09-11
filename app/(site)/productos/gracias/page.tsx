@@ -21,8 +21,8 @@ async function getDownloadToken(sessionId: string): Promise<string | null> {
   }
 }
 
-export default async function ProductosGraciasPage({ searchParams }: { searchParams: { session_id?: string } }) {
-  const downloadToken = searchParams.session_id ? await getDownloadToken(searchParams.session_id) : null;
+export default async function ProductosGraciasPage({ searchParams }: { searchParams: { session_id?: string; token?: string } }) {
+  const downloadToken = searchParams.token ?? (searchParams.session_id ? await getDownloadToken(searchParams.session_id) : null);
 
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-6 py-24">

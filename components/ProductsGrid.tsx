@@ -49,7 +49,7 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
             <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{p.category}</span>
             <h3 className="text-lg font-display">{p.name}</h3>
             {p.description && <p className="text-sm opacity-70">{p.description}</p>}
-            <span className="font-mono text-sm mt-auto">${(p.price_cents / 100).toFixed(2)}</span>
+            <span className="font-mono text-sm mt-auto">{p.price_cents === 0 ? "Gratis" : `$${(p.price_cents / 100).toFixed(2)}`}</span>
           </Link>
         ))}
       </div>

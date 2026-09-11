@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createStripeClient } from "@/lib/stripe";
 import { getProductById } from "@/lib/products";
+import { recordProductPurchase } from "@/lib/productPurchases";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -20,6 +21,19 @@ export async function POST(request: Request) {
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
+  // Stripe Checkout rejects a $0 line item — free products skip Stripe entirely.
+  if (product.price_cents === 0) {
+    const { downloadToken } = await recordProductPurchase({
+      email,
+      name,
+      productId: product.id,
+      amountCents: 0,
+      stripePaymentId: null,
+    });
+    return NextResponse.json({ url: `${siteUrl}/productos/gracias?token=${downloadToken}` });
+  }
+
   const stripe = createStripeClient();
   const session = await stripe.checkout.sessions.create({
     mode: "payment",

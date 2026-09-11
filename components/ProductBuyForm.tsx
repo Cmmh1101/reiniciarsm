@@ -4,7 +4,8 @@ import { useState } from "react";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export default function ProductBuyForm({ productId }: { productId: string }) {
+export default function ProductBuyForm({ productId, priceCents }: { productId: string; priceCents: number }) {
+  const isFree = priceCents === 0;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -56,7 +57,7 @@ export default function ProductBuyForm({ productId }: { productId: string }) {
         disabled={loading}
         className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper self-start disabled:opacity-60"
       >
-        {loading ? "Redirigiendo a pago..." : "Comprar →"}
+        {loading ? (isFree ? "Enviando..." : "Redirigiendo a pago...") : isFree ? "Descargar gratis →" : "Comprar →"}
       </button>
       {error && <p className="text-clay text-sm">{error}</p>}
     </form>
