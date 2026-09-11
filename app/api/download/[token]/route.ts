@@ -6,7 +6,7 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 // short-lived signed URL from the private 'product-files' bucket and redirects to it. A bad or
 // unpaid token gets a 404, not a hint about what exists.
 //
-// Must never be cached: this does a live purchase check and mints a fresh 5-minute signed URL on
+// Must never be cached: this does a live purchase check and mints a fresh 1-hour signed URL on
 // every request. Netlify's edge caches GET route handlers by default when Next.js doesn't mark
 // them dynamic — caught this in testing: a second request was served a stale cached redirect
 // instead of re-checking the purchase, which would eventually mean real customers get served a
@@ -41,7 +41,7 @@ export async function GET(request: Request, { params }: { params: { token: strin
 
   const { data: signed, error: signError } = await supabase.storage
     .from("product-files")
-    .createSignedUrl(product.file_path, 300, { download: product.file_name });
+    .createSignedUrl(product.file_path, 3600, { download: product.file_name });
 
   if (signError || !signed) {
     console.error("download: failed to create signed URL", signError);
