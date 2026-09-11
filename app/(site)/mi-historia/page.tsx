@@ -4,10 +4,7 @@ import { CONTIGO_VENEZUELA_URL } from "@/lib/constants";
 
 const HERO_IMAGE_URL = "/images/carla/hero-mi-historia.jpg";
 
-// Still hotlinked from the live WordPress site — carlamontano.io stays up until the migration's
-// own cutover condition is met, so this is safe short-term. Replace once Carla supplies the file.
-const CONTIGO_IMAGE_URL =
-  "https://carlamontano.io/wp-content/uploads/2026/07/ChatGPT-Image-Jul-10-2026-11_34_43-AM-1-200x300.png";
+const CONTIGO_IMAGE_URL = "/images/carla/contigove.png";
 
 const TITLE = "No Empecé Sabiendo El Camino. Lo Construí Reiniciando 6+ Veces.";
 const DESCRIPTION =
@@ -159,20 +156,20 @@ export default function MiHistoriaPage() {
         </div>
       </section>
 
-      <section className="px-[8vw] py-24 grid md:grid-cols-[1fr_280px] gap-12 items-center">
-        <div>
+      <section className="px-[8vw] py-24">
+        <div className="max-w-[640px] mb-10">
           <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">Tecnología con propósito</p>
           <h2 className="font-display text-[clamp(26px,3.2vw,38px)] mb-5 max-w-[20ch]">
             Creo Tecnología Que Ayuda A Personas Reales
           </h2>
-          <p className="text-base opacity-90 mb-4 max-w-[60ch]">
+          <p className="text-base opacity-90 mb-4">
             Aprender a programar me permitió reconstruir mi vida. Pero con el tiempo entendí que la tecnología
             también puede cambiar la vida de otros. Cuando Venezuela atravesó una emergencia nacional, construí
             junto a un equipo de voluntarios una plataforma para conectar gratuitamente a personas afectadas con
             psicólogos. No fue un proyecto comercial — fue una respuesta humana usando las herramientas que
             conocíamos.
           </p>
-          <p className="italic text-base opacity-70 mb-6 max-w-[60ch]">
+          <p className="italic text-base opacity-70 mb-6">
             Eso resume lo que significa para mí la tecnología: una herramienta, nunca un fin.
           </p>
           <a
@@ -187,8 +184,8 @@ export default function MiHistoriaPage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={CONTIGO_IMAGE_URL}
-          alt="Contigo Venezuela — Tech for good"
-          className="w-full rounded-[2px] justify-self-center"
+          alt="Contigo Venezuela — plataforma de acompañamiento psicológico gratuito"
+          className="w-full max-w-[700px] rounded-[3px] border border-[rgba(20,25,43,0.12)]"
         />
       </section>
 
