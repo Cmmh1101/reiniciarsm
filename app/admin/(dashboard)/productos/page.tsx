@@ -48,7 +48,9 @@ export default async function AdminProductosPage() {
               return (
                 <tr key={p.id} className="border-b border-[rgba(20,25,43,0.08)]">
                   <td className="py-3">
-                    {p.name}
+                    <Link href={`/admin/productos/${p.id}/edit`} className="hover:underline">
+                      {p.name}
+                    </Link>
                     <div className="text-xs opacity-50 font-mono">/productos/{p.slug}</div>
                   </td>
                   <td className="py-3 opacity-70">${(p.price_cents / 100).toFixed(2)}</td>

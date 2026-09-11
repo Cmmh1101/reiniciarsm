@@ -1,17 +1,20 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/slugify";
+import { uploadProductFile } from "@/lib/uploadProductFile";
+import type { Product } from "@/lib/products";
 
-export default function ProductForm() {
+export default function ProductForm({ product }: { product?: Product }) {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
-  const [slugTouched, setSlugTouched] = useState(false);
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const isEdit = !!product;
+
+  const [name, setName] = useState(product?.name ?? "");
+  const [slug, setSlug] = useState(product?.slug ?? "");
+  const [slugTouched, setSlugTouched] = useState(isEdit);
+  const [description, setDescription] = useState(product?.description ?? "");
+  const [price, setPrice] = useState(product ? (product.price_cents / 100).toFixed(2) : "");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -31,42 +34,41 @@ export default function ProductForm() {
       setError("Completa nombre, slug y un precio válido.");
       return;
     }
-    if (!file) {
+    if (!isEdit && !file) {
       setError("Sube el archivo del producto.");
       return;
     }
 
-    setUploading(true);
-    let filePath: string;
-    let fileName: string;
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const uploadRes = await fetch("/api/admin/upload-product-file", { method: "POST", body: formData });
-      const uploadData = await uploadRes.json();
-      if (!uploadRes.ok) throw new Error(uploadData.error ?? "No se pudo subir el archivo.");
-      filePath = uploadData.filePath;
-      fileName = uploadData.fileName;
-    } catch (err) {
+    let filePath: string | undefined;
+    let fileName: string | undefined;
+    if (file) {
+      setUploading(true);
+      try {
+        const uploaded = await uploadProductFile(file);
+        filePath = uploaded.filePath;
+        fileName = uploaded.fileName;
+      } catch (err) {
+        setUploading(false);
+        setError(err instanceof Error ? err.message : "No se pudo subir el archivo.");
+        return;
+      }
       setUploading(false);
-      setError(err instanceof Error ? err.message : "No se pudo subir el archivo.");
-      return;
     }
-    setUploading(false);
 
     setSaving(true);
     try {
-      const res = await fetch("/api/admin/products", {
-        method: "POST",
+      const payload = { name: name.trim(), slug: slug.trim(), description: description.trim(), priceCents, filePath, fileName };
+      const res = await fetch(isEdit ? `/api/admin/products/${product.id}` : "/api/admin/products", {
+        method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), slug: slug.trim(), description: description.trim(), priceCents, filePath, fileName }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo crear el producto.");
+      if (!res.ok) throw new Error(data.error ?? "No se pudo guardar el producto.");
       router.push("/admin/productos");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo crear el producto.");
+      setError(err instanceof Error ? err.message : "No se pudo guardar el producto.");
     } finally {
       setSaving(false);
     }
@@ -74,7 +76,7 @@ export default function ProductForm() {
 
   return (
     <main className="p-10 max-w-xl">
-      <h1 className="font-display text-2xl mb-6">Nuevo producto</h1>
+      <h1 className="font-display text-2xl mb-6">{isEdit ? "Editar producto" : "Nuevo producto"}</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           <span>Nombre</span>
@@ -121,14 +123,12 @@ export default function ProductForm() {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Archivo del producto</span>
-          <input
-            ref={fileInputRef}
-            type="file"
-            onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            className="text-sm"
-          />
-          {file && <span className="text-xs opacity-60">{file.name}</span>}
+          <span>{isEdit ? "Reemplazar archivo (opcional)" : "Archivo del producto"}</span>
+          {isEdit && product && (
+            <span className="text-xs opacity-60 font-normal">Archivo actual: {product.file_name}</span>
+          )}
+          <input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="text-sm" />
+          {file && <span className="text-xs opacity-60">Nuevo: {file.name}</span>}
         </label>
 
         {error && <p className="text-clay text-sm">{error}</p>}
@@ -138,7 +138,7 @@ export default function ProductForm() {
           disabled={uploading || saving}
           className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
         >
-          {uploading ? "Subiendo archivo..." : saving ? "Guardando..." : "Crear producto"}
+          {uploading ? "Subiendo archivo..." : saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Crear producto"}
         </button>
       </form>
     </main>
