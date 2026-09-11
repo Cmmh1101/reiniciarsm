@@ -1,4 +1,6 @@
 import { getDashboardStats } from "@/lib/dashboardStats";
+import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import BarRow from "@/components/admin/BarRow";
 
 function formatWeekLabel(weekStart: string): string {
   return new Date(`${weekStart}T00:00:00Z`).toLocaleDateString("es", {
@@ -8,21 +10,18 @@ function formatWeekLabel(weekStart: string): string {
   });
 }
 
-function BarRow({ label, value, max, formatValue }: { label: string; value: number; max: number; formatValue: (v: number) => string }) {
-  const pct = max > 0 ? Math.max((value / max) * 100, value > 0 ? 3 : 0) : 0;
-  return (
-    <div className="flex items-center gap-3">
-      <span className="font-mono text-[11px] opacity-60 w-14 shrink-0">{label}</span>
-      <div className="flex-1 bg-[rgba(20,25,43,0.06)] rounded-[2px] h-6 relative overflow-hidden">
-        <div className="h-full bg-clay rounded-[2px]" style={{ width: `${pct}%` }} />
-      </div>
-      <span className="font-mono text-[11px] opacity-70 w-16 text-right shrink-0">{formatValue(value)}</span>
-    </div>
+async function getRecentTraffic(): Promise<{ sessions: number; pageViews: number } | null> {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase.from("ga4_daily_stats").select("sessions, page_views").order("date", { ascending: false }).limit(7);
+  if (error || !data || data.length === 0) return null;
+  return data.reduce(
+    (acc, row) => ({ sessions: acc.sessions + row.sessions, pageViews: acc.pageViews + row.page_views }),
+    { sessions: 0, pageViews: 0 }
   );
 }
 
 export default async function AdminDashboardPage() {
-  const stats = await getDashboardStats();
+  const [stats, traffic] = await Promise.all([getDashboardStats(), getRecentTraffic()]);
   const conversionRate =
     stats.funnel.quizCompleted > 0 ? Math.round((stats.funnel.converted / stats.funnel.quizCompleted) * 100) : 0;
   const maxLeads = Math.max(0, ...stats.leadsPerWeek.map((w) => w.count));
@@ -101,14 +100,20 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-        <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">Tráfico del sitio (GA4)</p>
-        <p className="opacity-60 text-sm">
-          Pendiente de conectar Google Analytics — ver{" "}
-          <a href="/admin/analytics" className="underline">
-            /admin/analytics
-          </a>
-          .
-        </p>
+        <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">Tráfico del sitio (GA4, últimos 7 días)</p>
+        {traffic ? (
+          <p className="font-display text-lg">
+            {traffic.sessions} sesiones <span className="opacity-50 text-sm font-mono">·</span> {traffic.pageViews} vistas de página
+          </p>
+        ) : (
+          <p className="opacity-60 text-sm">
+            Todavía no hay datos sincronizados — ver{" "}
+            <a href="/admin/analytics" className="underline">
+              /admin/analytics
+            </a>
+            .
+          </p>
+        )}
       </div>
     </main>
   );
