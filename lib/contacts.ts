@@ -20,6 +20,7 @@ export const EVENT_TYPE_INFO: Record<string, { label: string; source: string }> 
   sequence_email_sent: { label: "Recibió un email de la secuencia automática", source: "Secuencia" },
   newsletter_sent: { label: "Recibió un newsletter", source: "Newsletter" },
   contact_form_submitted: { label: "Escribió por el formulario de contacto", source: "Contacto" },
+  product_purchased: { label: "Compró un producto digital", source: "Producto" },
 };
 
 export interface Contact {

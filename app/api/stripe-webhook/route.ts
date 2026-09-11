@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createStripeClient } from "@/lib/stripe";
 import { recordMentoriaPayment } from "@/lib/mentoriaPayments";
+import { recordProductPurchase } from "@/lib/productPurchases";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -24,14 +25,40 @@ export async function POST(request: Request) {
   const metadata = session.metadata ?? {};
   const email = (metadata.email ?? session.customer_details?.email ?? "").toLowerCase();
   const name = metadata.name ?? session.customer_details?.name ?? "";
-  const product = metadata.product;
+  const paymentId = typeof session.payment_intent === "string" ? session.payment_intent : session.id;
 
-  if (!email || !product) {
-    console.error("stripe-webhook: missing email or product in session metadata", session.id);
+  if (!email) {
+    console.error("stripe-webhook: missing email in session metadata", session.id);
     return NextResponse.json({ received: true });
   }
 
-  const paymentId = typeof session.payment_intent === "string" ? session.payment_intent : session.id;
+  // Dispatch by purchase type — digital products (metadata.type === "product") vs. the original
+  // mentoría flow, which predates this field and so has no explicit type of its own.
+  if (metadata.type === "product") {
+    if (!metadata.product_id) {
+      console.error("stripe-webhook: product checkout missing product_id", session.id);
+      return NextResponse.json({ received: true });
+    }
+    try {
+      await recordProductPurchase({
+        email,
+        name,
+        productId: metadata.product_id,
+        amountCents: session.amount_total ?? 0,
+        stripePaymentId: paymentId,
+      });
+    } catch (err) {
+      console.error("stripe-webhook: recordProductPurchase failed", err);
+      return NextResponse.json({ error: "Failed to record purchase" }, { status: 500 });
+    }
+    return NextResponse.json({ received: true });
+  }
+
+  const product = metadata.product;
+  if (!product) {
+    console.error("stripe-webhook: missing product in session metadata", session.id);
+    return NextResponse.json({ received: true });
+  }
 
   try {
     await recordMentoriaPayment({

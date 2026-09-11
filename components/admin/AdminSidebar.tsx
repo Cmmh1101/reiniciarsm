@@ -21,6 +21,9 @@ export default function AdminSidebar() {
         <Link href="/admin/pagos" className="opacity-75 hover:opacity-100 transition-opacity">
           Pagos
         </Link>
+        <Link href="/admin/productos" className="opacity-75 hover:opacity-100 transition-opacity">
+          Productos
+        </Link>
         <Link href="/admin/newsletter" className="opacity-75 hover:opacity-100 transition-opacity">
           Newsletter
         </Link>
