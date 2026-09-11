@@ -27,7 +27,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
     <main className="px-[8vw] py-24">
       <div className="grid md:grid-cols-[1fr_1fr] gap-16 max-w-[900px]">
         <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">Producto</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{product.category}</p>
           <h1 className="font-display text-[clamp(28px,3.6vw,40px)] leading-[1.1] mb-5">{product.name}</h1>
           {product.description && <p className="text-base opacity-90 mb-6 max-w-[48ch]">{product.description}</p>}
           <p className="font-display text-3xl text-clay mb-8">${(product.price_cents / 100).toFixed(2)}</p>

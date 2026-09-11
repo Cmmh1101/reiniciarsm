@@ -26,6 +26,9 @@ export default function Header() {
         <Link href="/mentorias" className="opacity-65 hover:opacity-100 transition-opacity">
           Mentorías
         </Link>
+        <Link href="/productos" className="opacity-65 hover:opacity-100 transition-opacity">
+          Productos
+        </Link>
         <Link href="/comunidad" className="opacity-65 hover:opacity-100 transition-opacity">
           Comunidad
         </Link>

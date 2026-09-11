@@ -27,3 +27,7 @@ export const ARC_PHASES = [
 ] as const;
 
 export const ARC_PHASE_NOT_APPLICABLE = "No aplica";
+
+// Fixed product categories (digital products, Fase 5+) — same closed-dropdown reasoning as
+// above: keeps values consistent for the public /productos category filter.
+export const PRODUCT_CATEGORIES = ["Ebook", "Plantilla", "Guía", "Curso", "Otro"] as const;

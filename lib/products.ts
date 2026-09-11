@@ -6,6 +6,7 @@ export interface Product {
   slug: string;
   description: string | null;
   price_cents: number;
+  category: string;
   file_path: string;
   file_name: string;
   active: boolean;

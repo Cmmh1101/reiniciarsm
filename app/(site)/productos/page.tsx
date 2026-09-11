@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { getActiveProducts } from "@/lib/products";
+import ProductsGrid from "@/components/ProductsGrid";
 
 // Products publish through the admin panel at runtime — fetch fresh every request.
 export const dynamic = "force-dynamic";
@@ -30,19 +30,7 @@ export default async function ProductosPage() {
         </p>
       </header>
 
-      {products.length === 0 ? (
-        <p className="opacity-60">Todavía no hay productos disponibles.</p>
-      ) : (
-        <div className="grid md:grid-cols-3 gap-7">
-          {products.map((p) => (
-            <Link key={p.id} href={`/productos/${p.slug}`} className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-6 flex flex-col gap-3">
-              <h3 className="text-lg font-display">{p.name}</h3>
-              {p.description && <p className="text-sm opacity-70">{p.description}</p>}
-              <span className="font-mono text-sm text-clay mt-auto">${(p.price_cents / 100).toFixed(2)}</span>
-            </Link>
-          ))}
-        </div>
-      )}
+      {products.length === 0 ? <p className="opacity-60">Todavía no hay productos disponibles.</p> : <ProductsGrid products={products} />}
     </main>
   );
 }

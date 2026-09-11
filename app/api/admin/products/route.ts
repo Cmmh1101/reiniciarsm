@@ -1,19 +1,23 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
 
   const body = await request.json().catch(() => null);
-  const { name, slug, description, priceCents, filePath, fileName } = body ?? {};
+  const { name, slug, description, category, priceCents, filePath, fileName } = body ?? {};
 
   if (!name || !slug || !priceCents || !filePath || !fileName) {
     return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
   }
   if (typeof priceCents !== "number" || priceCents <= 0) {
     return NextResponse.json({ error: "El precio debe ser mayor que cero." }, { status: 400 });
+  }
+  if (!PRODUCT_CATEGORIES.includes(category)) {
+    return NextResponse.json({ error: "Categoría inválida." }, { status: 400 });
   }
 
   const supabase = createSupabaseAdminClient();
@@ -23,6 +27,7 @@ export async function POST(request: Request) {
       name,
       slug,
       description: description || null,
+      category,
       price_cents: priceCents,
       file_path: filePath,
       file_name: fileName,

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
 
 // Handles both the active/inactive toggle and full edits (name/slug/description/price, and
 // optionally replacing the file). When filePath changes, the old file is deleted from storage
@@ -28,9 +29,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 
   // Full edit path (from the edit form).
-  const { name, slug, description, priceCents, filePath, fileName } = body;
+  const { name, slug, description, category, priceCents, filePath, fileName } = body;
   if (!name || !slug || !priceCents || priceCents <= 0) {
     return NextResponse.json({ error: "Completa nombre, slug y un precio válido." }, { status: 400 });
+  }
+  if (!PRODUCT_CATEGORIES.includes(category)) {
+    return NextResponse.json({ error: "Categoría inválida." }, { status: 400 });
   }
 
   const { data: existing, error: existingError } = await supabase
@@ -42,7 +46,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     return NextResponse.json({ error: "Producto no encontrado." }, { status: 404 });
   }
 
-  const update: Record<string, unknown> = { name, slug, description: description || null, price_cents: priceCents };
+  const update: Record<string, unknown> = { name, slug, description: description || null, category, price_cents: priceCents };
   const replacingFile = filePath && filePath !== existing.file_path;
   if (replacingFile) {
     update.file_path = filePath;

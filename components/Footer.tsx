@@ -29,6 +29,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/productos" className="no-underline opacity-75 text-[13.5px]">
+                  Productos
+                </Link>
+              </li>
+              <li>
                 <Link href="/mi-historia" className="no-underline opacity-75 text-[13.5px]">
                   Sobre mí
                 </Link>

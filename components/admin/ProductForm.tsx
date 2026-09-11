@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/slugify";
 import { uploadProductFile } from "@/lib/uploadProductFile";
 import type { Product } from "@/lib/products";
+import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
 
 export default function ProductForm({ product }: { product?: Product }) {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function ProductForm({ product }: { product?: Product }) {
   const [slug, setSlug] = useState(product?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(isEdit);
   const [description, setDescription] = useState(product?.description ?? "");
+  const [category, setCategory] = useState(product?.category ?? PRODUCT_CATEGORIES[0]);
   const [price, setPrice] = useState(product ? (product.price_cents / 100).toFixed(2) : "");
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -57,7 +59,7 @@ export default function ProductForm({ product }: { product?: Product }) {
 
     setSaving(true);
     try {
-      const payload = { name: name.trim(), slug: slug.trim(), description: description.trim(), priceCents, filePath, fileName };
+      const payload = { name: name.trim(), slug: slug.trim(), description: description.trim(), category, priceCents, filePath, fileName };
       const res = await fetch(isEdit ? `/api/admin/products/${product.id}` : "/api/admin/products", {
         method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,6 +109,21 @@ export default function ProductForm({ product }: { product?: Product }) {
             onChange={(e) => setDescription(e.target.value)}
             className="font-body text-sm px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] resize-none"
           />
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm font-semibold">
+          <span>Categoría</span>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] max-w-[200px] bg-white"
+          >
+            {PRODUCT_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">

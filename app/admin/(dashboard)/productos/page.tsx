@@ -36,6 +36,7 @@ export default async function AdminProductosPage() {
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Producto</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Categoría</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Precio</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Ventas</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Ingresos</th>
@@ -53,6 +54,7 @@ export default async function AdminProductosPage() {
                     </Link>
                     <div className="text-xs opacity-50 font-mono">/productos/{p.slug}</div>
                   </td>
+                  <td className="py-3 opacity-70">{p.category}</td>
                   <td className="py-3 opacity-70">${(p.price_cents / 100).toFixed(2)}</td>
                   <td className="py-3 opacity-70">{s.count}</td>
                   <td className="py-3 opacity-70">${(s.revenueCents / 100).toFixed(2)}</td>
