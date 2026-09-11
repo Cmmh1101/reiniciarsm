@@ -5,6 +5,16 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 // by its (unguessable, uuid) download_token, confirms it's a completed purchase, then mints a
 // short-lived signed URL from the private 'product-files' bucket and redirects to it. A bad or
 // unpaid token gets a 404, not a hint about what exists.
+//
+// Must never be cached: this does a live purchase check and mints a fresh 5-minute signed URL on
+// every request. Netlify's edge caches GET route handlers by default when Next.js doesn't mark
+// them dynamic — caught this in testing: a second request was served a stale cached redirect
+// instead of re-checking the purchase, which would eventually mean real customers get served a
+// long-expired signed URL days after their purchase.
+export const dynamic = "force-dynamic";
+
+const NO_STORE = { "Cache-Control": "no-store, must-revalidate" };
+
 export async function GET(request: Request, { params }: { params: { token: string } }) {
   const supabase = createSupabaseAdminClient();
 
@@ -15,7 +25,7 @@ export async function GET(request: Request, { params }: { params: { token: strin
     .single();
 
   if (purchaseError || !purchase || purchase.status !== "completed") {
-    return NextResponse.json({ error: "Enlace de descarga inválido o expirado." }, { status: 404 });
+    return NextResponse.json({ error: "Enlace de descarga inválido o expirado." }, { status: 404, headers: NO_STORE });
   }
 
   const { data: product, error: productError } = await supabase
@@ -26,7 +36,7 @@ export async function GET(request: Request, { params }: { params: { token: strin
 
   if (productError || !product) {
     console.error("download: product not found for purchase", purchase.id);
-    return NextResponse.json({ error: "Archivo no encontrado." }, { status: 404 });
+    return NextResponse.json({ error: "Archivo no encontrado." }, { status: 404, headers: NO_STORE });
   }
 
   const { data: signed, error: signError } = await supabase.storage
@@ -35,7 +45,7 @@ export async function GET(request: Request, { params }: { params: { token: strin
 
   if (signError || !signed) {
     console.error("download: failed to create signed URL", signError);
-    return NextResponse.json({ error: "No se pudo generar el enlace de descarga." }, { status: 500 });
+    return NextResponse.json({ error: "No se pudo generar el enlace de descarga." }, { status: 500, headers: NO_STORE });
   }
 
   await supabase
@@ -43,5 +53,5 @@ export async function GET(request: Request, { params }: { params: { token: strin
     .update({ download_count: purchase.download_count + 1, downloaded_at: new Date().toISOString() })
     .eq("id", purchase.id);
 
-  return NextResponse.redirect(signed.signedUrl);
+  return NextResponse.redirect(signed.signedUrl, { headers: NO_STORE });
 }
