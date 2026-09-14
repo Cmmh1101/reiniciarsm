@@ -2,6 +2,14 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
 import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT } from "@/lib/pricing";
+import { buildGoogleCalendarLink } from "@/lib/googleCalendar";
+
+/** Notification to Carla herself, alongside the customer's own confirmation email. */
+async function notifyAdmin(subject: string, text: string) {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail) return;
+  await sendConfirmationEmail(adminEmail, subject, text);
+}
 
 interface RecordPaymentInput {
   email: string;
@@ -84,6 +92,17 @@ export async function recordMentoriaPayment({
           `Hola ${name},\n\nConfirmamos tu sesión el ${slotLabel} — te comparto el enlace de Google Meet antes de la sesión.\n\n¿Necesitas reagendar? Escríbeme a hello@carlamontano.io.\n\nNos vemos pronto,\nCarla`
         );
         await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
+
+        const calendarLink = buildGoogleCalendarLink({
+          title: `Mentoría Next You — ${name}`,
+          startISO: updatedSlots[0].start_time,
+          durationMinutes: 60,
+          details: `Sesión 1:1 con ${name} (${email}). Recuerda enviarle el enlace de Google Meet.`,
+        });
+        await notifyAdmin(
+          `Nueva sesión reservada — ${name}`,
+          `${name} (${email}) reservó una sesión 1:1 para el ${slotLabel}.\n\nMétodo de pago: ${paymentMethod} · $${(amountCents / 100).toFixed(2)}\n\nAgregar a Google Calendar → ${calendarLink}`
+        );
       } else {
         console.error("recordMentoriaPayment: slot already booked at payment time", slotId);
       }
@@ -108,5 +127,10 @@ export async function recordMentoriaPayment({
       `Hola ${name},\n\n¡Gracias por tu compra! Confirmamos tu paquete de 4 sesiones de Mentoría Next You, que incluye 1 mes de membresía Comunidad Next You de regalo.\n\nTe escribo pronto para coordinar tus horarios.\n\nSaludos,\nCarla`
     );
     await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
+
+    await notifyAdmin(
+      `Nueva compra: Paquete de 4 sesiones — ${name}`,
+      `${name} (${email}) compró el paquete de 4 sesiones de Mentoría Next You por $${(amountCents / 100).toFixed(2)} (${paymentMethod}).\n\nEscríbele para coordinar horarios.`
+    );
   }
 }

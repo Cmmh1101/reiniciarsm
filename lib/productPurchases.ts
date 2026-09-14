@@ -68,5 +68,15 @@ export async function recordProductPurchase({ email, name, productId, amountCent
   );
   await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
 
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (adminEmail) {
+    const amountLabel = amountCents === 0 ? "Gratis" : `$${(amountCents / 100).toFixed(2)}`;
+    await sendConfirmationEmail(
+      adminEmail,
+      `Nueva compra: ${product.name} — ${name || email}`,
+      `${name || "(sin nombre)"} (${email}) compró "${product.name}" — ${amountLabel}.`
+    );
+  }
+
   return { purchaseId: purchase.id, downloadToken: purchase.download_token };
 }
