@@ -1,19 +1,21 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import BarRow from "@/components/admin/BarRow";
 import GA4SyncButton from "@/components/admin/GA4SyncButton";
+import SessionsBarChart from "@/components/admin/SessionsBarChart";
 
 interface DailyStatsRow {
   date: string;
   sessions: number;
   page_views: number;
+  active_users: number;
   top_pages: { path: string; views: number }[];
+  traffic_sources: { channel: string; sessions: number }[];
 }
 
 async function getGA4Data(): Promise<DailyStatsRow[]> {
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase
     .from("ga4_daily_stats")
-    .select("date, sessions, page_views, top_pages")
+    .select("date, sessions, page_views, active_users, top_pages, traffic_sources")
     .order("date", { ascending: false })
     .limit(30);
 
@@ -45,7 +47,7 @@ export default async function AdminAnalyticsPage() {
   }
 
   const last14 = [...rows].slice(0, 14).reverse();
-  const maxSessions = Math.max(0, ...last14.map((r) => r.sessions));
+  const chartData = last14.map((row) => ({ label: formatDayLabel(row.date), value: row.sessions }));
 
   const pageViewsByPath = new Map<string, number>();
   for (const row of rows) {
@@ -56,11 +58,21 @@ export default async function AdminAnalyticsPage() {
   const topPages = [...pageViewsByPath.entries()]
     .map(([path, views]) => ({ path, views }))
     .sort((a, b) => b.views - a.views)
-    .slice(0, 10);
-  const maxPageViews = topPages[0]?.views ?? 0;
+    .slice(0, 9);
+
+  const sessionsByChannel = new Map<string, number>();
+  for (const row of rows) {
+    for (const source of row.traffic_sources ?? []) {
+      sessionsByChannel.set(source.channel, (sessionsByChannel.get(source.channel) ?? 0) + source.sessions);
+    }
+  }
+  const trafficSources = [...sessionsByChannel.entries()]
+    .map(([channel, sessions]) => ({ channel, sessions }))
+    .sort((a, b) => b.sessions - a.sessions);
 
   const totalSessions = rows.reduce((sum, r) => sum + r.sessions, 0);
   const totalPageViews = rows.reduce((sum, r) => sum + r.page_views, 0);
+  const totalActiveUsers = rows.reduce((sum, r) => sum + r.active_users, 0);
 
   return (
     <main className="p-10 max-w-4xl">
@@ -68,10 +80,7 @@ export default async function AdminAnalyticsPage() {
         <h1 className="font-display text-2xl">Analytics</h1>
         <GA4SyncButton />
       </div>
-      <p className="text-xs opacity-50 mb-8">
-        Sincroniza una vez al día automáticamente. Los últimos {rows.length} día(s) con datos, {totalSessions} sesiones y{" "}
-        {totalPageViews} vistas de página en total.
-      </p>
+      <p className="text-xs opacity-50 mb-8">Últimos {rows.length} días, desde GA4.</p>
 
       {rows.length === 0 ? (
         <p className="opacity-60">
@@ -80,26 +89,74 @@ export default async function AdminAnalyticsPage() {
         </p>
       ) : (
         <>
-          <div className="mb-12">
-            <h2 className="font-mono text-xs uppercase tracking-wide opacity-60 mb-4">Sesiones por día</h2>
-            <div className="flex flex-col gap-2">
-              {last14.map((row) => (
-                <BarRow key={row.date} label={formatDayLabel(row.date)} value={row.sessions} max={maxSessions} formatValue={(v) => String(v)} />
-              ))}
+          <div className="grid grid-cols-3 gap-4 mb-12">
+            <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
+              <p className="font-display text-3xl mb-1">{totalActiveUsers}</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">Usuarios activos</p>
+            </div>
+            <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
+              <p className="font-display text-3xl mb-1">{totalSessions}</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">Sesiones</p>
+            </div>
+            <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
+              <p className="font-display text-3xl mb-1">{totalPageViews}</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">Vistas de página</p>
             </div>
           </div>
 
-          <div>
-            <h2 className="font-mono text-xs uppercase tracking-wide opacity-60 mb-4">Páginas más visitadas (últimos {rows.length} días)</h2>
-            {topPages.length === 0 ? (
-              <p className="opacity-50 text-sm">Sin datos de páginas todavía.</p>
-            ) : (
-              <div className="flex flex-col gap-2">
-                {topPages.map((p) => (
-                  <BarRow key={p.path} label="" value={p.views} max={maxPageViews} formatValue={() => `${p.path} — ${p.views}`} />
-                ))}
-              </div>
-            )}
+          <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-6 mb-12">
+            <h2 className="font-body font-semibold text-sm mb-6">Sesiones por día</h2>
+            <SessionsBarChart data={chartData} />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-10">
+            <div>
+              <h2 className="font-body font-semibold text-sm mb-4">Páginas más visitadas</h2>
+              {topPages.length === 0 ? (
+                <p className="opacity-50 text-sm">Sin datos de páginas todavía.</p>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[rgba(20,25,43,0.12)]">
+                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Página</th>
+                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Vistas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {topPages.map((p) => (
+                      <tr key={p.path} className="border-b border-[rgba(20,25,43,0.06)]">
+                        <td className="py-2.5 pr-3 font-mono text-[12.5px] break-all">{p.path || "/"}</td>
+                        <td className="py-2.5 text-right tabular-nums">{p.views}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <div>
+              <h2 className="font-body font-semibold text-sm mb-4">Fuentes de tráfico</h2>
+              {trafficSources.length === 0 ? (
+                <p className="opacity-50 text-sm">Sin datos de fuentes todavía.</p>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-[rgba(20,25,43,0.12)]">
+                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Canal</th>
+                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Sesiones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {trafficSources.map((s) => (
+                      <tr key={s.channel} className="border-b border-[rgba(20,25,43,0.06)]">
+                        <td className="py-2.5 pr-3">{s.channel || "Sin asignar"}</td>
+                        <td className="py-2.5 text-right tabular-nums">{s.sessions}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </>
       )}

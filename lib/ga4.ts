@@ -16,7 +16,9 @@ interface GA4ServiceAccount {
 export interface GA4DailyStats {
   sessions: number;
   pageViews: number;
+  activeUsers: number;
   topPages: { path: string; views: number }[];
+  trafficSources: { channel: string; sessions: number }[];
 }
 
 function base64url(input: Buffer | string): string {
@@ -86,7 +88,7 @@ export async function fetchGA4DailyStats(dateStr: string): Promise<GA4DailyStats
     headers,
     body: JSON.stringify({
       dateRanges: [{ startDate: dateStr, endDate: dateStr }],
-      metrics: [{ name: "sessions" }, { name: "screenPageViews" }],
+      metrics: [{ name: "sessions" }, { name: "screenPageViews" }, { name: "activeUsers" }],
     }),
   });
   if (!totalsRes.ok) {
@@ -97,6 +99,7 @@ export async function fetchGA4DailyStats(dateStr: string): Promise<GA4DailyStats
   const totalRow = totals.rows?.[0];
   const sessions = Number(totalRow?.metricValues?.[0]?.value ?? 0);
   const pageViews = Number(totalRow?.metricValues?.[1]?.value ?? 0);
+  const activeUsers = Number(totalRow?.metricValues?.[2]?.value ?? 0);
 
   const pagesRes = await fetch(endpoint, {
     method: "POST",
@@ -121,7 +124,30 @@ export async function fetchGA4DailyStats(dateStr: string): Promise<GA4DailyStats
     console.error("fetchGA4DailyStats: top-pages request failed", pagesRes.status, await pagesRes.text());
   }
 
-  return { sessions, pageViews, topPages };
+  const sourcesRes = await fetch(endpoint, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      dateRanges: [{ startDate: dateStr, endDate: dateStr }],
+      dimensions: [{ name: "sessionDefaultChannelGroup" }],
+      metrics: [{ name: "sessions" }],
+      orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
+      limit: 8,
+    }),
+  });
+
+  let trafficSources: { channel: string; sessions: number }[] = [];
+  if (sourcesRes.ok) {
+    const sourcesJson = await sourcesRes.json();
+    trafficSources = (sourcesJson.rows ?? []).map((row: { dimensionValues?: { value?: string }[]; metricValues?: { value?: string }[] }) => ({
+      channel: row.dimensionValues?.[0]?.value ?? "",
+      sessions: Number(row.metricValues?.[0]?.value ?? 0),
+    }));
+  } else {
+    console.error("fetchGA4DailyStats: traffic-sources request failed", sourcesRes.status, await sourcesRes.text());
+  }
+
+  return { sessions, pageViews, activeUsers, topPages, trafficSources };
 }
 
 /** Fetches and upserts one day's stats into ga4_daily_stats. Shared by the daily scheduled
@@ -137,7 +163,9 @@ export async function syncGA4DailyStats(dateStr: string): Promise<{ ok: boolean;
     date: dateStr,
     sessions: stats.sessions,
     page_views: stats.pageViews,
+    active_users: stats.activeUsers,
     top_pages: stats.topPages,
+    traffic_sources: stats.trafficSources,
     synced_at: new Date().toISOString(),
   });
 
