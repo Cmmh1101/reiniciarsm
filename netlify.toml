@@ -7,3 +7,12 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Belt-and-suspenders against Netlify's Durable CDN cache serving one purchaser's signed
+# download URL to a different purchaser (it was found to cache /api/download/[token] by
+# pathname pattern, ignoring the token segment) — see app/api/download/[token]/route.ts.
+[[headers]]
+  for = "/api/download/*"
+  [headers.values]
+    Cache-Control = "no-store, must-revalidate"
+    Netlify-CDN-Cache-Control = "no-store"

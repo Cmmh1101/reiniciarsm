@@ -7,13 +7,18 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 // unpaid token gets a 404, not a hint about what exists.
 //
 // Must never be cached: this does a live purchase check and mints a fresh 1-hour signed URL on
-// every request. Netlify's edge caches GET route handlers by default when Next.js doesn't mark
-// them dynamic — caught this in testing: a second request was served a stale cached redirect
-// instead of re-checking the purchase, which would eventually mean real customers get served a
-// long-expired signed URL days after their purchase.
+// every request. `dynamic = "force-dynamic"` plus a standard `Cache-Control: no-store` is NOT
+// enough on Netlify — its "Durable" CDN tier was found (via direct testing) to cache this route's
+// response keyed by pathname pattern only, ignoring the dynamic [token] segment, so every visitor
+// got served whichever purchaser's redirect happened to populate the cache first. The
+// Netlify-CDN-Cache-Control header talks directly to that tier and is required to bypass it.
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-const NO_STORE = { "Cache-Control": "no-store, must-revalidate" };
+const NO_STORE = {
+  "Cache-Control": "no-store, must-revalidate",
+  "Netlify-CDN-Cache-Control": "no-store",
+};
 
 export async function GET(request: Request, { params }: { params: { token: string } }) {
   const supabase = createSupabaseAdminClient();
