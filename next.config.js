@@ -4,10 +4,8 @@ const nextConfig = {
 
   // Preserves SEO and existing links from the old WordPress site once carlamontano.io's DNS
   // points here. Built from a full crawl of WordPress's own wp-sitemap.xml — see the migration
-  // memory notes for the source list. `/herramientas` and the paid product at
-  // `/products/empieza-en-tecnologia-con-claridad` were deliberately left out — those need
-  // Carla's decision on a destination before redirecting, not a silent guess. `/contacto` needs
-  // no redirect entry — the new site has a real page at that same path now.
+  // memory notes for the source list. `/contacto` needs no redirect entry — the new site has a
+  // real page at that same path now.
   async redirects() {
     return [
       // Blog posts that already lived on WordPress under a different slug.
@@ -42,6 +40,13 @@ const nextConfig = {
       // FluentCRM form landing artifacts (not real content pages).
       { source: "/form/comunidad", destination: "/comunidad", permanent: true },
       { source: "/form/:slug*", destination: "/", permanent: true },
+
+      // /herramientas had real content on WordPress but isn't being rebuilt yet — sends visitors
+      // home rather than to a 404. The old WooCommerce product isn't being relaunched either;
+      // its URL now points at the closest live replacement, the NEXT YOU™ workbook (the paid
+      // product, closer in spirit to "start in tech with clarity" than the free checklist).
+      { source: "/herramientas", destination: "/", permanent: true },
+      { source: "/products/empieza-en-tecnologia-con-claridad", destination: "/productos/el-mapa-de-tu-reinicio-workbook", permanent: true },
     ];
   },
 };
