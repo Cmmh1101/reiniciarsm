@@ -8,11 +8,50 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Belt-and-suspenders against Netlify's Durable CDN cache serving one purchaser's signed
-# download URL to a different purchaser (it was found to cache /api/download/[token] by
-# pathname pattern, ignoring the token segment) — see app/api/download/[token]/route.ts.
+# Netlify's "Durable" CDN tier caches responses even when Next.js marks a page
+# `dynamic = "force-dynamic"` and sends its own no-store Cache-Control — confirmed live on
+# /api/download/[token] (served one purchaser's stale signed URL to every other purchaser) and
+# again on /productos (a newly added product didn't appear for several minutes). Every page below
+# is force-dynamic specifically because it reads Supabase at request time and must never go
+# stale — the header here targets Netlify's CDN layer directly since Next's own directive isn't
+# enough on its own.
 [[headers]]
   for = "/api/download/*"
   [headers.values]
     Cache-Control = "no-store, must-revalidate"
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/"
+  [headers.values]
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/blog"
+  [headers.values]
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/blog/*"
+  [headers.values]
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/productos"
+  [headers.values]
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/productos/*"
+  [headers.values]
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/mentorias"
+  [headers.values]
+    Netlify-CDN-Cache-Control = "no-store"
+
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
     Netlify-CDN-Cache-Control = "no-store"
