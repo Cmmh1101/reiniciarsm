@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/lib/products";
 import ProductBuyForm from "@/components/ProductBuyForm";
@@ -25,6 +26,12 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   return (
     <main className="px-[8vw] py-24">
+      <Link
+        href="/productos"
+        className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity mb-10"
+      >
+        ← Ver todos los productos
+      </Link>
       <div className={`grid gap-16 ${product.image_url ? "md:grid-cols-[1fr_1fr] max-w-[1000px]" : "max-w-[560px]"}`}>
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{product.category}</p>
