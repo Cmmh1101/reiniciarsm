@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     console.error("contact-submit: failed to log event", eventError);
   }
 
-  const notifyTo = process.env.FROM_EMAIL;
+  const notifyTo = process.env.ADMIN_EMAIL;
   if (notifyTo) {
     const notifySubject = subject ? `Contacto: ${subject}` : "Nuevo mensaje de contacto";
     const notifyText = `${name || "(sin nombre)"} <${email}>\n\n${message}`;
