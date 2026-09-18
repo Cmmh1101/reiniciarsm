@@ -8,7 +8,7 @@ export async function POST(request: Request) {
   if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
 
   const body = await request.json().catch(() => null);
-  const { name, slug, description, category, priceCents, filePath, fileName } = body ?? {};
+  const { name, slug, description, category, priceCents, filePath, fileName, imageUrl } = body ?? {};
 
   if (!name || !slug || !priceCents || !filePath || !fileName) {
     return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
@@ -31,6 +31,7 @@ export async function POST(request: Request) {
       price_cents: priceCents,
       file_path: filePath,
       file_name: fileName,
+      image_url: imageUrl || null,
     })
     .select()
     .single();

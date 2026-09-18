@@ -25,7 +25,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
   return (
     <main className="px-[8vw] py-24">
-      <div className="grid md:grid-cols-[1fr_1fr] gap-16 max-w-[900px]">
+      <div className={`grid gap-16 ${product.image_url ? "md:grid-cols-[1fr_1fr] max-w-[1000px]" : "max-w-[560px]"}`}>
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{product.category}</p>
           <h1 className="font-display text-[clamp(28px,3.6vw,40px)] leading-[1.1] mb-5">{product.name}</h1>
@@ -35,6 +35,16 @@ export default async function ProductPage({ params }: { params: { slug: string }
           </p>
           <ProductBuyForm productId={product.id} priceCents={product.price_cents} />
         </div>
+        {product.image_url && (
+          <div className="order-first md:order-last">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.image_url}
+              alt={product.name}
+              className="w-full rounded-[3px] border border-[rgba(20,25,43,0.12)]"
+            />
+          </div>
+        )}
       </div>
     </main>
   );

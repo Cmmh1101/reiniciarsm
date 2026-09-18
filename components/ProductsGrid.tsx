@@ -45,11 +45,19 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
 
       <div className="grid md:grid-cols-3 gap-7">
         {filtered.map((p) => (
-          <Link key={p.id} href={`/productos/${p.slug}`} className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-6 flex flex-col gap-3">
-            <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{p.category}</span>
-            <h3 className="text-lg font-display">{p.name}</h3>
-            {p.description && <p className="text-sm opacity-70">{p.description}</p>}
-            <span className="font-mono text-sm mt-auto">{p.price_cents === 0 ? "Gratis" : `$${(p.price_cents / 100).toFixed(2)}`}</span>
+          <Link key={p.id} href={`/productos/${p.slug}`} className="border border-[rgba(20,25,43,0.12)] rounded-[2px] overflow-hidden flex flex-col">
+            {p.image_url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={p.image_url} alt="" className="w-full aspect-[4/3] object-cover" />
+            ) : (
+              <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
+            )}
+            <div className="p-6 flex flex-col gap-3 flex-1">
+              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{p.category}</span>
+              <h3 className="text-lg font-display">{p.name}</h3>
+              {p.description && <p className="text-sm opacity-70">{p.description}</p>}
+              <span className="font-mono text-sm mt-auto">{p.price_cents === 0 ? "Gratis" : `$${(p.price_cents / 100).toFixed(2)}`}</span>
+            </div>
           </Link>
         ))}
       </div>

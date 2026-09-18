@@ -9,6 +9,7 @@ export interface Product {
   category: string;
   file_path: string;
   file_name: string;
+  image_url: string | null;
   active: boolean;
   created_at: string;
 }

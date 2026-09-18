@@ -29,7 +29,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 
   // Full edit path (from the edit form).
-  const { name, slug, description, category, priceCents, filePath, fileName } = body;
+  const { name, slug, description, category, priceCents, filePath, fileName, imageUrl } = body;
   if (!name || !slug || !priceCents || priceCents <= 0) {
     return NextResponse.json({ error: "Completa nombre, slug y un precio válido." }, { status: 400 });
   }
@@ -46,7 +46,14 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     return NextResponse.json({ error: "Producto no encontrado." }, { status: 404 });
   }
 
-  const update: Record<string, unknown> = { name, slug, description: description || null, category, price_cents: priceCents };
+  const update: Record<string, unknown> = {
+    name,
+    slug,
+    description: description || null,
+    category,
+    price_cents: priceCents,
+    image_url: imageUrl || null,
+  };
   const replacingFile = filePath && filePath !== existing.file_path;
   if (replacingFile) {
     update.file_path = filePath;

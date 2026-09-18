@@ -18,9 +18,29 @@ export default function ProductForm({ product }: { product?: Product }) {
   const [category, setCategory] = useState(product?.category ?? PRODUCT_CATEGORIES[0]);
   const [price, setPrice] = useState(product ? (product.price_cents / 100).toFixed(2) : "");
   const [file, setFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState(product?.image_url ?? "");
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+
+  async function handleImageChange(selected: File | null) {
+    if (!selected) return;
+    setUploadingImage(true);
+    setError("");
+    try {
+      const formData = new FormData();
+      formData.append("file", selected);
+      const res = await fetch("/api/admin/upload-image", { method: "POST", body: formData });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "No se pudo subir la imagen.");
+      setImageUrl(data.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo subir la imagen.");
+    } finally {
+      setUploadingImage(false);
+    }
+  }
 
   function handleNameChange(value: string) {
     setName(value);
@@ -59,7 +79,16 @@ export default function ProductForm({ product }: { product?: Product }) {
 
     setSaving(true);
     try {
-      const payload = { name: name.trim(), slug: slug.trim(), description: description.trim(), category, priceCents, filePath, fileName };
+      const payload = {
+        name: name.trim(),
+        slug: slug.trim(),
+        description: description.trim(),
+        category,
+        priceCents,
+        filePath,
+        fileName,
+        imageUrl: imageUrl || null,
+      };
       const res = await fetch(isEdit ? `/api/admin/products/${product.id}` : "/api/admin/products", {
         method: isEdit ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -140,6 +169,24 @@ export default function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
+          <span>Imagen del producto (opcional)</span>
+          <span className="text-xs opacity-60 font-normal">
+            Captura de la página de inicio para plantillas, portada para ebooks/guías. Se muestra junto al producto en /productos.
+          </span>
+          {imageUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={imageUrl} alt="" className="w-full max-w-[280px] rounded-[3px] border border-[rgba(20,25,43,0.12)] mt-1" />
+          )}
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
+            className="text-sm"
+          />
+          {uploadingImage && <span className="text-xs opacity-60">Subiendo imagen...</span>}
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm font-semibold">
           <span>{isEdit ? "Reemplazar archivo (opcional)" : "Archivo del producto"}</span>
           {isEdit && product && (
             <span className="text-xs opacity-60 font-normal">Archivo actual: {product.file_name}</span>
@@ -152,7 +199,7 @@ export default function ProductForm({ product }: { product?: Product }) {
 
         <button
           type="submit"
-          disabled={uploading || saving}
+          disabled={uploading || uploadingImage || saving}
           className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
         >
           {uploading ? "Subiendo archivo..." : saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Crear producto"}
