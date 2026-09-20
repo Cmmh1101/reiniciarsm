@@ -3,7 +3,8 @@ import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendHtmlEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
-import { wrapEmailShell, escapeHtml, htmlToPlainTextFallback, styleTiptapHtml } from "@/lib/emailHtml";
+import { wrapEmailShell, escapeHtml, htmlToPlainTextFallback, styleTiptapHtml, applyNameToken } from "@/lib/emailHtml";
+import { NEWSLETTER_AUDIENCES, type NewsletterAudience } from "@/lib/newsletterAudience";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
@@ -12,13 +13,33 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
   const html = typeof body?.html === "string" ? body.html.trim() : "";
+  const audience: NewsletterAudience = NEWSLETTER_AUDIENCES.includes(body?.audience) ? body.audience : "all";
 
   if (!subject || !html) {
     return NextResponse.json({ error: "Asunto y contenido son requeridos." }, { status: 400 });
   }
 
   const supabase = createSupabaseAdminClient();
-  const { data: recipients, error } = await supabase.from("contacts").select("id, email, name").eq("subscribed", true);
+
+  let recipientsQuery = supabase.from("contacts").select("id, email, name").eq("subscribed", true);
+  if (audience === "clients" || audience === "non_buyers") {
+    const { data: purchases, error: purchasesError } = await supabase
+      .from("product_purchases")
+      .select("contact_id")
+      .eq("status", "completed");
+    if (purchasesError) {
+      console.error("newsletter-send: purchases query failed", purchasesError);
+      return NextResponse.json({ error: "No se pudo cargar la lista de compradores." }, { status: 500 });
+    }
+    const buyerIds = [...new Set((purchases ?? []).map((p) => p.contact_id))];
+    if (audience === "clients") {
+      recipientsQuery = buyerIds.length > 0 ? recipientsQuery.in("id", buyerIds) : recipientsQuery.eq("id", "00000000-0000-0000-0000-000000000000");
+    } else if (buyerIds.length > 0) {
+      recipientsQuery = recipientsQuery.not("id", "in", `(${buyerIds.join(",")})`);
+    }
+  }
+
+  const { data: recipients, error } = await recipientsQuery;
 
   if (error) {
     console.error("newsletter-send: query failed", error);
@@ -29,7 +50,7 @@ export async function POST(request: Request) {
   // reference this issue's id for per-issue open/click stats.
   const { data: issue, error: issueError } = await supabase
     .from("newsletter_issues")
-    .insert({ subject, content: html, recipient_count: 0 })
+    .insert({ subject, content: html, recipient_count: 0, audience })
     .select("id")
     .single();
 
@@ -45,10 +66,11 @@ export async function POST(request: Request) {
   for (const contact of recipients ?? []) {
     const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(contact.email)}`;
     const greetingHtml = `<p style="margin:0 0 20px;">${contact.name?.trim() ? `Hola ${escapeHtml(contact.name.trim())},` : "Hola,"}</p>`;
+    const personalizedContentHtml = applyNameToken(styledContentHtml, contact.name);
     const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
     const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.</p>`;
-    const fullHtml = wrapEmailShell(greetingHtml + styledContentHtml + signatureHtml + unsubscribeHtml);
-    const textFallback = htmlToPlainTextFallback(greetingHtml + styledContentHtml + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
+    const fullHtml = wrapEmailShell(greetingHtml + personalizedContentHtml + signatureHtml + unsubscribeHtml);
+    const textFallback = htmlToPlainTextFallback(greetingHtml + personalizedContentHtml + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
 
     try {
       const resendId = await sendHtmlEmail(contact.email, subject, fullHtml, textFallback);

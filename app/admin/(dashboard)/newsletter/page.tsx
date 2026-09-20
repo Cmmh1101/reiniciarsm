@@ -1,11 +1,13 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import NewsletterComposer from "@/components/admin/NewsletterComposer";
+import { AUDIENCE_LABELS, type NewsletterAudience } from "@/lib/newsletterAudience";
 
 interface NewsletterIssue {
   id: string;
   subject: string;
   recipient_count: number;
   sent_at: string;
+  audience: NewsletterAudience | null;
 }
 
 interface IssueStats {
@@ -15,11 +17,17 @@ interface IssueStats {
 
 async function getData() {
   const supabase = createSupabaseAdminClient();
-  const [{ count }, { data: issues }, { data: sends }] = await Promise.all([
-    supabase.from("contacts").select("id", { count: "exact", head: true }).eq("subscribed", true),
+  const [{ data: subscribedContacts }, { data: purchases }, { data: issues }, { data: sends }] = await Promise.all([
+    supabase.from("contacts").select("id").eq("subscribed", true),
+    supabase.from("product_purchases").select("contact_id").eq("status", "completed"),
     supabase.from("newsletter_issues").select("*").order("sent_at", { ascending: false }),
     supabase.from("email_sends").select("newsletter_issue_id, opened_at, clicked_at").not("newsletter_issue_id", "is", null),
   ]);
+
+  const subscribedIds = new Set((subscribedContacts ?? []).map((c) => c.id));
+  const buyerIds = new Set((purchases ?? []).map((p) => p.contact_id));
+  const clientsCount = [...buyerIds].filter((id) => subscribedIds.has(id)).length;
+  const audienceCounts = { all: subscribedIds.size, clients: clientsCount, non_buyers: subscribedIds.size - clientsCount };
 
   const statsByIssue = new Map<string, IssueStats>();
   for (const send of sends ?? []) {
@@ -30,17 +38,17 @@ async function getData() {
     statsByIssue.set(id, stats);
   }
 
-  return { subscriberCount: count ?? 0, issues: (issues ?? []) as NewsletterIssue[], statsByIssue };
+  return { audienceCounts, issues: (issues ?? []) as NewsletterIssue[], statsByIssue };
 }
 
 export default async function AdminNewsletterPage() {
-  const { subscriberCount, issues, statsByIssue } = await getData();
+  const { audienceCounts, issues, statsByIssue } = await getData();
 
   return (
     <main className="p-10">
       <h1 className="font-display text-2xl mb-6">Newsletter</h1>
 
-      <NewsletterComposer subscriberCount={subscriberCount} />
+      <NewsletterComposer audienceCounts={audienceCounts} />
 
       <h2 className="font-semibold mb-3">Enviados anteriormente</h2>
       {issues.length === 0 ? (
@@ -50,6 +58,7 @@ export default async function AdminNewsletterPage() {
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Asunto</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Audiencia</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Enviados</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Abiertos</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Clics</th>
@@ -63,6 +72,7 @@ export default async function AdminNewsletterPage() {
               return (
                 <tr key={issue.id} className="border-b border-[rgba(20,25,43,0.08)]">
                   <td className="py-3">{issue.subject}</td>
+                  <td className="py-3 opacity-70">{AUDIENCE_LABELS[issue.audience ?? "all"] ?? issue.audience}</td>
                   <td className="py-3 opacity-70">{issue.recipient_count}</td>
                   <td className="py-3 opacity-70">
                     {stats.opened} <span className="opacity-60">({openRate}%)</span>

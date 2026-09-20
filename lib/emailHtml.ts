@@ -9,6 +9,15 @@ export function escapeHtml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+const NAME_TOKEN = "{{Nombre}}";
+
+/** Replaces the {{Nombre}} token the newsletter composer lets you insert into the body with the
+ * contact's own name, falling back to a neutral greeting when a contact has none on file. */
+export function applyNameToken(html: string, name: string | null): string {
+  const value = name?.trim() || "amigo/a";
+  return html.replaceAll(NAME_TOKEN, escapeHtml(value));
+}
+
 function linkifyEscaped(escaped: string): string {
   return escaped.replace(/(https?:\/\/[^\s<]+)/g, (url) => `<a href="${url}" style="color:#BE5A34;">${url}</a>`);
 }

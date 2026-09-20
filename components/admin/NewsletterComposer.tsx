@@ -8,6 +8,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
+import { AUDIENCE_LABELS, NEWSLETTER_AUDIENCES, type NewsletterAudience } from "@/lib/newsletterAudience";
 
 // Images need their own width/align/href handling — none of this works out of the box:
 // - TextAlign only targets text-bearing nodes (paragraph/heading); an image is its own block
@@ -111,10 +112,11 @@ const IMAGE_ALIGNS: { label: string; value: string }[] = [
   { label: "⇥", value: "right" },
 ];
 
-export default function NewsletterComposer({ subscriberCount }: { subscriberCount: number }) {
+export default function NewsletterComposer({ audienceCounts }: { audienceCounts: Record<NewsletterAudience, number> }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [subject, setSubject] = useState("");
+  const [audience, setAudience] = useState<NewsletterAudience>("all");
   const [error, setError] = useState("");
   const [result, setResult] = useState<{ sent: number; total: number } | null>(null);
   const [sending, setSending] = useState(false);
@@ -123,6 +125,7 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
   const [testError, setTestError] = useState("");
   const [testSent, setTestSent] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
+  const recipientCount = audienceCounts[audience];
 
   const editor = useEditor({
     extensions: [
@@ -150,6 +153,10 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
     } finally {
       setUploading(false);
     }
+  }
+
+  function handleInsertNameToken() {
+    editor?.chain().focus().insertContent("{{Nombre}}").run();
   }
 
   function handleAddLink() {
@@ -214,7 +221,11 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
       setError("Escribe un asunto y contenido.");
       return;
     }
-    if (!confirm(`¿Enviar este correo a los ${subscriberCount} suscriptores activos? Esta acción no se puede deshacer.`)) {
+    if (
+      !confirm(
+        `¿Enviar este correo a ${recipientCount} contactos (${AUDIENCE_LABELS[audience].toLowerCase()})? Esta acción no se puede deshacer.`
+      )
+    ) {
       return;
     }
 
@@ -223,7 +234,7 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
       const res = await fetch("/api/admin/newsletter-send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(composed),
+        body: JSON.stringify({ ...composed, audience }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No se pudo enviar.");
@@ -243,8 +254,8 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
     <div className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 mb-8 max-w-2xl">
       <h2 className="font-semibold mb-1">Escribir newsletter</h2>
       <p className="text-xs opacity-60 mb-4">
-        Se envía a los {subscriberCount} contactos suscritos (no incluye a quienes se dieron de baja). Tu nombre, saludo y
-        enlace de baja se agregan automáticamente.
+        Elige a quién llega abajo — nunca incluye a quienes se dieron de baja. Tu saludo y enlace de baja se agregan
+        automáticamente; usa el botón &quot;+ Nombre&quot; en el editor para personalizar también el cuerpo del correo.
       </p>
 
       <div className="flex flex-col gap-3.5">
@@ -255,6 +266,21 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
             onChange={(e) => setSubject(e.target.value)}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
           />
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm font-semibold">
+          <span>Enviar a</span>
+          <select
+            value={audience}
+            onChange={(e) => setAudience(e.target.value as NewsletterAudience)}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+          >
+            {NEWSLETTER_AUDIENCES.map((a) => (
+              <option key={a} value={a}>
+                {AUDIENCE_LABELS[a]} ({audienceCounts[a]})
+              </option>
+            ))}
+          </select>
         </label>
 
         <div>
@@ -279,6 +305,9 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
                 </ToolbarButton>
                 <ToolbarButton active={editor.isActive("link")} onClick={handleAddLink}>
                   Enlace
+                </ToolbarButton>
+                <ToolbarButton active={false} onClick={handleInsertNameToken}>
+                  + Nombre
                 </ToolbarButton>
                 <ToolbarButton active={false} onClick={() => fileInputRef.current?.click()}>
                   {uploading ? "Subiendo..." : "Imagen"}
@@ -339,12 +368,16 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
               <EditorContent editor={editor} className="prose-post px-4 py-3 min-h-[220px] [&_.ProseMirror]:outline-none" />
             </div>
           )}
+          <p className="text-xs opacity-50 mt-1.5">
+            &quot;+ Nombre&quot; inserta {"{{Nombre}}"} donde esté el cursor — al enviar, se reemplaza por el nombre de
+            cada contacto (o &quot;amigo/a&quot; si no tiene uno registrado).
+          </p>
         </div>
 
         {error && <p className="text-clay text-sm">{error}</p>}
         {result && (
           <p className="text-sage text-sm">
-            Enviado a {result.sent} de {result.total} suscriptores.
+            Enviado a {result.sent} de {result.total} contactos.
           </p>
         )}
 
@@ -377,7 +410,7 @@ export default function NewsletterComposer({ subscriberCount }: { subscriberCoun
           disabled={sending}
           className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
         >
-          {sending ? "Enviando..." : `Enviar a ${subscriberCount} suscriptores`}
+          {sending ? "Enviando..." : `Enviar a ${recipientCount} contactos`}
         </button>
       </div>
     </div>
