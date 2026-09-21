@@ -134,7 +134,9 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
       Link.configure({ openOnClick: false }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
-    content: "<p></p>",
+    // Starts with an editable greeting rather than a fixed one the server used to prepend — move
+    // or delete it like any other line; {{Nombre}} works the same way anywhere else in the body.
+    content: "<p>Hola {{Nombre}},</p><p></p>",
     immediatelyRender: false,
   });
 
@@ -241,7 +243,7 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
       setResult(data);
       setSubject("");
       setTestSent(false);
-      editor?.commands.setContent("<p></p>");
+      editor?.commands.setContent("<p>Hola {{Nombre}},</p><p></p>");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "No se pudo enviar.");
@@ -254,8 +256,8 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
     <div className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 mb-8 max-w-2xl">
       <h2 className="font-semibold mb-1">Escribir newsletter</h2>
       <p className="text-xs opacity-60 mb-4">
-        Elige a quién llega abajo — nunca incluye a quienes se dieron de baja. Tu saludo y enlace de baja se agregan
-        automáticamente; usa el botón &quot;+ Nombre&quot; en el editor para personalizar también el cuerpo del correo.
+        Elige a quién llega abajo — nunca incluye a quienes se dieron de baja. El saludo ya viene escrito en el editor
+        (bórralo o muévelo si no lo quieres ahí); tu firma y el enlace de baja se agregan automáticamente al final.
       </p>
 
       <div className="flex flex-col gap-3.5">

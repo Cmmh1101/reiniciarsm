@@ -25,11 +25,10 @@ export async function POST(request: Request) {
   // No real contact behind a test send — stands in for {{Nombre}} so the preview shows how the
   // token reads in context instead of leaving the literal placeholder in the email.
   const styledContentHtml = applyNameToken(styleTiptapHtml(html), "Camila");
-  const greetingHtml = `<p style="margin:0 0 20px;">Hola,</p>`;
   const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
-  const testNoticeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">Este es un correo de prueba — no se envió a tus suscriptores. El token {{Nombre}} se reemplazó aquí por "Camila" como ejemplo.</p>`;
-  const fullHtml = wrapEmailShell(greetingHtml + styledContentHtml + signatureHtml + testNoticeHtml);
-  const textFallback = htmlToPlainTextFallback(greetingHtml + styledContentHtml + signatureHtml);
+  const testNoticeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">Este es un correo de prueba — no se envió a tus suscriptores. El token {{Nombre}} se reemplazó aquí por "Camila" como ejemplo, y no lleva enlace de baja porque no hay un suscriptor real detrás; los envíos reales sí lo incluyen siempre.</p>`;
+  const fullHtml = wrapEmailShell(styledContentHtml + signatureHtml + testNoticeHtml);
+  const textFallback = htmlToPlainTextFallback(styledContentHtml + signatureHtml);
 
   const resendId = await sendHtmlEmail(testEmail, `[PRUEBA] ${subject}`, fullHtml, textFallback);
   if (!resendId) {

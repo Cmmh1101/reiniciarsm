@@ -3,7 +3,7 @@ import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendHtmlEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
-import { wrapEmailShell, escapeHtml, htmlToPlainTextFallback, styleTiptapHtml, applyNameToken } from "@/lib/emailHtml";
+import { wrapEmailShell, htmlToPlainTextFallback, styleTiptapHtml, applyNameToken } from "@/lib/emailHtml";
 import { NEWSLETTER_AUDIENCES, type NewsletterAudience } from "@/lib/newsletterAudience";
 
 export async function POST(request: Request) {
@@ -65,12 +65,11 @@ export async function POST(request: Request) {
 
   for (const contact of recipients ?? []) {
     const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(contact.email)}`;
-    const greetingHtml = `<p style="margin:0 0 20px;">${contact.name?.trim() ? `Hola ${escapeHtml(contact.name.trim())},` : "Hola,"}</p>`;
     const personalizedContentHtml = applyNameToken(styledContentHtml, contact.name);
     const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
     const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.</p>`;
-    const fullHtml = wrapEmailShell(greetingHtml + personalizedContentHtml + signatureHtml + unsubscribeHtml);
-    const textFallback = htmlToPlainTextFallback(greetingHtml + personalizedContentHtml + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
+    const fullHtml = wrapEmailShell(personalizedContentHtml + signatureHtml + unsubscribeHtml);
+    const textFallback = htmlToPlainTextFallback(personalizedContentHtml + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
 
     try {
       const resendId = await sendHtmlEmail(contact.email, subject, fullHtml, textFallback);
