@@ -21,6 +21,7 @@ export const EVENT_TYPE_INFO: Record<string, { label: string; source: string }> 
   newsletter_sent: { label: "Recibió un newsletter", source: "Newsletter" },
   contact_form_submitted: { label: "Escribió por el formulario de contacto", source: "Contacto" },
   product_purchased: { label: "Compró un producto digital", source: "Producto" },
+  review_submitted: { label: "Dejó una reseña de un producto", source: "Producto" },
 };
 
 export interface Contact {

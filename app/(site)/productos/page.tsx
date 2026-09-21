@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getActiveProducts } from "@/lib/products";
+import { getProductStats, withProductStats } from "@/lib/productReviews";
 import ProductsGrid from "@/components/ProductsGrid";
 
 // Products publish through the admin panel at runtime — fetch fresh every request.
@@ -16,7 +17,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ProductosPage() {
-  const products = await getActiveProducts();
+  const [products, stats] = await Promise.all([getActiveProducts(), getProductStats()]);
+  const productsWithStats = withProductStats(products, stats);
 
   return (
     <main className="px-[8vw] py-24">
@@ -30,7 +32,11 @@ export default async function ProductosPage() {
         </p>
       </header>
 
-      {products.length === 0 ? <p className="opacity-60">Todavía no hay productos disponibles.</p> : <ProductsGrid products={products} />}
+      {productsWithStats.length === 0 ? (
+        <p className="opacity-60">Todavía no hay productos disponibles.</p>
+      ) : (
+        <ProductsGrid products={productsWithStats} />
+      )}
     </main>
   );
 }

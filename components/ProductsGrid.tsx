@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import type { Product } from "@/lib/products";
+import { MIN_PURCHASES_TO_SHOW_COUNT, MIN_REVIEWS_TO_SHOW_RATING, type ProductWithStats } from "@/lib/productReviews";
+import StarRating from "@/components/StarRating";
 
-export default function ProductsGrid({ products }: { products: Product[] }) {
+export default function ProductsGrid({ products }: { products: ProductWithStats[] }) {
   const categories = useMemo(() => {
     const set = new Set(products.map((p) => p.category));
     return [...set];
@@ -56,7 +57,15 @@ export default function ProductsGrid({ products }: { products: Product[] }) {
               <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{p.category}</span>
               <h3 className="text-lg font-display">{p.name}</h3>
               {p.description && <p className="text-sm opacity-70">{p.description}</p>}
-              <span className="font-mono text-sm mt-auto">{p.price_cents === 0 ? "Gratis" : `$${(p.price_cents / 100).toFixed(2)}`}</span>
+              {p.reviewCount >= MIN_REVIEWS_TO_SHOW_RATING && p.avgRating !== null && (
+                <StarRating avgRating={p.avgRating} reviewCount={p.reviewCount} />
+              )}
+              <div className="mt-auto flex items-center justify-between gap-2">
+                <span className="font-mono text-sm">{p.price_cents === 0 ? "Gratis" : `$${(p.price_cents / 100).toFixed(2)}`}</span>
+                {p.purchaseCount >= MIN_PURCHASES_TO_SHOW_COUNT && (
+                  <span className="font-mono text-[10.5px] opacity-50">{p.purchaseCount} compras</span>
+                )}
+              </div>
             </div>
           </Link>
         ))}
