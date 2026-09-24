@@ -94,7 +94,15 @@ export default function Footer() {
       </div>
       <div className="pt-6 flex justify-between font-mono text-[11px] opacity-50 flex-wrap gap-2.5">
         <span>© 2026 Carla Montaño — Reiniciar Sin Mapa</span>
-        <span>carlamontano.io</span>
+        <div className="flex gap-5">
+          <Link href="/privacidad" className="no-underline hover:opacity-100 transition-opacity">
+            Privacidad
+          </Link>
+          <Link href="/terminos" className="no-underline hover:opacity-100 transition-opacity">
+            Términos
+          </Link>
+          <span>carlamontano.io</span>
+        </div>
       </div>
     </footer>
   );

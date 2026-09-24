@@ -5,7 +5,18 @@ import { getPublishedPosts } from "@/lib/posts";
 // Home/Blog/Mentorías need this (see app/(site)/blog/page.tsx).
 export const dynamic = "force-dynamic";
 
-const STATIC_ROUTES = ["", "/blog", "/mentorias", "/diagnostico-next-you", "/comunidad", "/mi-historia", "/contacto", "/productos"];
+const STATIC_ROUTES = [
+  "",
+  "/blog",
+  "/mentorias",
+  "/diagnostico-next-you",
+  "/comunidad",
+  "/mi-historia",
+  "/contacto",
+  "/productos",
+  "/privacidad",
+  "/terminos",
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://carlamontano.io";
