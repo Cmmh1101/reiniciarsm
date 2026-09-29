@@ -31,12 +31,18 @@ const WEEK = [
   { day: "Una vez al mes", detail: "Sesión en vivo conmigo, profundizando un pilar." },
 ];
 
+const METHOD_PHASES = [
+  { name: "Giro", promise: "Rompes la creencia de que es imposible, y eliges un rumbo.", pillars: "Mentalidad + Dirección" },
+  { name: "Ruta", promise: "Construyes lo que el mercado necesita ver de ti.", pillars: "Tecnología e IA + Empleabilidad + Inglés" },
+  { name: "Ritmo", promise: "Lo sostienes sin quemarte.", pillars: "Productividad + Bienestar" },
+];
+
 const INCLUDES = [
-  "8 canales, uno por cada pilar de NEXT YOU™",
+  "8 canales, organizados en 3 fases: Giro, Ruta, Ritmo",
   "Sesiones en vivo mensuales",
   "Accountability partners",
   "Muro de Victorias",
-  "Retos mensuales ligados a un pilar",
+  "Retos mensuales ligados a tu fase actual",
   "No necesitas tener nada resuelto antes de entrar",
 ];
 
@@ -50,7 +56,7 @@ export default function ComunidadPage() {
         </h1>
         <p className="text-lg max-w-[56ch] mx-auto opacity-80 mb-9">
           El hogar de quienes están reiniciando en paralelo a ti — retos mensuales, sesiones en vivo y acompañamiento
-          real, organizado alrededor de los 8 pilares de NEXT YOU™.
+          real, organizado en 3 fases: Giro, Ruta, Ritmo.
         </p>
         <a
           href={SKOOL_COMMUNITY_URL}
@@ -81,6 +87,28 @@ export default function ComunidadPage() {
         </div>
       </section>
 
+      <section className="px-[8vw] py-24">
+        <div className="max-w-[640px] mb-14">
+          <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">El método</p>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] mb-3.5">Giro. Ruta. Ritmo.</h2>
+          <p className="opacity-70 text-base">No es una lista de 8 temas sueltos — es un camino, en orden, con un destino claro en cada fase.</p>
+        </div>
+        <div className="grid md:grid-cols-3 gap-px bg-[rgba(20,25,43,0.12)] mb-8">
+          {METHOD_PHASES.map((phase, i) => (
+            <div key={phase.name} className="bg-paper p-8 flex flex-col gap-2.5">
+              <span className="font-mono text-xs text-clay">{String(i + 1).padStart(2, "0")}</span>
+              <h3 className="font-display text-2xl">{phase.name}</h3>
+              <p className="text-sm opacity-75">{phase.promise}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wide opacity-50 mt-auto pt-3">{phase.pillars}</p>
+            </div>
+          ))}
+        </div>
+        <div className="bg-ink text-paper rounded-[2px] px-7 py-6 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-6">
+          <span className="font-mono text-[10.5px] uppercase tracking-widest text-clay-soft shrink-0">Comunidad</span>
+          <p className="text-sm opacity-85">No es una fase más — es el espacio que te acompaña en las 3. No reinventarte a solas.</p>
+        </div>
+      </section>
+
       <section className="bg-ink text-paper px-[8vw] py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">Cómo funciona</p>
@@ -100,7 +128,7 @@ export default function ComunidadPage() {
       <section className="bg-paper-soft px-[8vw] py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">Qué incluye</p>
-          <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">Todo alrededor de los 8 pilares</h2>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">Todo alrededor de Giro, Ruta, Ritmo</h2>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3.5">
           {INCLUDES.map((item) => (

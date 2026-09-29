@@ -6,15 +6,35 @@ import { NewsletterFormHome } from "@/components/NewsletterForm";
 // this page must fetch fresh on every request, not bake posts into the build.
 export const dynamic = "force-dynamic";
 
-const PILLARS = [
-  { num: "01", name: "Mentalidad", icon: <><circle cx="16" cy="16" r="10" /><path d="M16 10v6l4 3" /></> },
-  { num: "02", name: "Dirección", icon: <><circle cx="16" cy="16" r="11" /><path d="M16 9l3 6-3 2-3-2z" /></> },
-  { num: "03", name: "Tecnología e IA", icon: <><path d="M8 22l6-12 4 7 3-4 3 9" /><circle cx="14" cy="10" r="1.4" /></> },
-  { num: "04", name: "Empleabilidad", icon: <><rect x="7" y="12" width="18" height="12" rx="1.5" /><path d="M12 12v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></> },
-  { num: "05", name: "Inglés profesional", icon: <><path d="M7 12h18M7 18h12" /><circle cx="16" cy="16" r="11" /></> },
-  { num: "06", name: "Productividad", icon: <><path d="M8 24V14l8-6 8 6v10" /><path d="M13 24v-6h6v6" /></> },
-  { num: "07", name: "Bienestar", icon: <path d="M16 25c-5-4-9-7.5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-9 12z" /> },
-  { num: "08", name: "Comunidad", icon: <><circle cx="11" cy="13" r="3.4" /><circle cx="22" cy="13" r="3.4" /><path d="M6 24c0-3.5 2.5-6 5-6s5 2.5 5 6M16 24c0-3.5 2.5-6 5-6s5 2.5 5 6" /></> },
+const METHOD_PHASES = [
+  {
+    key: "giro",
+    name: "Giro",
+    promise: "Rompes la creencia de que es imposible, y eliges un rumbo.",
+    pillars: [
+      { name: "Mentalidad", icon: <><circle cx="16" cy="16" r="10" /><path d="M16 10v6l4 3" /></> },
+      { name: "Dirección", icon: <><circle cx="16" cy="16" r="11" /><path d="M16 9l3 6-3 2-3-2z" /></> },
+    ],
+  },
+  {
+    key: "ruta",
+    name: "Ruta",
+    promise: "Construyes lo que el mercado necesita ver de ti.",
+    pillars: [
+      { name: "Tecnología e IA", icon: <><path d="M8 22l6-12 4 7 3-4 3 9" /><circle cx="14" cy="10" r="1.4" /></> },
+      { name: "Empleabilidad", icon: <><rect x="7" y="12" width="18" height="12" rx="1.5" /><path d="M12 12v-2a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" /></> },
+      { name: "Inglés profesional", icon: <><path d="M7 12h18M7 18h12" /><circle cx="16" cy="16" r="11" /></> },
+    ],
+  },
+  {
+    key: "ritmo",
+    name: "Ritmo",
+    promise: "Lo sostienes sin quemarte.",
+    pillars: [
+      { name: "Productividad", icon: <><path d="M8 24V14l8-6 8 6v10" /><path d="M13 24v-6h6v6" /></> },
+      { name: "Bienestar", icon: <path d="M16 25c-5-4-9-7.5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 4.5-4 8-9 12z" /> },
+    ],
+  },
 ];
 
 const ROUTE_STEPS = [
@@ -162,26 +182,44 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* 8 PILARES */}
+      {/* GIRO / RUTA / RITMO */}
       <section id="pilares" className="bg-paper-soft px-[8vw] py-24">
         <div className="max-w-[640px] mb-14">
-          <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">La metodología</p>
-          <h2 className="font-display text-[clamp(28px,3.4vw,42px)] mb-3.5">NEXT YOU™ — los ocho pilares</h2>
+          <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">El método</p>
+          <h2 className="font-display text-[clamp(28px,3.4vw,42px)] mb-3.5">Giro. Ruta. Ritmo.</h2>
           <p className="opacity-70 text-base">
-            No se trata solo de tecnología. Se trata de reconstruir cada parte que sostiene tu
-            próxima versión.
+            No es una lista de 8 temas sueltos — es un camino, en orden, con un destino claro en cada fase.
           </p>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-          {PILLARS.map((p) => (
-            <div key={p.num} className="border border-[rgba(20,25,43,0.12)] bg-paper rounded-[2px] px-5 py-6.5 flex flex-col gap-3.5">
-              <span className="font-mono text-[10.5px] opacity-45">{p.num}</span>
-              <svg viewBox="0 0 32 32" fill="none" strokeWidth="1.6" stroke="var(--ink)" className="w-6.5 h-6.5">
-                {p.icon}
-              </svg>
-              <h4 className="text-[15px] font-semibold">{p.name}</h4>
+        <div className="grid md:grid-cols-3 gap-7">
+          {METHOD_PHASES.map((phase, i) => (
+            <div key={phase.key}>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-mono text-[11px] w-7 h-7 rounded-full bg-ink text-paper flex items-center justify-center shrink-0">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="font-display text-2xl">{phase.name}</h3>
+              </div>
+              <p className="text-sm opacity-70 mb-5 min-h-[2.6em]">{phase.promise}</p>
+              <div className="flex flex-col gap-3">
+                {phase.pillars.map((p) => (
+                  <div
+                    key={p.name}
+                    className="border border-[rgba(20,25,43,0.12)] bg-paper rounded-[2px] px-5 py-4 flex items-center gap-3.5"
+                  >
+                    <svg viewBox="0 0 32 32" fill="none" strokeWidth="1.6" stroke="var(--ink)" className="w-6 h-6 shrink-0">
+                      {p.icon}
+                    </svg>
+                    <h4 className="text-[14.5px] font-semibold">{p.name}</h4>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
+        </div>
+        <div className="mt-8 bg-ink text-paper rounded-[2px] px-7 py-6 flex flex-col sm:flex-row sm:items-center gap-2.5 sm:gap-6">
+          <span className="font-mono text-[10.5px] uppercase tracking-widest text-clay-soft shrink-0">Comunidad</span>
+          <p className="text-sm opacity-85">No es una fase más — es el espacio que te acompaña en las 3. No reinventarte a solas.</p>
         </div>
       </section>
 
@@ -220,7 +258,7 @@ export default async function Home() {
       {/* RUTA / FIRMA */}
       <section className="bg-ink text-paper px-[8vw] py-24">
         <div className="max-w-[640px] mb-14">
-          <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">La ruta</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">Así se ve un reinicio</p>
           <h2 className="font-display text-[clamp(28px,3.4vw,42px)] mb-3.5">Siete reinicios, un método</h2>
           <p className="opacity-60 text-base">
             El arco real detrás de NEXT YOU™ — sin mapa, pero con coordenadas.

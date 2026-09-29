@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { PILLARS, computeWinner, type Pillar, type QuizScores } from "@/lib/diagnostic";
+import { PILLARS, PHASES, PILLAR_PHASE, computeWinner, type Pillar, type QuizScores } from "@/lib/diagnostic";
 
 type Screen = "cover" | "questions" | "capture" | "result";
 
@@ -200,9 +200,21 @@ export default function DiagnosticQuiz() {
             <h2 className="font-display font-semibold text-xl md:text-[28px] mb-4">
               {winner.archetype}
             </h2>
-            <p className="font-mono text-sm uppercase tracking-wide text-[#E1D6C2] mb-4">
-              Pilar prioritario: {winner.key}
-            </p>
+            {(() => {
+              const phaseKey = PILLAR_PHASE[winner.key];
+              const phase = phaseKey ? PHASES[phaseKey] : null;
+              return (
+                <p className="font-mono text-sm uppercase tracking-wide text-[#E1D6C2] mb-4">
+                  {phase ? (
+                    <>
+                      Est&aacute;s en la fase: <span className="text-clay">{phase.name}</span> &middot; Pilar prioritario: {winner.label}
+                    </>
+                  ) : (
+                    <>Pilar prioritario: {winner.label} &middot; te acompa&ntilde;a en las 3 fases</>
+                  )}
+                </p>
+              );
+            })()}
             <p className="text-[rgba(237,230,216,0.8)] mb-7">{winner.description}</p>
             <Link
               href="/comunidad"

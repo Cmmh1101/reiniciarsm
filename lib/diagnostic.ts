@@ -19,6 +19,7 @@ export interface QuizOption {
 
 export interface Pillar {
   key: PillarKey;
+  label: string;
   question: string;
   options: QuizOption[];
   archetype: string;
@@ -26,9 +27,37 @@ export interface Pillar {
   description: string;
 }
 
+// The Método Next You: 3 ordered phases (Giro → Ruta → Ritmo), each grouping a few pillars.
+// Comunidad has no phase — it's the space that accompanies all 3, not a stop along the way.
+export type PhaseKey = "giro" | "ruta" | "ritmo";
+
+export interface Phase {
+  key: PhaseKey;
+  name: string;
+  promise: string;
+}
+
+export const PHASES: Record<PhaseKey, Phase> = {
+  giro: { key: "giro", name: "Giro", promise: "Rompes la creencia de que es imposible, y eliges un rumbo." },
+  ruta: { key: "ruta", name: "Ruta", promise: "Construyes lo que el mercado necesita ver de ti." },
+  ritmo: { key: "ritmo", name: "Ritmo", promise: "Lo sostienes sin quemarte." },
+};
+
+export const PILLAR_PHASE: Record<PillarKey, PhaseKey | null> = {
+  mentalidad: "giro",
+  direccion: "giro",
+  tecnologia: "ruta",
+  empleabilidad: "ruta",
+  ingles: "ruta",
+  productividad: "ritmo",
+  bienestar: "ritmo",
+  comunidad: null,
+};
+
 export const PILLARS: Pillar[] = [
   {
     key: "mentalidad",
+    label: "Mentalidad",
     question: "Cuando piensas en cambiar de rumbo profesional, ¿qué es lo primero que sientes?",
     options: [
       { label: "Confianza", score: 1 },
@@ -43,6 +72,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "direccion",
+    label: "Dirección",
     question: "¿Qué tan clara tienes tu próxima meta profesional?",
     options: [
       { label: "Muy clara", score: 1 },
@@ -57,6 +87,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "tecnologia",
+    label: "Tecnología e IA",
     question: "¿Cómo describirías tu relación con la tecnología y la IA hoy?",
     options: [
       { label: "La uso a mi favor", score: 1 },
@@ -71,6 +102,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "empleabilidad",
+    label: "Empleabilidad",
     question: "¿Qué tan preparado(a) sientes tu perfil profesional hoy?",
     options: [
       { label: "Listo para postular", score: 1 },
@@ -85,6 +117,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "ingles",
+    label: "Inglés Profesional",
     question: "¿Cómo te sientes usando inglés en un contexto laboral?",
     options: [
       { label: "Lo domino", score: 1 },
@@ -99,6 +132,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "productividad",
+    label: "Productividad",
     question: "¿Qué tan bien organizas tu tiempo entre trabajo, familia y tu crecimiento?",
     options: [
       { label: "Tengo un sistema", score: 1 },
@@ -113,6 +147,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "bienestar",
+    label: "Bienestar",
     question: "¿Cómo está tu energía/salud mientras persigues este cambio?",
     options: [
       { label: "Cuido mi descanso", score: 1 },
@@ -127,6 +162,7 @@ export const PILLARS: Pillar[] = [
   },
   {
     key: "comunidad",
+    label: "Comunidad",
     question: "¿Con quién cuentas hoy para acompañarte en este proceso?",
     options: [
       { label: "Red de apoyo sólida", score: 1 },
