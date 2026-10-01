@@ -264,8 +264,8 @@ export default async function Home() {
             El arco real detrás de NEXT YOU™ — sin mapa, pero con coordenadas.
           </p>
         </div>
-        <div className="bg-ink-soft border border-[rgba(237,230,216,0.14)] rounded-[2px] p-9 overflow-x-auto">
-          <svg viewBox="0 0 1100 260" width="100%" style={{ minWidth: 600 }}>
+        <div className="bg-ink-soft border border-[rgba(237,230,216,0.14)] rounded-[2px] p-9">
+          <svg viewBox="0 0 1100 260" width="100%">
             <path
               d="M 40 210 C 140 230, 190 180, 230 155 S 340 100, 300 70 S 210 40, 300 25 S 520 20, 570 75 S 610 180, 730 165 S 900 80, 1050 40"
               fill="none"
