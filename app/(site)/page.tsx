@@ -333,7 +333,7 @@ export default async function Home() {
                 ) : (
                   <div className="aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
                 )}
-                <div className="p-4.5 flex flex-col gap-2.5 flex-1">
+                <div className="p-[18px] flex flex-col gap-2.5 flex-1">
                   <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{post.pillar}</span>
                   <h4 className="text-[15.5px] leading-snug">{post.title}</h4>
                   <span className="font-mono text-[11px] opacity-45 mt-auto">

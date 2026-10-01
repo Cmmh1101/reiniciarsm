@@ -165,7 +165,7 @@ export default async function MentoriasPage() {
         </div>
         <div className="border-t border-[rgba(20,25,43,0.12)]">
           {IDEAL_FOR.map((item) => (
-            <div key={item.title} className="grid grid-cols-[32px_1fr] gap-4 py-5.5 border-b border-[rgba(20,25,43,0.12)] items-start">
+            <div key={item.title} className="grid grid-cols-[32px_1fr] gap-4 py-[22px] border-b border-[rgba(20,25,43,0.12)] items-start">
               <span className="font-mono text-clay text-sm pt-0.5">—</span>
               <div>
                 <h4 className="text-base font-semibold mb-1">{item.title}</h4>
