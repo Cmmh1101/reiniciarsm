@@ -6,7 +6,7 @@ const HERO_IMAGE_URL = "/images/carla/hero-mi-historia.jpg";
 
 const CONTIGO_IMAGE_URL = "/images/carla/contigove.png";
 
-const TITLE = "No Empecé Sabiendo El Camino. Lo Construí Reiniciando 6+ Veces.";
+const TITLE = "No Empecé Sabiendo El Camino. Lo Construí Reiniciando Muchas Veces.";
 const DESCRIPTION =
   "Fui madre joven en Venezuela. Emigré a Estados Unidos sin hablar inglés. Trabajé de mesera, limpié casas, cuidé bebés — mientras aprendía sola. Cambié de carrera y me convertí en Software Engineer sin título tradicional en tecnología. Conseguí empleo remoto — y renuncié. Volví a Venezuela. Emprendí de nuevo.";
 
@@ -50,7 +50,7 @@ const LESSONS = [
   {
     num: "02",
     title: "El Método Vale Más Que La Motivación",
-    body: "La motivación se agota a la semana. Lo que sostuvo mis seis reinicios fueron pasos concretos, repetibles, no discursos de ánimo.",
+    body: "La motivación se agota a la semana. Lo que sostuvo cada uno de mis reinicios fueron pasos concretos, repetibles, no discursos de ánimo.",
   },
   {
     num: "03",

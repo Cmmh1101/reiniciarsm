@@ -63,7 +63,7 @@ const FAQ = [
   { q: "¿Cuánto dura la sesión?", a: "Aproximadamente 60 minutos — tiempo suficiente para resolver dudas, revisar tu situación actual y salir con un plan claro." },
   { q: "¿Puedo reagendar si no puedo asistir?", a: "Sí, con anticipación — escríbeme a hello@carlamontano.io." },
   { q: "¿En qué se diferencia esto de la Comunidad Next You?", a: "La Comunidad es tu espacio diario de acompañamiento y pertenencia, a menor costo. La Mentoría es una transformación más estructurada y personalizada, con seguimiento directo conmigo." },
-  { q: "¿Qué hace diferente esta mentoría?", a: "No te doy una lista interminable de cursos. Identificamos juntas/os tu pilar prioritario, resolvemos tus dudas reales y sales con un plan de acción — con la misma metodología que yo usé para reiniciar seis veces." },
+  { q: "¿Qué hace diferente esta mentoría?", a: "No te doy una lista interminable de cursos. Identificamos juntas/os tu pilar prioritario, resolvemos tus dudas reales y sales con un plan de acción — con la misma metodología que yo usé para reiniciar muchas veces." },
 ];
 
 export default async function MentoriasPage() {

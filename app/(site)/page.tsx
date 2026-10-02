@@ -233,7 +233,7 @@ export default async function Home() {
           <div>
             <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">Hola, soy Carla</p>
             <h2 className="font-display text-[clamp(28px,3.4vw,42px)] mb-5">
-              No empecé sabiendo el camino. Lo construí reiniciando seis veces.
+              No empecé sabiendo el camino. Lo construí reiniciando muchas veces.
             </h2>
             <p className="opacity-85 text-base max-w-[52ch] mb-4">
               Fui madre joven. Emigré de Venezuela a Estados Unidos sin hablar inglés. Trabajé en
@@ -259,7 +259,7 @@ export default async function Home() {
       <section className="bg-ink text-paper px-[8vw] py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">Así se ve un reinicio</p>
-          <h2 className="font-display text-[clamp(28px,3.4vw,42px)] mb-3.5">Siete reinicios, un método</h2>
+          <h2 className="font-display text-[clamp(28px,3.4vw,42px)] mb-3.5">Muchos reinicios, un método</h2>
           <p className="opacity-60 text-base">
             El arco real detrás de NEXT YOU™ — sin mapa, pero con coordenadas.
           </p>
