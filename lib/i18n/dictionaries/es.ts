@@ -392,7 +392,6 @@ export const es: Dictionary = {
     readingTime: "min de lectura",
     byline: "Por Carla Montaño",
     moreTitle: "Sigue leyendo",
-    otherLanguageTitle: "También disponibles en inglés",
     postOtherLanguage: "Este artículo solo está disponible en inglés.",
   },
 

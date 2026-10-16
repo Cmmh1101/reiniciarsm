@@ -1,6 +1,8 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import type { Locale } from "@/lib/i18n/config";
 
+// One row per article. title/excerpt/content hold the Spanish version (the original posts);
+// the *_en columns (migration 0018) hold the English one. The slug is shared by both languages.
 export interface BlogPost {
   id: string;
   slug: string;
@@ -12,48 +14,57 @@ export interface BlogPost {
   featured_image_url: string | null;
   published_at: string | null;
   reading_time_minutes: number | null;
-  // Added by migration 0018 — absent on a database that hasn't run it, where every post is Spanish.
-  locale?: Locale;
-  translation_group?: string | null;
+  title_en?: string | null;
+  excerpt_en?: string | null;
+  content_en?: string | null;
 }
 
-export function postLocale(post: BlogPost): Locale {
-  return post.locale === "en" ? "en" : "es";
+/** A post resolved to one language, with the language actually shown (it falls back when the other is empty). */
+export interface LocalizedPost extends BlogPost {
+  shown: Locale;
+  languages: Locale[];
 }
 
-async function fetchPublished(): Promise<BlogPost[]> {
+const filled = (s: string | null | undefined) => !!s && s.trim().length > 0 && s.trim() !== "<p></p>";
+
+/** Languages the article actually has content in. */
+export function availableLocales(post: BlogPost): Locale[] {
+  const langs: Locale[] = [];
+  if (filled(post.title_en) && filled(post.content_en)) langs.push("en");
+  if (filled(post.title) && filled(post.content)) langs.push("es");
+  return langs;
+}
+
+/** The article in `locale`, or in the other language when `locale` has no content. */
+export function localizePost(post: BlogPost, locale: Locale): LocalizedPost {
+  const languages = availableLocales(post);
+  const shown: Locale = languages.includes(locale) ? locale : languages[0] ?? "es";
+  if (shown === "en") {
+    return { ...post, title: post.title_en ?? "", excerpt: post.excerpt_en ?? null, content: post.content_en ?? "", shown, languages };
+  }
+  return { ...post, shown, languages };
+}
+
+export async function getPublishedPosts(limit?: number): Promise<BlogPost[]> {
   const supabase = createSupabaseAdminClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("blog_posts")
     .select("*")
     .not("published_at", "is", null)
     .order("published_at", { ascending: false });
 
+  if (limit) query = query.limit(limit);
+
+  const { data, error } = await query;
   if (error) {
     console.error("getPublishedPosts failed", error);
     return [];
   }
-  return (data ?? []) as BlogPost[];
+  return ((data ?? []) as BlogPost[]).filter((p) => availableLocales(p).length > 0);
 }
 
-export async function getPublishedPosts(limit?: number): Promise<BlogPost[]> {
-  const posts = await fetchPublished();
-  return limit ? posts.slice(0, limit) : posts;
-}
-
-/** Published posts split into those written in `locale` and those written in the other language. */
-export async function getPostsByLocale(locale: Locale): Promise<{ native: BlogPost[]; other: BlogPost[] }> {
-  const posts = await fetchPublished();
-  return {
-    native: posts.filter((p) => postLocale(p) === locale),
-    other: posts.filter((p) => postLocale(p) !== locale),
-  };
-}
-
-/** Up to `limit` posts, preferring ones written in `locale` and filling with the other language if there are too few. */
-export async function getPostsPreferLocale(locale: Locale, limit: number): Promise<BlogPost[]> {
-  const { native, other } = await getPostsByLocale(locale);
-  return [...native, ...other].slice(0, limit);
+export async function getLocalizedPosts(locale: Locale, limit?: number): Promise<LocalizedPost[]> {
+  return (await getPublishedPosts(limit)).map((p) => localizePost(p, locale));
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
@@ -67,20 +78,6 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
 
   if (error) return null;
   return data as BlogPost;
-}
-
-/** The published translation of `post` in `locale`, if one has been linked in the admin. */
-export async function getTranslation(post: BlogPost, locale: Locale): Promise<BlogPost | null> {
-  if (!post.translation_group) return null;
-  const supabase = createSupabaseAdminClient();
-  const { data } = await supabase
-    .from("blog_posts")
-    .select("*")
-    .eq("translation_group", post.translation_group)
-    .eq("locale", locale)
-    .not("published_at", "is", null)
-    .limit(1);
-  return data && data.length > 0 ? (data[0] as BlogPost) : null;
 }
 
 /** Admin-only — unlike getPostBySlug, returns drafts too. */

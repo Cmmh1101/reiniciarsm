@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { postLocale, type BlogPost } from "@/lib/posts";
+import { availableLocales, type BlogPost } from "@/lib/posts";
 
 async function getAllPosts(): Promise<BlogPost[]> {
   const supabase = createSupabaseAdminClient();
@@ -44,10 +44,10 @@ export default async function AdminBlogListPage() {
               <tr key={post.id} className="border-b border-[rgba(20,25,43,0.08)]">
                 <td className="py-3">
                   <Link href={`/admin/blog/${post.id}/edit`} className="hover:underline">
-                    {post.title}
+                    {post.title || post.title_en}
                   </Link>
                 </td>
-                <td className="py-3 font-mono text-xs opacity-70">{postLocale(post).toUpperCase()}</td>
+                <td className="py-3 font-mono text-xs opacity-70">{availableLocales(post).length ? [...availableLocales(post)].reverse().map((l) => l.toUpperCase()).join(" · ") : "—"}</td>
                 <td className="py-3 opacity-70">{post.pillar}</td>
                 <td className="py-3">
                   {post.published_at ? (

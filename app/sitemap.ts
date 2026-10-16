@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getPublishedPosts, postLocale } from "@/lib/posts";
+import { availableLocales, getPublishedPosts } from "@/lib/posts";
 import { getActiveProducts } from "@/lib/products";
 import { LOCALES } from "@/lib/i18n/config";
 import { localizedPath, type RouteKey } from "@/lib/i18n/routes";
@@ -34,17 +34,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  // Each article is listed at its own language's URL, with its linked translation as the hreflang alternate.
+  // Both languages share a slug. An article is listed once per language it is written in, and when it
+  // exists in both, the two pages point at each other as hreflang alternates.
   for (const post of posts) {
-    const own = postLocale(post);
-    const translation = post.translation_group ? posts.find((p) => p.id !== post.id && p.translation_group === post.translation_group) : undefined;
-    const languages: Record<string, string> = { [own]: abs(localizedPath(own, "resourcePost", { slug: post.slug })) };
-    if (translation) languages[postLocale(translation)] = abs(localizedPath(postLocale(translation), "resourcePost", { slug: translation.slug }));
-    entries.push({
-      url: languages[own],
-      lastModified: post.published_at ? new Date(post.published_at) : now,
-      ...(translation ? { alternates: { languages } } : {}),
-    });
+    const langs = availableLocales(post);
+    const languages = Object.fromEntries(langs.map((l) => [l, abs(localizedPath(l, "resourcePost", { slug: post.slug }))]));
+    for (const l of langs) {
+      entries.push({
+        url: languages[l],
+        lastModified: post.published_at ? new Date(post.published_at) : now,
+        ...(langs.length > 1 ? { alternates: { languages } } : {}),
+      });
+    }
   }
 
   return entries;

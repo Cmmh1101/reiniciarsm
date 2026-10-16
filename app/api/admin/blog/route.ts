@@ -1,29 +1,32 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { resolveTranslationGroup } from "@/lib/postTranslations";
+import { hasLanguage, readLanguages } from "@/lib/postPayload";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
 
   const body = await request.json().catch(() => null);
-  if (!body?.title || !body?.slug || !body?.content || !body?.pillar) {
+  if (!body?.slug || !body?.pillar) {
     return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
+  }
+  const { es, en } = readLanguages(body);
+  if (!hasLanguage(es) && !hasLanguage(en)) {
+    return NextResponse.json({ error: "Escribe título y contenido en al menos un idioma." }, { status: 400 });
   }
 
   const supabase = createSupabaseAdminClient();
-  const group = await resolveTranslationGroup(body.translation_of);
   const { data, error } = await supabase
     .from("blog_posts")
     .insert({
-      // Only sent when set, so creating a plain Spanish post keeps working before migration 0018.
-      ...(body.locale === "en" ? { locale: "en" } : {}),
-      ...(group ? { translation_group: group } : {}),
-      title: body.title,
+      // The original columns hold the Spanish version; an English-only post leaves them empty.
+      title: es.title,
+      excerpt: es.excerpt || null,
+      content: es.content,
+      // English columns only exist after migration 0018 — don't send them for a Spanish-only post.
+      ...(en.title || en.content ? { title_en: en.title, excerpt_en: en.excerpt || null, content_en: en.content } : {}),
       slug: body.slug,
-      excerpt: body.excerpt || null,
-      content: body.content,
       pillar: body.pillar,
       arc_phase: body.arc_phase || null,
       featured_image_url: body.featured_image_url || null,

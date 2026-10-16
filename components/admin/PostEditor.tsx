@@ -8,70 +8,95 @@ import { PILLARS, ARC_PHASES, ARC_PHASE_NOT_APPLICABLE } from "@/lib/taxonomy";
 import { slugify } from "@/lib/slug";
 import type { BlogPost } from "@/lib/posts";
 
-export interface TranslationCandidate {
-  id: string;
-  title: string;
-  locale: "en" | "es";
-}
-
 interface Props {
   post?: BlogPost;
-  // Other posts that this one could be the translation of.
-  candidates?: TranslationCandidate[];
-  // Id of the post this one is currently linked to as a translation, if any.
-  linkedPostId?: string;
 }
 
-export default function PostEditor({ post, candidates = [], linkedPostId = "" }: Props) {
+type Lang = "en" | "es";
+interface LangFields {
+  title: string;
+  excerpt: string;
+  content: string;
+}
+
+const LANG_LABEL: Record<Lang, string> = { en: "English", es: "Español" };
+
+export default function PostEditor({ post }: Props) {
   const router = useRouter();
   const isEditing = !!post;
 
-  const [title, setTitle] = useState(post?.title ?? "");
+  // Each language keeps its own title, excerpt and body; switching tabs swaps them in and out of the editor.
+  // The original columns hold Spanish; a post written only in English starts on the English tab.
+  const [fields, setFields] = useState<Record<Lang, LangFields>>({
+    es: { title: post?.title ?? "", excerpt: post?.excerpt ?? "", content: post?.content ?? "" },
+    en: { title: post?.title_en ?? "", excerpt: post?.excerpt_en ?? "", content: post?.content_en ?? "" },
+  });
+  const [lang, setLang] = useState<Lang>(post && !post.title && post.title_en ? "en" : post ? "es" : "en");
+
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(isEditing);
-  const [excerpt, setExcerpt] = useState(post?.excerpt ?? "");
   const [pillar, setPillar] = useState(post?.pillar ?? PILLARS[0]);
   const [arcPhase, setArcPhase] = useState(post?.arc_phase ?? ARC_PHASE_NOT_APPLICABLE);
   const [featuredImageUrl, setFeaturedImageUrl] = useState(post?.featured_image_url ?? "");
   const [readingTime, setReadingTime] = useState(post?.reading_time_minutes?.toString() ?? "");
   const [published, setPublished] = useState(!!post?.published_at);
-  const [locale, setLocale] = useState<"en" | "es">(post?.locale === "en" ? "en" : "es");
-  const [translationOf, setTranslationOf] = useState(linkedPostId);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
   const editor = useEditor({
     extensions: [StarterKit],
-    content: post?.content ?? "<p></p>",
+    content: fields[lang].content || "<p></p>",
     immediatelyRender: false,
   });
 
-  function handleTitleChange(value: string) {
-    setTitle(value);
-    if (!slugTouched) setSlug(slugify(value));
+  /** Fields with whatever is currently in the editor folded into the active language. */
+  function currentFields(): Record<Lang, LangFields> {
+    return { ...fields, [lang]: { ...fields[lang], content: editor ? editor.getHTML() : fields[lang].content } };
   }
+
+  function switchLang(next: Lang) {
+    if (next === lang) return;
+    const saved = currentFields();
+    setFields(saved);
+    setLang(next);
+    editor?.commands.setContent(saved[next].content || "<p></p>");
+  }
+
+  function updateField(field: "title" | "excerpt", value: string) {
+    setFields((prev) => ({ ...prev, [lang]: { ...prev[lang], [field]: value } }));
+    // The URL follows the first title typed (English preferred), until the slug is edited by hand.
+    if (field === "title" && !slugTouched && (lang === "en" || !fields.en.title)) setSlug(slugify(value));
+  }
+
+  const isEmpty = (l: Lang) => !fields[l].title.trim() && (l === lang ? !editor || editor.isEmpty : !fields[l].content.replace(/<[^>]*>/g, "").trim());
 
   async function handleSave() {
     setError("");
-    if (!title.trim() || !slug.trim() || !editor) {
-      setError("Título y slug son requeridos.");
+    const saved = currentFields();
+    const writtenIn = (["en", "es"] as Lang[]).filter((l) => saved[l].title.trim() && saved[l].content.replace(/<[^>]*>/g, "").trim());
+    if (!slug.trim()) {
+      setError("El slug es requerido.");
+      return;
+    }
+    if (writtenIn.length === 0) {
+      setError("Escribe título y contenido en al menos un idioma.");
       return;
     }
 
     setSaving(true);
     const payload = {
-      title: title.trim(),
+      title_es: saved.es.title.trim(),
+      excerpt_es: saved.es.excerpt.trim(),
+      content_es: saved.es.content,
+      title_en: saved.en.title.trim(),
+      excerpt_en: saved.en.excerpt.trim(),
+      content_en: saved.en.content,
       slug: slug.trim(),
-      excerpt: excerpt.trim(),
-      content: editor.getHTML(),
       pillar,
       arc_phase: arcPhase === ARC_PHASE_NOT_APPLICABLE ? null : arcPhase,
       featured_image_url: featuredImageUrl.trim(),
       reading_time_minutes: readingTime ? Number(readingTime) : null,
       published,
-      locale,
-      // "" unlinks, an id links, and the field is left out when nothing changed.
-      ...(translationOf !== linkedPostId ? { translation_of: translationOf } : {}),
     };
 
     try {
@@ -92,7 +117,7 @@ export default function PostEditor({ post, candidates = [], linkedPostId = "" }:
 
   async function handleDelete() {
     if (!isEditing) return;
-    if (!confirm(`¿Eliminar "${post!.title}"? Esta acción no se puede deshacer.`)) return;
+    if (!confirm(`¿Eliminar "${post!.title || post!.title_en}"? Esta acción no se puede deshacer.`)) return;
 
     const res = await fetch(`/api/admin/blog/${post!.id}`, { method: "DELETE" });
     if (res.ok) {
@@ -110,51 +135,35 @@ export default function PostEditor({ post, candidates = [], linkedPostId = "" }:
       {error && <p className="text-clay text-sm mb-4">{error}</p>}
 
       <div className="flex flex-col gap-4 mb-6">
-        <div className="grid grid-cols-2 gap-4">
-          <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Idioma del artículo</span>
-            <select
-              value={locale}
-              onChange={(e) => {
-                setLocale(e.target.value as "en" | "es");
-                setTranslationOf("");
-              }}
-              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+        <div role="tablist" aria-label="Idioma del contenido" className="flex gap-2">
+          {(["en", "es"] as Lang[]).map((l) => (
+            <button
+              key={l}
+              type="button"
+              role="tab"
+              aria-selected={lang === l}
+              onClick={() => switchLang(l)}
+              className={`font-mono text-xs px-4 py-2.5 rounded-[3px] border ${
+                lang === l ? "bg-ink text-paper border-ink" : "bg-paper-soft border-[rgba(20,25,43,0.15)]"
+              }`}
             >
-              <option value="es">Español</option>
-              <option value="en">English</option>
-            </select>
-          </label>
-          <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Es la traducción de…</span>
-            <select
-              value={translationOf}
-              onChange={(e) => setTranslationOf(e.target.value)}
-              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
-            >
-              <option value="">Ninguno</option>
-              {candidates
-                .filter((c) => c.locale !== locale)
-                .map((c) => (
-                  <option key={c.id} value={c.id}>
-                    [{c.locale.toUpperCase()}] {c.title}
-                  </option>
-                ))}
-            </select>
-          </label>
+              {LANG_LABEL[l]}
+              {l !== lang && isEmpty(l) && <span className="opacity-60"> (vacío — usa {l === "es" ? "English" : "Español"})</span>}
+            </button>
+          ))}
         </div>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Título</span>
+          <span>Título ({LANG_LABEL[lang]})</span>
           <input
-            value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
+            value={fields[lang].title}
+            onChange={(e) => updateField("title", e.target.value)}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
           />
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Slug</span>
+          <span>Slug (misma URL en ambos idiomas)</span>
           <input
             value={slug}
             onChange={(e) => {
@@ -163,13 +172,14 @@ export default function PostEditor({ post, candidates = [], linkedPostId = "" }:
             }}
             className="font-mono text-sm px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
           />
+          <span className="font-mono text-[11px] font-normal opacity-60">/resources/{slug || "…"} · /recursos/{slug || "…"}</span>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Extracto</span>
+          <span>Extracto ({LANG_LABEL[lang]})</span>
           <textarea
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
+            value={fields[lang].excerpt}
+            onChange={(e) => updateField("excerpt", e.target.value)}
             rows={2}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
           />
@@ -231,7 +241,7 @@ export default function PostEditor({ post, candidates = [], linkedPostId = "" }:
       </div>
 
       <div className="mb-6">
-        <span className="text-sm font-semibold block mb-1.5">Contenido</span>
+        <span className="text-sm font-semibold block mb-1.5">Contenido ({LANG_LABEL[lang]})</span>
         {editor && (
           <div className="border border-[rgba(20,25,43,0.15)] rounded-[3px] bg-white">
             <div className="flex flex-wrap gap-1 border-b border-[rgba(20,25,43,0.1)] p-2">

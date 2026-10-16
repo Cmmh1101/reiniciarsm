@@ -1,15 +1,19 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { resolveTranslationGroup } from "@/lib/postTranslations";
+import { hasLanguage, readLanguages } from "@/lib/postPayload";
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const admin = await getAdminUser();
   if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
 
   const body = await request.json().catch(() => null);
-  if (!body?.title || !body?.slug || !body?.content || !body?.pillar) {
+  if (!body?.slug || !body?.pillar) {
     return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
+  }
+  const { es, en } = readLanguages(body);
+  if (!hasLanguage(es) && !hasLanguage(en)) {
+    return NextResponse.json({ error: "Escribe título y contenido en al menos un idioma." }, { status: 400 });
   }
 
   const supabase = createSupabaseAdminClient();
@@ -22,24 +26,26 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     published_at = existing?.published_at ?? new Date().toISOString();
   }
 
-  // locale / translation_group exist after migration 0018 — only write them once the columns are there.
-  const hasLocaleColumn = !!existing && "locale" in existing;
-  const group = hasLocaleColumn ? await resolveTranslationGroup(body.translation_of) : undefined;
+  // The English columns exist after migration 0018 — only write them once they are there (or when English was written).
+  const hasEnglishColumns = !!existing && "title_en" in existing;
+  const wroteEnglish = !!(en.title || en.content);
+  if (wroteEnglish && !hasEnglishColumns) {
+    return NextResponse.json({ error: "Falta correr la migración 0018 en Supabase para guardar contenido en inglés." }, { status: 400 });
+  }
 
   const { data, error } = await supabase
     .from("blog_posts")
     .update({
-      title: body.title,
+      title: es.title,
+      excerpt: es.excerpt || null,
+      content: es.content,
       slug: body.slug,
-      excerpt: body.excerpt || null,
-      content: body.content,
       pillar: body.pillar,
       arc_phase: body.arc_phase || null,
       featured_image_url: body.featured_image_url || null,
       reading_time_minutes: body.reading_time_minutes || null,
       published_at,
-      ...(hasLocaleColumn && (body.locale === "en" || body.locale === "es") ? { locale: body.locale } : {}),
-      ...(group !== undefined ? { translation_group: group } : {}),
+      ...(hasEnglishColumns ? { title_en: en.title, excerpt_en: en.excerpt || null, content_en: en.content } : {}),
     })
     .eq("id", params.id)
     .select()

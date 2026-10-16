@@ -400,7 +400,6 @@ export const en = {
     readingTime: "min read",
     byline: "By Carla Montaño",
     moreTitle: "Keep reading",
-    otherLanguageTitle: "Also available in Spanish",
     postOtherLanguage: "This article is available in Spanish only.",
   },
 
