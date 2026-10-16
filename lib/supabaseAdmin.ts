@@ -7,5 +7,8 @@ import { createClient } from "@supabase/supabase-js";
 export function createSupabaseAdminClient() {
   return createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
     auth: { autoRefreshToken: false, persistSession: false },
+    // Next.js caches fetch() responses in its data cache by default, which can serve stale posts,
+    // products or slots after an edit. Everything read through this client is live data.
+    global: { fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }) },
   });
 }
