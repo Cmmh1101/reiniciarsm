@@ -13,6 +13,8 @@ export async function POST(request: Request) {
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
   const message = typeof body?.message === "string" ? body.message.trim() : "";
+  const intent = typeof body?.intent === "string" ? body.intent.trim().slice(0, 40) : "";
+  const locale = body?.locale === "en" ? "en" : "es";
 
   if (!EMAIL_RE.test(email)) {
     return NextResponse.json({ error: "Por favor escribe un correo válido." }, { status: 400 });
@@ -36,7 +38,7 @@ export async function POST(request: Request) {
   const { error: eventError } = await supabase.from("contact_events").insert({
     contact_id: contact.id,
     event_type: "contact_form_submitted",
-    metadata: { subject, message },
+    metadata: { subject, message, intent, locale },
   });
   if (eventError) {
     console.error("contact-submit: failed to log event", eventError);
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
   const notifyTo = process.env.ADMIN_EMAIL;
   if (notifyTo) {
     const notifySubject = subject ? `Contacto: ${subject}` : "Nuevo mensaje de contacto";
-    const notifyText = `${name || "(sin nombre)"} <${email}>\n\n${message}`;
+    const notifyText = `${name || "(sin nombre)"} <${email}>\nIdioma: ${locale.toUpperCase()}${intent ? ` · Motivo: ${intent}` : ""}\n\n${message}`;
     await sendConfirmationEmail(notifyTo, notifySubject, notifyText);
   }
 

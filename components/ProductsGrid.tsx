@@ -4,8 +4,10 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { MIN_PURCHASES_TO_SHOW_COUNT, MIN_REVIEWS_TO_SHOW_RATING, type ProductWithStats } from "@/lib/productReviews";
 import StarRating from "@/components/StarRating";
+import type { Locale } from "@/lib/i18n/config";
+import { localizedPath } from "@/lib/i18n/routes";
 
-export default function ProductsGrid({ products }: { products: ProductWithStats[] }) {
+export default function ProductsGrid({ products, locale, copy }: { products: ProductWithStats[]; locale: Locale; copy: { allCategories: string; free: string; purchases: string } }) {
   const categories = useMemo(() => {
     const set = new Set(products.map((p) => p.category));
     return [...set];
@@ -27,7 +29,7 @@ export default function ProductsGrid({ products }: { products: ProductWithStats[
               activeCategory === null ? "bg-ink text-paper border-ink" : "border-[rgba(20,25,43,0.2)] opacity-70"
             }`}
           >
-            Todos
+            {copy.allCategories}
           </button>
           {categories.map((c) => (
             <button
@@ -46,7 +48,7 @@ export default function ProductsGrid({ products }: { products: ProductWithStats[
 
       <div className="grid md:grid-cols-3 gap-7">
         {filtered.map((p) => (
-          <Link key={p.id} href={`/productos/${p.slug}`} className="border border-[rgba(20,25,43,0.12)] rounded-[2px] overflow-hidden flex flex-col">
+          <Link key={p.id} href={localizedPath(locale, "shopProduct", { slug: p.slug })} className="border border-[rgba(20,25,43,0.12)] rounded-[2px] overflow-hidden flex flex-col">
             {p.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={p.image_url} alt="" className="w-full aspect-[4/3] object-cover" />
@@ -61,9 +63,9 @@ export default function ProductsGrid({ products }: { products: ProductWithStats[
                 <StarRating avgRating={p.avgRating} reviewCount={p.reviewCount} />
               )}
               <div className="mt-auto flex items-center justify-between gap-2">
-                <span className="font-mono text-sm">{p.price_cents === 0 ? "Gratis" : `$${(p.price_cents / 100).toFixed(2)}`}</span>
+                <span className="font-mono text-sm">{p.price_cents === 0 ? copy.free : `$${(p.price_cents / 100).toFixed(2)}`}</span>
                 {p.purchaseCount >= MIN_PURCHASES_TO_SHOW_COUNT && (
-                  <span className="font-mono text-[10.5px] opacity-50">{p.purchaseCount} compras</span>
+                  <span className="font-mono text-[10.5px] opacity-50">{p.purchaseCount} {copy.purchases}</span>
                 )}
               </div>
             </div>

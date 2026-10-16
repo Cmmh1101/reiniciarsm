@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createStripeClient } from "@/lib/stripe";
 import { getProductById } from "@/lib/products";
 import { recordProductPurchase } from "@/lib/productPurchases";
+import { localizedPath } from "@/lib/i18n/routes";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -10,6 +11,7 @@ export async function POST(request: Request) {
   const productId = typeof body?.productId === "string" ? body.productId : "";
   const name = typeof body?.name === "string" ? body.name.trim() : "";
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
+  const locale = body?.locale === "es" ? "es" : "en";
 
   if (!name || !EMAIL_RE.test(email)) {
     return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
@@ -31,7 +33,7 @@ export async function POST(request: Request) {
       amountCents: 0,
       stripePaymentId: null,
     });
-    return NextResponse.json({ url: `${siteUrl}/productos/gracias?token=${downloadToken}` });
+    return NextResponse.json({ url: `${siteUrl}${localizedPath(locale, "shopThanks")}?token=${downloadToken}` });
   }
 
   const stripe = createStripeClient();
@@ -52,9 +54,10 @@ export async function POST(request: Request) {
         quantity: 1,
       },
     ],
+    locale: locale === "es" ? "es" : "en",
     metadata: { type: "product", product_id: product.id, name, email },
-    success_url: `${siteUrl}/productos/gracias?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${siteUrl}/productos/${product.slug}?canceled=1`,
+    success_url: `${siteUrl}${localizedPath(locale, "shopThanks")}?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${siteUrl}${localizedPath(locale, "shopProduct", { slug: product.slug })}?canceled=1`,
   });
 
   return NextResponse.json({ url: session.url });

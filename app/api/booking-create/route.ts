@@ -56,8 +56,8 @@ export async function POST(request: Request) {
       },
     ],
     metadata: { product: MENTORIA_SESSION_PRODUCT, slot_id: slotId, name, email },
-    success_url: `${siteUrl}/mentorias/gracias?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${siteUrl}/mentorias?canceled=1`,
+    success_url: `${siteUrl}/es/trabaja-conmigo/mentoria/gracias?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${siteUrl}/es/trabaja-conmigo/mentoria?canceled=1`,
   });
 
   return NextResponse.json({ url: session.url });

@@ -217,7 +217,7 @@ export default function DiagnosticQuiz() {
             })()}
             <p className="text-[rgba(237,230,216,0.8)] mb-7">{winner.description}</p>
             <Link
-              href="/comunidad"
+              href="/es/proyectos/next-you"
               className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform"
             >
               Únete a la Comunidad Next You

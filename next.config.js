@@ -1,52 +1,56 @@
+const routes = require("./lib/i18n/routes.json");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
 
-  // Preserves SEO and existing links from the old WordPress site once carlamontano.io's DNS
-  // points here. Built from a full crawl of WordPress's own wp-sitemap.xml — see the migration
-  // memory notes for the source list. `/contacto` needs no redirect entry — the new site has a
-  // real page at that same path now.
+  // Spanish public slugs are served by the same internal (English-named) routes. Specific paths
+  // come first so e.g. /es/tienda/gracias wins over /es/tienda/:slug.
+  async rewrites() {
+    const rewrites = Object.values(routes)
+      .filter((r) => r.es !== r.en && r.es !== "")
+      .sort((a, b) => a.es.split(":").length - b.es.split(":").length)
+      .map((r) => ({ source: `/es/${r.es}`, destination: `/es/${r.en}` }));
+    return { beforeFiles: rewrites };
+  },
+
   async redirects() {
     return [
-      // Blog posts that already lived on WordPress under a different slug.
-      {
-        source: "/como-elegir-tu-primer-rol-en-tecnologia-desde-diseno-hasta-automatizacion",
-        destination: "/blog/como-elegir-tu-primer-rol-en-tecnologia-desde-diseno-hasta-automatizacion",
-        permanent: true,
-      },
-      {
-        source: "/de-mesera-a-software-engineer-mi-historia-completa-con-fechas-reales",
-        destination: "/blog/de-mesera-a-software-engineer",
-        permanent: true,
-      },
+      // Pages and posts that already lived on WordPress under a different slug.
+      { source: "/como-elegir-tu-primer-rol-en-tecnologia-desde-diseno-hasta-automatizacion", destination: "/es/recursos/como-elegir-tu-primer-rol-en-tecnologia-desde-diseno-hasta-automatizacion", permanent: true },
+      { source: "/de-mesera-a-software-engineer-mi-historia-completa-con-fechas-reales", destination: "/es/recursos/de-mesera-a-software-engineer", permanent: true },
+      { source: "/historiasguias", destination: "/es/recursos", permanent: true },
+      { source: "/1-1-sessions", destination: "/es/trabaja-conmigo/mentoria", permanent: true },
+      { source: "/checkout", destination: "/es/trabaja-conmigo/mentoria", permanent: true },
+      { source: "/shop", destination: "/es/trabaja-conmigo/mentoria", permanent: true },
 
-      // WordPress pages that moved to a different path on the new site.
-      { source: "/historiasguias", destination: "/blog", permanent: true },
-      { source: "/1-1-sessions", destination: "/mentorias", permanent: true },
-      { source: "/checkout", destination: "/mentorias", permanent: true },
-      { source: "/shop", destination: "/mentorias", permanent: true },
+      // WordPress pages with no equivalent on the new site (old lead magnets, WooCommerce account
+      // pages, the pre-rebrand landing page, the Linktree-style page).
+      { source: "/links", destination: "/es", permanent: true },
+      { source: "/checklist-thankyou", destination: "/es", permanent: true },
+      { source: "/empieza-aqui", destination: "/es", permanent: true },
+      { source: "/customer-dashboard", destination: "/es", permanent: true },
+      { source: "/card-link/comunidad", destination: "/es/proyectos/next-you", permanent: true },
+      { source: "/card-link/:slug*", destination: "/es", permanent: true },
+      { source: "/form/comunidad", destination: "/es/proyectos/next-you", permanent: true },
+      { source: "/form/:slug*", destination: "/es", permanent: true },
+      { source: "/herramientas", destination: "/es", permanent: true },
+      { source: "/products/empieza-en-tecnologia-con-claridad", destination: "/es/tienda/el-mapa-de-tu-reinicio-workbook", permanent: true },
 
-      // WordPress pages with no equivalent on the new site (old lead magnets, WooCommerce
-      // account pages, the pre-rebrand "Tu Camino Tech" landing page, the Linktree-style page).
-      { source: "/links", destination: "/", permanent: true },
-      { source: "/checklist-thankyou", destination: "/", permanent: true },
-      { source: "/empieza-aqui", destination: "/", permanent: true },
-      { source: "/customer-dashboard", destination: "/", permanent: true },
-
-      // Bricks builder "card-link" entries that powered the old /links page.
-      { source: "/card-link/comunidad", destination: "/comunidad", permanent: true },
-      { source: "/card-link/:slug*", destination: "/", permanent: true },
-
-      // FluentCRM form landing artifacts (not real content pages).
-      { source: "/form/comunidad", destination: "/comunidad", permanent: true },
-      { source: "/form/:slug*", destination: "/", permanent: true },
-
-      // /herramientas had real content on WordPress but isn't being rebuilt yet — sends visitors
-      // home rather than to a 404. The old WooCommerce product isn't being relaunched either;
-      // its URL now points at the closest live replacement, the NEXT YOU™ workbook (the paid
-      // product, closer in spirit to "start in tech with clarity" than the free checklist).
-      { source: "/herramientas", destination: "/", permanent: true },
-      { source: "/products/empieza-en-tecnologia-con-claridad", destination: "/productos/el-mapa-de-tu-reinicio-workbook", permanent: true },
+      // Spanish URLs from before the bilingual redesign -> their /es equivalents (flattened, no chains).
+      { source: "/blog", destination: "/es/recursos", permanent: true },
+      { source: "/blog/:slug", destination: "/es/recursos/:slug", permanent: true },
+      { source: "/mi-historia", destination: "/es/sobre-mi", permanent: true },
+      { source: "/productos", destination: "/es/tienda", permanent: true },
+      { source: "/productos/gracias", destination: "/es/tienda/gracias", permanent: true },
+      { source: "/productos/:slug", destination: "/es/tienda/:slug", permanent: true },
+      { source: "/mentorias", destination: "/es/trabaja-conmigo/mentoria", permanent: true },
+      { source: "/mentorias/gracias", destination: "/es/trabaja-conmigo/mentoria/gracias", permanent: true },
+      { source: "/comunidad", destination: "/es/proyectos/next-you", permanent: true },
+      { source: "/diagnostico-next-you", destination: "/es/proyectos/next-you/diagnostico", permanent: true },
+      { source: "/contacto", destination: "/es/contacto", permanent: true },
+      { source: "/privacidad", destination: "/es/privacidad", permanent: true },
+      { source: "/terminos", destination: "/es/terminos", permanent: true },
     ];
   },
 };

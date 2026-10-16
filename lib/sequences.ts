@@ -16,7 +16,7 @@ function footer(unsubscribeUrl: string) {
 
 function communityPageUrl() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  return `${siteUrl}/comunidad`;
+  return `${siteUrl}/es/proyectos/next-you`;
 }
 
 // Verbatim from ~/Downloads/secuencias-email-8-arquetipos.md (Carla, 2026-09-08).
@@ -191,7 +191,7 @@ export const NEWSLETTER_SEQUENCE: SequenceStep[] = [
       `6. Productividad — sostener el cambio sin sacrificar tu vida\n` +
       `7. Bienestar — que reiniciar no te cueste tu salud\n` +
       `8. Comunidad — no hacerlo sola/o\n\n` +
-      `Si quieres saber cuál de estos 8 pilares es tu prioridad ahora mismo, te dejo un diagnóstico corto y gratuito: https://carlamontano.io/diagnostico-next-you\n\n` +
+      `Si quieres saber cuál de estos 8 pilares es tu prioridad ahora mismo, te dejo un diagnóstico corto y gratuito: https://carlamontano.io/es/proyectos/next-you/diagnostico\n\n` +
       `En el próximo email te cuento cómo se ve esto puesto en práctica, dentro de una comunidad real.` +
       footer(unsubscribeUrl),
   },
