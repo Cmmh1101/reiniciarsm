@@ -549,7 +549,7 @@ export const es: Dictionary = {
 
   newsletter: {
     title: "Recibe nuevos recursos por correo",
-    body: "Correos ocasionales y prácticos. Date de baja cuando quieras.",
+    body: "Una breve serie de bienvenida y luego correos ocasionales y prácticos. Date de baja cuando quieras.",
     namePlaceholder: "Nombre",
     emailPlaceholder: "Correo",
     button: "Suscribirme",

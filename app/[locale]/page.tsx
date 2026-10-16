@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import NewsletterForm from "@/components/NewsletterForm";
 import { getLocalizedPosts } from "@/lib/posts";
 import { pillarLabel } from "@/lib/taxonomy";
 import { getActiveProducts } from "@/lib/products";
@@ -21,7 +22,7 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
 export default async function Home({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale;
-  const { home: h, site, common, nav } = getDictionary(locale);
+  const { home: h, site, common, nav, newsletter } = getDictionary(locale);
 
   const [posts, products] = await Promise.all([getLocalizedPosts(locale, 3), getActiveProducts()]);
   const featuredProducts = products.slice(0, 3);
@@ -164,6 +165,15 @@ export default async function Home({ params }: { params: { locale: string } }) {
         <Link href={localizedPath(locale, "about")} className="underline font-mono text-xs uppercase tracking-wide">
           {h.story.cta} →
         </Link>
+      </section>
+
+      {/* NEWSLETTER */}
+      <section className="px-[8vw] py-20 max-w-[1100px]">
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{newsletter.title}</h2>
+        <p className="opacity-75 mb-7 max-w-[52ch]">{newsletter.body}</p>
+        <div className="max-w-[560px]">
+          <NewsletterForm locale={locale} copy={newsletter} />
+        </div>
       </section>
 
       {/* CONTACT */}

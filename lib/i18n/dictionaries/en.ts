@@ -557,7 +557,7 @@ export const en = {
 
   newsletter: {
     title: "Get new resources by email",
-    body: "Occasional, practical emails. Unsubscribe anytime.",
+    body: "A short welcome series, then occasional practical emails. Unsubscribe anytime.",
     namePlaceholder: "Name",
     emailPlaceholder: "Email",
     button: "Subscribe",
