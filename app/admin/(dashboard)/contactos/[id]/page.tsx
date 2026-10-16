@@ -1,18 +1,24 @@
 import { notFound } from "next/navigation";
-import { getContactById, getContactEvents, EVENT_TYPE_INFO, type ContactEvent } from "@/lib/contacts";
+import { getContactById, getContactEvents, type ContactEvent } from "@/lib/contacts";
+import { fmt, getAdminDictionary, type AdminDictionary } from "@/lib/admin/dictionary";
+import { getAdminLocale } from "@/lib/admin/i18n";
+import { ADMIN_TIMEZONE } from "@/lib/admin/constants";
 import { getEmailSendsForContact, type EmailSend } from "@/lib/emailTracking";
 import ContactStatusEditor from "@/components/admin/ContactStatusEditor";
 import ContactLanguageEditor from "@/components/admin/ContactLanguageEditor";
 
-function eventCaption(event: ContactEvent): string | null {
+function eventCaption(event: ContactEvent, t: AdminDictionary["contacts"]): string | null {
   const m = event.metadata;
   if (!m) return null;
   if (event.event_type === "quiz_completed" && m.archetype) {
-    return `Arquetipo: ${m.archetype}`;
+    return fmt(t.archetype, { value: String(m.archetype) });
+  }
+  if (event.event_type === "next_step_completed" && m.profile) {
+    return fmt(t.profile, { value: String(m.profile) });
   }
   if ((event.event_type === "booking_created" || event.event_type === "payment_completed") && m.payment_method) {
     const method = m.payment_method === "stripe" ? "Stripe" : String(m.payment_method);
-    return `Vía ${method}`;
+    return fmt(t.via, { method });
   }
   if ((event.event_type === "sequence_email_sent" || event.event_type === "newsletter_sent") && m.subject) {
     return `"${m.subject}"`;
@@ -23,17 +29,17 @@ function eventCaption(event: ContactEvent): string | null {
   return null;
 }
 
-function emailStatus(send: EmailSend): { label: string; color: string } {
-  if (send.bounced_at) return { label: "Rebotado", color: "text-clay" };
-  if (send.complained_at) return { label: "Marcado como spam", color: "text-clay" };
-  if (send.clicked_at) return { label: "Clic", color: "text-sage" };
-  if (send.opened_at) return { label: "Abierto", color: "text-sage" };
-  if (send.delivered_at) return { label: "Entregado", color: "opacity-70" };
-  return { label: "Enviado", color: "opacity-50" };
+function emailStatus(send: EmailSend, t: AdminDictionary["contacts"]): { label: string; color: string } {
+  if (send.bounced_at) return { label: t.emailStatus.bounced, color: "text-clay" };
+  if (send.complained_at) return { label: t.emailStatus.complained, color: "text-clay" };
+  if (send.clicked_at) return { label: t.emailStatus.clicked, color: "text-sage" };
+  if (send.opened_at) return { label: t.emailStatus.opened, color: "text-sage" };
+  if (send.delivered_at) return { label: t.emailStatus.delivered, color: "opacity-70" };
+  return { label: t.emailStatus.sent, color: "opacity-50" };
 }
 
 const dateFmt: Intl.DateTimeFormatOptions = {
-  timeZone: "America/Caracas",
+  timeZone: ADMIN_TIMEZONE,
   day: "numeric",
   month: "short",
   year: "numeric",
@@ -42,6 +48,8 @@ const dateFmt: Intl.DateTimeFormatOptions = {
 };
 
 export default async function AdminContactDetailPage({ params }: { params: { id: string } }) {
+  const locale = getAdminLocale();
+  const { contacts: t } = getAdminDictionary(locale);
   const contact = await getContactById(params.id);
   if (!contact) notFound();
 
@@ -66,45 +74,44 @@ export default async function AdminContactDetailPage({ params }: { params: { id:
         )}
       </div>
 
-      <h2 className="font-semibold mb-3">Historial</h2>
+      <h2 className="font-semibold mb-3">{t.history}</h2>
       {events.length === 0 ? (
-        <p className="opacity-60 mb-8">Sin eventos todavía.</p>
+        <p className="opacity-60 mb-8">{t.noEvents}</p>
       ) : (
         <ul className="flex flex-col gap-4 mb-8">
           {events.map((e) => {
-            const info = EVENT_TYPE_INFO[e.event_type];
-            const caption = eventCaption(e);
+            const caption = eventCaption(e, t);
             return (
               <li key={e.id} className="border-l-2 border-[rgba(20,25,43,0.12)] pl-4">
-                <p className="text-sm font-semibold">{info?.label ?? e.event_type}</p>
+                <p className="text-sm font-semibold">{t.eventTypes[e.event_type] ?? e.event_type}</p>
                 {caption && <p className="text-sm opacity-70">{caption}</p>}
-                <p className="text-xs opacity-50 mt-0.5">{new Date(e.created_at).toLocaleString("es", dateFmt)}</p>
+                <p className="text-xs opacity-50 mt-0.5">{new Date(e.created_at).toLocaleString(locale, dateFmt)}</p>
               </li>
             );
           })}
         </ul>
       )}
 
-      <h2 className="font-semibold mb-3">Correos enviados</h2>
+      <h2 className="font-semibold mb-3">{t.emails}</h2>
       {emailSends.length === 0 ? (
-        <p className="opacity-60">Sin correos todavía.</p>
+        <p className="opacity-60">{t.noEmails}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Asunto</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Estado</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Fecha</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.emailColumns.subject}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.emailColumns.status}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.emailColumns.date}</th>
             </tr>
           </thead>
           <tbody>
             {emailSends.map((send) => {
-              const status = emailStatus(send);
+              const status = emailStatus(send, t);
               return (
                 <tr key={send.id} className="border-b border-[rgba(20,25,43,0.08)]">
                   <td className="py-3">{send.subject}</td>
                   <td className={`py-3 ${status.color}`}>{status.label}</td>
-                  <td className="py-3 opacity-70">{new Date(send.created_at).toLocaleDateString("es")}</td>
+                  <td className="py-3 opacity-70">{new Date(send.created_at).toLocaleDateString(locale)}</td>
                 </tr>
               );
             })}

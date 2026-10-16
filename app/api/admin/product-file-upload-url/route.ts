@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 
 // Netlify Functions (which is what a Next.js API route becomes here) reject request bodies over
@@ -9,13 +10,13 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 // Storage with it. No Supabase key of any kind reaches the browser — the returned URL already
 // has its one-time token embedded and is scoped to this exact path.
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   const fileName = typeof body?.fileName === "string" ? body.fileName : "";
   if (!fileName) {
-    return NextResponse.json({ error: "Falta el nombre del archivo." }, { status: 400 });
+    return adminError(400, "The file name is missing.", "Falta el nombre del archivo.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
 
   if (error || !data) {
     console.error("product-file-upload-url: failed to create signed upload URL", error);
-    return NextResponse.json({ error: "No se pudo preparar la subida." }, { status: 500 });
+    return adminError(500, "Couldn't prepare the upload.", "No se pudo preparar la subida.");
   }
 
   return NextResponse.json({ uploadUrl: data.signedUrl, filePath: data.path });

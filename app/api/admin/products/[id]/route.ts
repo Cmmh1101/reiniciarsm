@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
 
@@ -8,12 +9,12 @@ import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
 // after the DB update succeeds — never before, so a failed update can't strand a product
 // pointing at a file that no longer exists.
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   if (!body || typeof body !== "object") {
-    return NextResponse.json({ error: "Solicitud inválida." }, { status: 400 });
+    return adminError(400, "Invalid request.", "Solicitud inválida.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -23,7 +24,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     const { error } = await supabase.from("products").update({ active: body.active }).eq("id", params.id);
     if (error) {
       console.error("PATCH /api/admin/products/[id] (toggle) failed", error);
-      return NextResponse.json({ error: "No se pudo actualizar el producto." }, { status: 500 });
+      return adminError(500, "Couldn't update the product.", "No se pudo actualizar el producto.");
     }
     return NextResponse.json({ ok: true });
   }
@@ -31,10 +32,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   // Full edit path (from the edit form).
   const { name, slug, description, category, priceCents, filePath, fileName, imageUrl } = body;
   if (!name || !slug || !priceCents || priceCents <= 0) {
-    return NextResponse.json({ error: "Completa nombre, slug y un precio válido." }, { status: 400 });
+    return adminError(400, "Fill in the name, slug and a valid price.", "Completa nombre, slug y un precio válido.");
   }
   if (!PRODUCT_CATEGORIES.includes(category)) {
-    return NextResponse.json({ error: "Categoría inválida." }, { status: 400 });
+    return adminError(400, "Invalid category.", "Categoría inválida.");
   }
 
   const { data: existing, error: existingError } = await supabase
@@ -43,7 +44,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     .eq("id", params.id)
     .single();
   if (existingError || !existing) {
-    return NextResponse.json({ error: "Producto no encontrado." }, { status: 404 });
+    return adminError(404, "Product not found.", "Producto no encontrado.");
   }
 
   const update: Record<string, unknown> = {
@@ -62,8 +63,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
   const { error: updateError } = await supabase.from("products").update(update).eq("id", params.id);
   if (updateError) {
-    const message = updateError.code === "23505" ? "Ese slug ya existe — elige otro." : "No se pudo actualizar el producto.";
-    return NextResponse.json({ error: message }, { status: 400 });
+    return updateError.code === "23505"
+      ? adminError(400, "That slug already exists — choose another.", "Ese slug ya existe — elige otro.")
+      : adminError(400, "Couldn't update the product.", "No se pudo actualizar el producto.");
   }
 
   if (replacingFile) {

@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { hasLanguage, readLanguages } from "@/lib/postPayload";
 
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   if (!body?.slug || !body?.pillar) {
-    return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
+    return adminError(400, "Required fields are missing.", "Faltan campos requeridos.");
   }
   const { es, en } = readLanguages(body);
   if (!hasLanguage(es) && !hasLanguage(en)) {
-    return NextResponse.json({ error: "Escribe título y contenido en al menos un idioma." }, { status: 400 });
+    return adminError(400, "Write a title and content in at least one language.", "Escribe título y contenido en al menos un idioma.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -37,8 +38,9 @@ export async function POST(request: Request) {
     .single();
 
   if (error) {
-    const message = error.code === "23505" ? "Ese slug ya existe — elige otro." : "No se pudo crear el post.";
-    return NextResponse.json({ error: message }, { status: 400 });
+    return error.code === "23505"
+      ? adminError(400, "That slug already exists — choose another.", "Ese slug ya existe — elige otro.")
+      : adminError(400, "Couldn't create the post.", "No se pudo crear el post.");
   }
 
   return NextResponse.json(data);

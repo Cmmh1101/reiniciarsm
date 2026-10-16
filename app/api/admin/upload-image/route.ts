@@ -1,25 +1,26 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 
 const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif"];
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const formData = await request.formData().catch(() => null);
   const file = formData?.get("file");
 
   if (!(file instanceof File)) {
-    return NextResponse.json({ error: "No se recibió ningún archivo." }, { status: 400 });
+    return adminError(400, "No file was received.", "No se recibió ningún archivo.");
   }
   if (!ALLOWED_TYPES.includes(file.type)) {
-    return NextResponse.json({ error: "Formato no soportado. Usa PNG, JPEG, WEBP o GIF." }, { status: 400 });
+    return adminError(400, "Unsupported format. Use PNG, JPEG, WEBP or GIF.", "Formato no soportado. Usa PNG, JPEG, WEBP o GIF.");
   }
   if (file.size > MAX_SIZE_BYTES) {
-    return NextResponse.json({ error: "La imagen supera el límite de 5MB." }, { status: 400 });
+    return adminError(400, "The image is over the 5MB limit.", "La imagen supera el límite de 5MB.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -32,7 +33,7 @@ export async function POST(request: Request) {
 
   if (uploadError) {
     console.error("upload-image: upload failed", uploadError);
-    return NextResponse.json({ error: "No se pudo subir la imagen." }, { status: 500 });
+    return adminError(500, "Couldn't upload the image.", "No se pudo subir la imagen.");
   }
 
   const { data } = supabase.storage.from("newsletter-images").getPublicUrl(path);

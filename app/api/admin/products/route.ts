@@ -1,23 +1,24 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
 
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   const { name, slug, description, category, priceCents, filePath, fileName, imageUrl } = body ?? {};
 
   if (!name || !slug || !priceCents || !filePath || !fileName) {
-    return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
+    return adminError(400, "Required fields are missing.", "Faltan campos requeridos.");
   }
   if (typeof priceCents !== "number" || priceCents <= 0) {
-    return NextResponse.json({ error: "El precio debe ser mayor que cero." }, { status: 400 });
+    return adminError(400, "The price must be above zero.", "El precio debe ser mayor que cero.");
   }
   if (!PRODUCT_CATEGORIES.includes(category)) {
-    return NextResponse.json({ error: "Categoría inválida." }, { status: 400 });
+    return adminError(400, "Invalid category.", "Categoría inválida.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -37,8 +38,9 @@ export async function POST(request: Request) {
     .single();
 
   if (error) {
-    const message = error.code === "23505" ? "Ese slug ya existe — elige otro." : "No se pudo crear el producto.";
-    return NextResponse.json({ error: message }, { status: 400 });
+    return error.code === "23505"
+      ? adminError(400, "That slug already exists — choose another.", "Ese slug ya existe — elige otro.")
+      : adminError(400, "Couldn't create the product.", "No se pudo crear el producto.");
   }
 
   return NextResponse.json(data);

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { sendHtmlEmail } from "@/lib/resend";
 import { wrapEmailShell, htmlToPlainTextFallback, styleTiptapHtml, applyNameToken } from "@/lib/emailHtml";
 
@@ -7,8 +8,8 @@ import { wrapEmailShell, htmlToPlainTextFallback, styleTiptapHtml, applyNameToke
 // contacts/newsletter_issues/contact_events/email_sends writes, since there's no real recipient
 // behind it. Subject gets a "[PRUEBA]" prefix so it's unmistakable in the inbox.
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
@@ -17,10 +18,10 @@ export async function POST(request: Request) {
   const testEmail = typeof body?.testEmail === "string" ? body.testEmail.trim() : "";
 
   if (!subject || !html) {
-    return NextResponse.json({ error: "Asunto y contenido son requeridos." }, { status: 400 });
+    return adminError(400, "Subject and content are required.", "Asunto y contenido son requeridos.");
   }
   if (!testEmail || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(testEmail)) {
-    return NextResponse.json({ error: "Ingresa un correo válido para la prueba." }, { status: 400 });
+    return adminError(400, "Enter a valid email for the test.", "Ingresa un correo válido para la prueba.");
   }
 
   // No real contact behind a test send — stands in for {{Nombre}} so the preview shows how the
@@ -33,7 +34,7 @@ export async function POST(request: Request) {
 
   const resendId = await sendHtmlEmail(testEmail, `[PRUEBA] ${subject}`, fullHtml, textFallback);
   if (!resendId) {
-    return NextResponse.json({ error: "No se pudo enviar el correo de prueba." }, { status: 500 });
+    return adminError(500, "Couldn't send the test email.", "No se pudo enviar el correo de prueba.");
   }
 
   return NextResponse.json({ ok: true });

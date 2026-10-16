@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { generateSlotTimes, WEEKDAYS } from "@/lib/availability";
 import { SESSION_DURATION_MINUTES, SOS_DURATION_MINUTES } from "@/lib/pricing";
@@ -9,8 +10,8 @@ const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   const days: string[] = Array.isArray(body?.days) ? body.days : [];
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
     !DATE_RE.test(rangeEnd) ||
     rangeStart > rangeEnd
   ) {
-    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
+    return adminError(400, "Invalid details.", "Datos inválidos.");
   }
 
   const slotTimes = generateSlotTimes({ days, windows, rangeStart, rangeEnd, durationMinutes });
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error("generate-slots: insert failed", error);
-    return NextResponse.json({ error: "No se pudieron crear los horarios." }, { status: 500 });
+    return adminError(500, "Couldn't create the times.", "No se pudieron crear los horarios.");
   }
 
   const created = data?.length ?? 0;

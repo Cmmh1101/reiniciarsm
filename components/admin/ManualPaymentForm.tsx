@@ -13,13 +13,10 @@ import {
   sessionTypeForProduct,
 } from "@/lib/pricing";
 import type { MentoriaSlot } from "@/lib/mentorias";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
+import { ADMIN_TIMEZONE } from "@/lib/admin/constants";
 
-const METHODS = [
-  { value: "zelle", label: "Zelle" },
-  { value: "paypal", label: "PayPal" },
-  { value: "pago_movil", label: "Pago Móvil (Venezuela)" },
-  { value: "otro", label: "Otro" },
-];
+const METHOD_KEYS = ["zelle", "paypal", "pago_movil", "otro"] as const;
 
 const PRICE_BY_PRODUCT: Record<string, number> = {
   [MENTORIA_SESSION_PRODUCT]: MENTORIA_SESSION_PRICE_CENTS,
@@ -29,12 +26,14 @@ const PRICE_BY_PRODUCT: Record<string, number> = {
 
 export default function ManualPaymentForm({ availableSlots }: { availableSlots: MentoriaSlot[] }) {
   const router = useRouter();
+  const { locale: adminLocale, t: all } = useAdminI18n();
+  const t = all.payments.manual;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [product, setProduct] = useState(MENTORIA_SESSION_PRODUCT);
   const [amount, setAmount] = useState((MENTORIA_SESSION_PRICE_CENTS / 100).toString());
   const [paymentMethod, setPaymentMethod] = useState("zelle");
-  const [locale, setLocale] = useState("es");
+  const [locale, setLocale] = useState<string>(adminLocale === "en" ? "en" : "es");
   const [slotId, setSlotId] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -53,7 +52,7 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
 
     const amountCents = Math.round(parseFloat(amount) * 100);
     if (!name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !amountCents || amountCents <= 0) {
-      setError("Completa nombre, correo válido y un monto mayor a 0.");
+      setError(t.invalid);
       return;
     }
 
@@ -73,14 +72,14 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
         }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo registrar el pago.");
+      if (!res.ok) throw new Error(data.error ?? t.failed);
       setSuccess(true);
       setName("");
       setEmail("");
       setSlotId("");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo registrar el pago.");
+      setError(err instanceof Error ? err.message : t.failed);
     } finally {
       setSaving(false);
     }
@@ -88,12 +87,12 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
 
   return (
     <form onSubmit={handleSubmit} className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 mb-8 max-w-xl">
-      <h2 className="font-semibold mb-4">Registrar pago manual (Zelle / PayPal / Pago Móvil)</h2>
+      <h2 className="font-semibold mb-4">{t.title}</h2>
 
       <div className="flex flex-col gap-3.5">
         <div className="grid grid-cols-2 gap-3.5">
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Nombre</span>
+            <span>{t.name}</span>
             <input
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -101,7 +100,7 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Correo</span>
+            <span>{t.email}</span>
             <input
               type="email"
               value={email}
@@ -113,19 +112,19 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Producto</span>
+            <span>{t.product}</span>
             <select
               value={product}
               onChange={(e) => handleProductChange(e.target.value)}
               className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
             >
-              <option value={MENTORIA_SESSION_PRODUCT}>Sesión 1:1 (60 min)</option>
-              <option value={TECH_SOS_PRODUCT}>Tech SOS (30 min)</option>
-              <option value={MENTORIA_PACK_PRODUCT}>Paquete de 4</option>
+              <option value={MENTORIA_SESSION_PRODUCT}>{all.payments.products[MENTORIA_SESSION_PRODUCT]}</option>
+              <option value={TECH_SOS_PRODUCT}>{all.payments.products[TECH_SOS_PRODUCT]}</option>
+              <option value={MENTORIA_PACK_PRODUCT}>{all.payments.products[MENTORIA_PACK_PRODUCT]}</option>
             </select>
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Monto (USD)</span>
+            <span>{t.amount}</span>
             <input
               type="number"
               min="0"
@@ -136,47 +135,47 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
             />
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Método</span>
+            <span>{t.method}</span>
             <select
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
               className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
             >
-              {METHODS.map((m) => (
-                <option key={m.value} value={m.value}>
-                  {m.label}
+              {METHOD_KEYS.map((m) => (
+                <option key={m} value={m}>
+                  {m === "pago_movil" ? t.pagoMovilOption : all.payments.methods[m]}
                 </option>
               ))}
             </select>
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Idioma del correo</span>
+            <span>{t.emailLanguage}</span>
             <select
               value={locale}
               onChange={(e) => setLocale(e.target.value)}
               className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
             >
-              <option value="es">Español</option>
-              <option value="en">English</option>
+              <option value="es">{all.common.spanish}</option>
+              <option value="en">{all.common.english}</option>
             </select>
           </label>
         </div>
 
         {isSlotProduct(product) && (
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Horario (opcional — deja en blanco si coordinas después)</span>
+            <span>{t.slot}</span>
             <select
               value={slotId}
               onChange={(e) => setSlotId(e.target.value)}
               className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
             >
-              <option value="">Sin asignar</option>
+              <option value="">{t.unassigned}</option>
               {availableSlots
                 .filter((slot) => slot.session_type === sessionTypeForProduct(product))
                 .map((slot) => (
                 <option key={slot.id} value={slot.id}>
-                  {new Date(slot.start_time).toLocaleString("es", {
-                    timeZone: "America/Caracas",
+                  {new Date(slot.start_time).toLocaleString(adminLocale, {
+                    timeZone: ADMIN_TIMEZONE,
                     weekday: "short",
                     day: "numeric",
                     month: "short",
@@ -190,14 +189,14 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
         )}
 
         {error && <p className="text-clay text-sm">{error}</p>}
-        {success && <p className="text-sage text-sm">Pago registrado correctamente.</p>}
+        {success && <p className="text-sage text-sm">{t.success}</p>}
 
         <button
           type="submit"
           disabled={saving}
           className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
         >
-          {saving ? "Guardando..." : "Registrar pago"}
+          {saving ? t.saving : t.submit}
         </button>
       </div>
     </form>

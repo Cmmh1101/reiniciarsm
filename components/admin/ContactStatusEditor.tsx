@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { CONTACT_STATUSES, STATUS_LABELS } from "@/lib/contacts";
+import { CONTACT_STATUSES } from "@/lib/contacts";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
 
 export default function ContactStatusEditor({ contactId, status }: { contactId: string; status: string }) {
   const router = useRouter();
+  const { t } = useAdminI18n();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
@@ -38,11 +40,11 @@ export default function ContactStatusEditor({ contactId, status }: { contactId: 
       >
         {CONTACT_STATUSES.map((s) => (
           <option key={s} value={s}>
-            {STATUS_LABELS[s]}
+            {t.contacts.statuses[s] ?? s}
           </option>
         ))}
       </select>
-      {saved && <span className="text-sage text-xs">Guardado</span>}
+      {saved && <span className="text-sage text-xs">{t.common.saved}</span>}
     </div>
   );
 }

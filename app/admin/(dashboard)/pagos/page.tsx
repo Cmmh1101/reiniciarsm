@@ -1,7 +1,8 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT } from "@/lib/pricing";
 import { getAvailableSlots } from "@/lib/mentorias";
 import ManualPaymentForm from "@/components/admin/ManualPaymentForm";
+import { fmt, getAdminDictionary } from "@/lib/admin/dictionary";
+import { getAdminLocale } from "@/lib/admin/i18n";
 
 interface PaymentRow {
   id: string;
@@ -12,20 +13,6 @@ interface PaymentRow {
   created_at: string;
   contacts: { name: string | null; email: string } | null;
 }
-
-const PRODUCT_LABELS: Record<string, string> = {
-  [MENTORIA_SESSION_PRODUCT]: "Sesión 1:1 (60 min)",
-  [MENTORIA_PACK_PRODUCT]: "Paquete de 4 sesiones",
-  [TECH_SOS_PRODUCT]: "Tech SOS (30 min)",
-};
-
-const METHOD_LABELS: Record<string, string> = {
-  stripe: "Stripe",
-  zelle: "Zelle",
-  paypal: "PayPal",
-  pago_movil: "Pago Móvil",
-  otro: "Otro",
-};
 
 async function getPayments(): Promise<PaymentRow[]> {
   const supabase = createSupabaseAdminClient();
@@ -42,29 +29,31 @@ async function getPayments(): Promise<PaymentRow[]> {
 }
 
 export default async function AdminPagosPage() {
+  const locale = getAdminLocale();
+  const { payments: t } = getAdminDictionary(locale);
   const [payments, availableSlots] = await Promise.all([getPayments(), getAvailableSlots()]);
   const totalCents = payments.reduce((sum, p) => sum + p.amount_cents, 0);
 
   return (
     <main className="p-10">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="font-display text-2xl">Pagos</h1>
-        <span className="font-mono text-sm opacity-70">Total: ${(totalCents / 100).toFixed(2)}</span>
+        <h1 className="font-display text-2xl">{t.title}</h1>
+        <span className="font-mono text-sm opacity-70">{fmt(t.total, { amount: `$${(totalCents / 100).toFixed(2)}` })}</span>
       </div>
 
       <ManualPaymentForm availableSlots={availableSlots} />
 
       {payments.length === 0 ? (
-        <p className="opacity-60">Todavía no hay pagos.</p>
+        <p className="opacity-60">{t.none}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Contacto</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Producto</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Método</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Monto</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Fecha</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.contact}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.product}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.method}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.amount}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.date}</th>
             </tr>
           </thead>
           <tbody>
@@ -74,10 +63,10 @@ export default async function AdminPagosPage() {
                   {p.contacts?.name ?? "—"}
                   <div className="text-xs opacity-60">{p.contacts?.email}</div>
                 </td>
-                <td className="py-3 opacity-70">{PRODUCT_LABELS[p.product] ?? p.product}</td>
-                <td className="py-3 opacity-70">{METHOD_LABELS[p.payment_method] ?? p.payment_method}</td>
+                <td className="py-3 opacity-70">{t.products[p.product] ?? p.product}</td>
+                <td className="py-3 opacity-70">{t.methods[p.payment_method] ?? p.payment_method}</td>
                 <td className="py-3 opacity-70">${(p.amount_cents / 100).toFixed(2)}</td>
-                <td className="py-3 opacity-70">{new Date(p.created_at).toLocaleDateString("es")}</td>
+                <td className="py-3 opacity-70">{new Date(p.created_at).toLocaleDateString(locale)}</td>
               </tr>
             ))}
           </tbody>

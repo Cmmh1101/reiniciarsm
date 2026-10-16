@@ -1,19 +1,20 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { hasLanguage, readLanguages } from "@/lib/postPayload";
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   if (!body?.slug || !body?.pillar) {
-    return NextResponse.json({ error: "Faltan campos requeridos." }, { status: 400 });
+    return adminError(400, "Required fields are missing.", "Faltan campos requeridos.");
   }
   const { es, en } = readLanguages(body);
   if (!hasLanguage(es) && !hasLanguage(en)) {
-    return NextResponse.json({ error: "Escribe título y contenido en al menos un idioma." }, { status: 400 });
+    return adminError(400, "Write a title and content in at least one language.", "Escribe título y contenido en al menos un idioma.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -30,7 +31,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   const hasEnglishColumns = !!existing && "title_en" in existing;
   const wroteEnglish = !!(en.title || en.content);
   if (wroteEnglish && !hasEnglishColumns) {
-    return NextResponse.json({ error: "Falta correr la migración 0018 en Supabase para guardar contenido en inglés." }, { status: 400 });
+    return adminError(400, "Run migration 0018 in Supabase to save English content.", "Falta correr la migración 0018 en Supabase para guardar contenido en inglés.");
   }
 
   const { data, error } = await supabase
@@ -52,20 +53,21 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     .single();
 
   if (error) {
-    const message = error.code === "23505" ? "Ese slug ya existe — elige otro." : "No se pudo guardar el post.";
-    return NextResponse.json({ error: message }, { status: 400 });
+    return error.code === "23505"
+      ? adminError(400, "That slug already exists — choose another.", "Ese slug ya existe — elige otro.")
+      : adminError(400, "Couldn't save the post.", "No se pudo guardar el post.");
   }
 
   return NextResponse.json(data);
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+export async function DELETE(request: Request, { params }: { params: { id: string } }) {
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const supabase = createSupabaseAdminClient();
   const { error } = await supabase.from("blog_posts").delete().eq("id", params.id);
 
-  if (error) return NextResponse.json({ error: "No se pudo eliminar el post." }, { status: 400 });
+  if (error) return adminError(400, "Couldn't delete the post.", "No se pudo eliminar el post.");
   return NextResponse.json({ ok: true });
 }

@@ -11,11 +11,13 @@ export interface MentoriaSlot {
 interface SlotRow extends MentoriaSlot {
   is_booked: boolean;
   held_until: string | null;
+  is_blocked?: boolean; // set by the admin; blocks the slot and anything overlapping it
 }
 
 // Columns added by later migrations (0016 session_type, 0017 held_until). Selecting them fails on a
 // database that hasn't run the migration yet, so fall back to fewer columns until it has.
 const COLUMN_SETS = [
+  "id, start_time, duration_minutes, is_booked, session_type, held_until, is_blocked",
   "id, start_time, duration_minutes, is_booked, session_type, held_until",
   "id, start_time, duration_minutes, is_booked, session_type",
   "id, start_time, duration_minutes, is_booked",
@@ -30,7 +32,7 @@ function overlaps(a: SlotRow, b: SlotRow) {
 }
 
 /**
- * Slots someone can book right now. A slot is unavailable if it is booked, held by someone in
+ * Slots someone can book right now. A slot is unavailable if it is booked, blocked by the admin, held by someone in
  * checkout, or overlaps (in time) with any slot that is — e.g. a 30-minute Tech SOS slot inside an
  * hour that is already booked as a 1:1 session.
  */
@@ -58,7 +60,7 @@ export async function getAvailableSlots(): Promise<MentoriaSlot[]> {
     return [];
   }
 
-  const isBlocking = (s: SlotRow) => s.is_booked || (s.held_until !== null && new Date(s.held_until) > now);
+  const isBlocking = (s: SlotRow) => s.is_booked || !!s.is_blocked || (s.held_until !== null && new Date(s.held_until) > now);
   const blockers = rows.filter(isBlocking);
 
   return rows

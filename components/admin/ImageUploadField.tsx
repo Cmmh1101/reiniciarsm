@@ -1,12 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
 
 /**
  * Image field with a preview: upload a file from the computer, replace it, or remove it. The URL
  * stays editable underneath for an image that already lives somewhere else.
  */
 export default function ImageUploadField({ label, value, onChange }: { label: string; value: string; onChange: (url: string) => void }) {
+  const { t: all } = useAdminI18n();
+  const t = all.imageField;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -20,10 +23,10 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
       formData.append("file", file);
       const res = await fetch("/api/admin/upload-image", { method: "POST", body: formData });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo subir la imagen.");
+      if (!res.ok) throw new Error(data.error ?? t.uploadFailed);
       onChange(data.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo subir la imagen.");
+      setError(err instanceof Error ? err.message : t.uploadFailed);
     } finally {
       setUploading(false);
     }
@@ -40,21 +43,21 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
         <img src={value} alt="" className="w-full max-w-[420px] aspect-[16/9] object-cover rounded-[3px] border border-[rgba(20,25,43,0.15)]" />
       ) : (
         <div className="w-full max-w-[420px] aspect-[16/9] rounded-[3px] border border-dashed border-[rgba(20,25,43,0.25)] flex items-center justify-center text-xs font-mono opacity-50">
-          Sin imagen
+          {t.none}
         </div>
       )}
 
       <div className="flex flex-wrap items-center gap-2">
         <button type="button" onClick={() => fileInputRef.current?.click()} disabled={uploading} className={buttonClass}>
-          {uploading ? "Subiendo..." : value ? "Cambiar imagen" : "Subir imagen"}
+          {uploading ? t.uploading : value ? t.change : t.upload}
         </button>
         {value && (
           <button type="button" onClick={() => onChange("")} disabled={uploading} className={buttonClass}>
-            Quitar
+            {t.remove}
           </button>
         )}
         <button type="button" onClick={() => setShowUrl((v) => !v)} className="font-mono text-xs opacity-60 hover:opacity-100 underline">
-          {showUrl ? "Ocultar URL" : "Usar una URL"}
+          {showUrl ? t.hideUrl : t.useUrl}
         </button>
         <input
           ref={fileInputRef}
@@ -77,7 +80,7 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
           className="font-body text-sm px-3.5 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
         />
       )}
-      <span className="text-xs opacity-50">PNG, JPG, WEBP o GIF, hasta 5MB.</span>
+      <span className="text-xs opacity-50">{t.help}</span>
       {error && <p className="text-clay text-sm">{error}</p>}
     </div>
   );

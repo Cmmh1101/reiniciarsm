@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendHtmlEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
@@ -7,8 +8,8 @@ import { wrapEmailShell, htmlToPlainTextFallback, styleTiptapHtml, applyNameToke
 import { NEWSLETTER_AUDIENCES, NEWSLETTER_LANGUAGES, type NewsletterAudience, type NewsletterLanguage } from "@/lib/newsletterAudience";
 
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
@@ -18,7 +19,7 @@ export async function POST(request: Request) {
   const language: NewsletterLanguage = NEWSLETTER_LANGUAGES.includes(body?.language) ? body.language : "all";
 
   if (!subject || !html) {
-    return NextResponse.json({ error: "Asunto y contenido son requeridos." }, { status: 400 });
+    return adminError(400, "Subject and content are required.", "Asunto y contenido son requeridos.");
   }
 
   const supabase = createSupabaseAdminClient();
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
   const probe = await supabase.from("contacts").select("preferred_language").limit(1);
   const hasLanguageColumn = !probe.error;
   if (language !== "all" && !hasLanguageColumn) {
-    return NextResponse.json({ error: "Falta correr la migración 0019 en Supabase para enviar por idioma." }, { status: 400 });
+    return adminError(400, "Run migration 0019 in Supabase to send by language.", "Falta correr la migración 0019 en Supabase para enviar por idioma.");
   }
 
   let recipientsQuery = supabase
@@ -43,7 +44,7 @@ export async function POST(request: Request) {
       .eq("status", "completed");
     if (purchasesError) {
       console.error("newsletter-send: purchases query failed", purchasesError);
-      return NextResponse.json({ error: "No se pudo cargar la lista de compradores." }, { status: 500 });
+      return adminError(500, "Couldn't load the list of buyers.", "No se pudo cargar la lista de compradores.");
     }
     const buyerIds = [...new Set((purchases ?? []).map((p) => p.contact_id))];
     if (audience === "clients") {
@@ -58,7 +59,7 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error("newsletter-send: query failed", error);
-    return NextResponse.json({ error: "No se pudo cargar la lista de suscriptores." }, { status: 500 });
+    return adminError(500, "Couldn't load the list of subscribers.", "No se pudo cargar la lista de suscriptores.");
   }
 
   // Created up front (recipient_count patched after) so every send can
@@ -71,7 +72,7 @@ export async function POST(request: Request) {
 
   if (issueError || !issue) {
     console.error("newsletter-send: failed to create issue row", issueError);
-    return NextResponse.json({ error: "No se pudo registrar el envío." }, { status: 500 });
+    return adminError(500, "Couldn't record the send.", "No se pudo registrar el envío.");
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

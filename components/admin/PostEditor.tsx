@@ -5,6 +5,9 @@ import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
 import { buildExtensions, RichToolbar } from "@/components/admin/richText";
 import ImageUploadField from "@/components/admin/ImageUploadField";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
+import { fmt } from "@/lib/admin/dictionary";
+import { pillarLabel } from "@/lib/taxonomy";
 import { PILLARS, ARC_PHASES, ARC_PHASE_NOT_APPLICABLE } from "@/lib/taxonomy";
 import { slugify } from "@/lib/slug";
 import type { BlogPost } from "@/lib/posts";
@@ -20,10 +23,11 @@ interface LangFields {
   content: string;
 }
 
-const LANG_LABEL: Record<Lang, string> = { en: "English", es: "Español" };
-
 export default function PostEditor({ post }: Props) {
   const router = useRouter();
+  const { locale, t: all } = useAdminI18n();
+  const t = all.blog.editor;
+  const LANG_LABEL: Record<Lang, string> = { en: all.common.english, es: all.common.spanish };
   const isEditing = !!post;
 
   // Each language keeps its own title, excerpt and body; switching tabs swaps them in and out of the editor.
@@ -76,11 +80,11 @@ export default function PostEditor({ post }: Props) {
     const saved = currentFields();
     const writtenIn = (["en", "es"] as Lang[]).filter((l) => saved[l].title.trim() && saved[l].content.replace(/<[^>]*>/g, "").trim());
     if (!slug.trim()) {
-      setError("El slug es requerido.");
+      setError(t.errorSlug);
       return;
     }
     if (writtenIn.length === 0) {
-      setError("Escribe título y contenido en al menos un idioma.");
+      setError(t.errorContent);
       return;
     }
 
@@ -107,36 +111,36 @@ export default function PostEditor({ post }: Props) {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo guardar.");
+      if (!res.ok) throw new Error(data.error ?? t.errorSave);
       router.push("/admin/blog");
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "No se pudo guardar.");
+      setError(e instanceof Error ? e.message : t.errorSave);
       setSaving(false);
     }
   }
 
   async function handleDelete() {
     if (!isEditing) return;
-    if (!confirm(`¿Eliminar "${post!.title || post!.title_en}"? Esta acción no se puede deshacer.`)) return;
+    if (!confirm(fmt(t.confirmDelete, { title: post!.title || post!.title_en || "" }))) return;
 
     const res = await fetch(`/api/admin/blog/${post!.id}`, { method: "DELETE" });
     if (res.ok) {
       router.push("/admin/blog");
       router.refresh();
     } else {
-      setError("No se pudo eliminar el post.");
+      setError(t.errorDelete);
     }
   }
 
   return (
     <div className="p-10 max-w-3xl">
-      <h1 className="font-display text-2xl mb-6">{isEditing ? "Editar post" : "Nuevo post"}</h1>
+      <h1 className="font-display text-2xl mb-6">{isEditing ? t.editTitle : t.newTitle}</h1>
 
       {error && <p className="text-clay text-sm mb-4">{error}</p>}
 
       <div className="flex flex-col gap-4 mb-6">
-        <div role="tablist" aria-label="Idioma del contenido" className="flex gap-2">
+        <div role="tablist" aria-label={t.languageTabs} className="flex gap-2">
           {(["en", "es"] as Lang[]).map((l) => (
             <button
               key={l}
@@ -149,13 +153,13 @@ export default function PostEditor({ post }: Props) {
               }`}
             >
               {LANG_LABEL[l]}
-              {l !== lang && isEmpty(l) && <span className="opacity-60"> (vacío — usa {l === "es" ? "English" : "Español"})</span>}
+              {l !== lang && isEmpty(l) && <span className="opacity-60"> {fmt(t.emptyUse, { other: l === "es" ? LANG_LABEL.en : LANG_LABEL.es })}</span>}
             </button>
           ))}
         </div>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Título ({LANG_LABEL[lang]})</span>
+          <span>{fmt(t.title, { lang: LANG_LABEL[lang] })}</span>
           <input
             value={fields[lang].title}
             onChange={(e) => updateField("title", e.target.value)}
@@ -164,7 +168,7 @@ export default function PostEditor({ post }: Props) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Slug (misma URL en ambos idiomas)</span>
+          <span>{t.slug}</span>
           <input
             value={slug}
             onChange={(e) => {
@@ -177,7 +181,7 @@ export default function PostEditor({ post }: Props) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Extracto ({LANG_LABEL[lang]})</span>
+          <span>{fmt(t.excerpt, { lang: LANG_LABEL[lang] })}</span>
           <textarea
             value={fields[lang].excerpt}
             onChange={(e) => updateField("excerpt", e.target.value)}
@@ -188,7 +192,7 @@ export default function PostEditor({ post }: Props) {
 
         <div className="grid grid-cols-2 gap-4">
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Pilar</span>
+            <span>{t.pillar}</span>
             <select
               value={pillar}
               onChange={(e) => setPillar(e.target.value)}
@@ -196,22 +200,22 @@ export default function PostEditor({ post }: Props) {
             >
               {PILLARS.map((p) => (
                 <option key={p} value={p}>
-                  {p}
+                  {pillarLabel(p, locale)}
                 </option>
               ))}
             </select>
           </label>
 
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Fase del arco</span>
+            <span>{t.arcPhase}</span>
             <select
               value={arcPhase}
               onChange={(e) => setArcPhase(e.target.value)}
               className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
             >
-              <option value={ARC_PHASE_NOT_APPLICABLE}>{ARC_PHASE_NOT_APPLICABLE}</option>
+              <option value={ARC_PHASE_NOT_APPLICABLE}>{all.blog.arcPhases[ARC_PHASE_NOT_APPLICABLE] ?? ARC_PHASE_NOT_APPLICABLE}</option>
               {ARC_PHASES.map((p) => (
-                <option key={p} value={p}>
+                <option key={all.blog.arcPhases[p] ?? p} value={p}>
                   {p}
                 </option>
               ))}
@@ -219,10 +223,10 @@ export default function PostEditor({ post }: Props) {
           </label>
         </div>
 
-        <ImageUploadField label="Imagen destacada" value={featuredImageUrl} onChange={setFeaturedImageUrl} />
+        <ImageUploadField label={t.featuredImage} value={featuredImageUrl} onChange={setFeaturedImageUrl} />
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold max-w-[200px]">
-          <span>Minutos de lectura</span>
+          <span>{t.readingTime}</span>
           <input
             type="number"
             min={1}
@@ -234,7 +238,7 @@ export default function PostEditor({ post }: Props) {
       </div>
 
       <div className="mb-6">
-        <span className="text-sm font-semibold block mb-1.5">Contenido ({LANG_LABEL[lang]})</span>
+        <span className="text-sm font-semibold block mb-1.5">{fmt(t.content, { lang: LANG_LABEL[lang] })}</span>
         {editor && (
           <div className="border border-[rgba(20,25,43,0.15)] rounded-[3px] bg-white">
             <RichToolbar editor={editor} />
@@ -245,7 +249,7 @@ export default function PostEditor({ post }: Props) {
 
       <label className="flex items-center gap-2 mb-6 text-sm font-semibold">
         <input type="checkbox" checked={published} onChange={(e) => setPublished(e.target.checked)} />
-        Publicado
+        {t.published}
       </label>
 
       <div className="flex gap-3">
@@ -255,7 +259,7 @@ export default function PostEditor({ post }: Props) {
           disabled={saving}
           className="font-body font-semibold text-[15px] px-6 py-3 rounded-[3px] bg-clay text-white disabled:opacity-60"
         >
-          {saving ? "Guardando..." : "Guardar"}
+          {saving ? t.saving : t.save}
         </button>
         {isEditing && (
           <button
@@ -263,7 +267,7 @@ export default function PostEditor({ post }: Props) {
             onClick={handleDelete}
             className="font-body font-semibold text-[15px] px-6 py-3 rounded-[3px] border border-clay text-clay"
           >
-            Eliminar
+            {t.delete}
           </button>
         )}
       </div>

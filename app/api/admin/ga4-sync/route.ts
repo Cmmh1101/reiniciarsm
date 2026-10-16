@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { syncGA4DailyStats } from "@/lib/ga4";
 
 // Lets Carla trigger a sync on demand from /admin/analytics instead of waiting for the daily
@@ -7,8 +8,8 @@ import { syncGA4DailyStats } from "@/lib/ga4";
 // after setup. Defaults to yesterday (GA4's own processing needs a full day to settle), but
 // accepts an explicit date for re-syncing an older day.
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   let dateStr = typeof body?.date === "string" ? body.date : null;

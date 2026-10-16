@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
+import { fmt } from "@/lib/admin/dictionary";
 import { WEEKDAYS } from "@/lib/availability";
 
 function todayStr() {
@@ -13,8 +15,12 @@ function weeksFromNowStr(weeks: number) {
   return d.toISOString().slice(0, 10);
 }
 
-export default function GenerateSlotsForm() {
+const field = "font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]";
+
+export default function GenerateSlotsForm({ timeZone }: { timeZone: string }) {
   const router = useRouter();
+  const { t: all } = useAdminI18n();
+  const t = all.sessions.generate;
   const [sessionType, setSessionType] = useState<"session" | "sos">("session");
   const [days, setDays] = useState<string[]>([]);
   const [windows, setWindows] = useState([{ start: "08:00", end: "10:00" }]);
@@ -28,8 +34,8 @@ export default function GenerateSlotsForm() {
     setDays((prev) => (prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]));
   }
 
-  function updateWindow(i: number, field: "start" | "end", value: string) {
-    setWindows((prev) => prev.map((w, idx) => (idx === i ? { ...w, [field]: value } : w)));
+  function updateWindow(i: number, key: "start" | "end", value: string) {
+    setWindows((prev) => prev.map((w, idx) => (idx === i ? { ...w, [key]: value } : w)));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -38,11 +44,11 @@ export default function GenerateSlotsForm() {
     setResult(null);
 
     if (days.length === 0) {
-      setError("Elige al menos un día de la semana.");
+      setError(t.errorDays);
       return;
     }
     if (windows.some((w) => w.start >= w.end)) {
-      setError("Cada ventana debe tener una hora de inicio antes de la hora de fin.");
+      setError(t.errorWindows);
       return;
     }
 
@@ -54,135 +60,103 @@ export default function GenerateSlotsForm() {
         body: JSON.stringify({ days, windows, range_start: rangeStart, range_end: rangeEnd, session_type: sessionType }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudieron crear los horarios.");
+      if (!res.ok) throw new Error(data.error ?? t.failed);
       setResult(data);
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudieron crear los horarios.");
+      setError(err instanceof Error ? err.message : t.failed);
     } finally {
       setSaving(false);
     }
   }
 
   return (
-    <form onSubmit={handleSubmit} className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 mb-8 max-w-2xl">
-      <h2 className="font-semibold mb-1">Generar horarios disponibles</h2>
-      <p className="text-xs opacity-60 mb-4">Hora de Venezuela (UTC-4). Se omiten los horarios que ya existan.</p>
+    <form onSubmit={handleSubmit} className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 max-w-2xl bg-white">
+      <h2 className="font-semibold mb-1">{t.title}</h2>
+      <p className="text-xs opacity-60 mb-4">{fmt(t.help, { tz: timeZone })}</p>
 
       <div className="flex flex-col gap-4">
-        <div>
-          <span className="text-sm font-semibold block mb-2">Tipo de horario</span>
+        <fieldset>
+          <legend className="text-sm font-semibold mb-2">{t.type}</legend>
           <div className="flex flex-wrap gap-2">
-            {([
-              ["session", "Sesión 1:1 (60 min)"],
-              ["sos", "Tech SOS (30 min)"],
-            ] as const).map(([value, label]) => (
+            {(["session", "sos"] as const).map((value) => (
               <button
                 key={value}
                 type="button"
                 onClick={() => setSessionType(value)}
-                className={`text-xs px-3 py-1.5 rounded-full border ${
-                  sessionType === value ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"
-                }`}
+                aria-pressed={sessionType === value}
+                className={`text-xs px-3 py-1.5 rounded-full border ${sessionType === value ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"}`}
               >
-                {label}
+                {all.sessions.types[value]}
               </button>
             ))}
           </div>
-          <p className="text-xs opacity-60 mt-2">Usa ventanas horarias distintas para cada tipo: un mismo inicio de hora solo puede tener un tipo.</p>
-        </div>
+          <p className="text-xs opacity-60 mt-2">{t.typeHelp}</p>
+        </fieldset>
 
-        <div>
-          <span className="text-sm font-semibold block mb-2">Días de la semana</span>
+        <fieldset>
+          <legend className="text-sm font-semibold mb-2">{t.days}</legend>
           <div className="flex flex-wrap gap-2">
             {WEEKDAYS.map((d) => (
               <button
                 key={d.value}
                 type="button"
                 onClick={() => toggleDay(d.value)}
-                className={`text-xs px-3 py-1.5 rounded-full border ${
-                  days.includes(d.value) ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"
-                }`}
+                aria-pressed={days.includes(d.value)}
+                className={`text-xs px-3 py-1.5 rounded-full border ${days.includes(d.value) ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"}`}
               >
-                {d.label}
+                {t.weekdays[d.value] ?? d.value}
               </button>
             ))}
           </div>
-        </div>
+        </fieldset>
 
-        <div>
-          <span className="text-sm font-semibold block mb-2">Ventanas horarias</span>
+        <fieldset>
+          <legend className="text-sm font-semibold mb-2">{t.windows}</legend>
           <div className="flex flex-col gap-2">
             {windows.map((w, i) => (
               <div key={i} className="flex items-center gap-2">
-                <input
-                  type="time"
-                  value={w.start}
-                  onChange={(e) => updateWindow(i, "start", e.target.value)}
-                  className="font-body text-sm px-2 py-1.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
-                />
-                <span className="text-sm opacity-60">a</span>
-                <input
-                  type="time"
-                  value={w.end}
-                  onChange={(e) => updateWindow(i, "end", e.target.value)}
-                  className="font-body text-sm px-2 py-1.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
-                />
+                <input type="time" value={w.start} onChange={(e) => updateWindow(i, "start", e.target.value)} aria-label={t.from} className={field} />
+                <span className="text-sm opacity-60">{t.to}</span>
+                <input type="time" value={w.end} onChange={(e) => updateWindow(i, "end", e.target.value)} aria-label={t.until} className={field} />
                 {windows.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => setWindows((prev) => prev.filter((_, idx) => idx !== i))}
-                    className="text-xs text-clay"
-                  >
-                    Quitar
+                  <button type="button" onClick={() => setWindows((prev) => prev.filter((_, idx) => idx !== i))} className="text-xs text-clay">
+                    {t.remove}
                   </button>
                 )}
               </div>
             ))}
-            <button
-              type="button"
-              onClick={() => setWindows((prev) => [...prev, { start: "08:00", end: "10:00" }])}
-              className="text-xs text-clay self-start"
-            >
-              + Agregar ventana
+            <button type="button" onClick={() => setWindows((prev) => [...prev, { start: "08:00", end: "10:00" }])} className="text-xs text-clay self-start">
+              {t.addWindow}
             </button>
           </div>
-        </div>
+        </fieldset>
 
         <div className="grid grid-cols-2 gap-3.5">
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Desde</span>
-            <input
-              type="date"
-              value={rangeStart}
-              onChange={(e) => setRangeStart(e.target.value)}
-              className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
-            />
+            <span>{t.from}</span>
+            <input type="date" value={rangeStart} onChange={(e) => setRangeStart(e.target.value)} className={field} />
           </label>
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Hasta</span>
-            <input
-              type="date"
-              value={rangeEnd}
-              onChange={(e) => setRangeEnd(e.target.value)}
-              className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
-            />
+            <span>{t.until}</span>
+            <input type="date" value={rangeEnd} onChange={(e) => setRangeEnd(e.target.value)} className={field} />
           </label>
         </div>
 
-        {error && <p className="text-clay text-sm">{error}</p>}
+        {error && (
+          <p role="alert" className="text-clay text-sm">
+            {error}
+          </p>
+        )}
         {result && (
-          <p className="text-sage text-sm">
-            Se crearon {result.created} horarios nuevos{result.skipped > 0 ? ` (${result.skipped} ya existían)` : ""}.
+          <p role="status" className="text-sage text-sm">
+            {fmt(t.created, { created: result.created })}
+            {result.skipped > 0 ? fmt(t.skipped, { skipped: result.skipped }) : ""}
           </p>
         )}
 
-        <button
-          type="submit"
-          disabled={saving}
-          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
-        >
-          {saving ? "Generando..." : "Generar horarios"}
+        <button type="submit" disabled={saving} className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60">
+          {saving ? t.generating : t.submit}
         </button>
       </div>
     </form>

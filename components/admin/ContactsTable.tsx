@@ -2,9 +2,13 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { CONTACT_STATUSES, STATUS_LABELS, type ContactWithSources } from "@/lib/contacts";
+import { CONTACT_STATUSES, type ContactWithSources } from "@/lib/contacts";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
+import { fmt } from "@/lib/admin/dictionary";
 
 export default function ContactsTable({ contacts }: { contacts: ContactWithSources[] }) {
+  const { locale, t: all } = useAdminI18n();
+  const t = all.contacts;
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("");
   const [source, setSource] = useState("");
@@ -29,30 +33,30 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
       <div className="flex flex-wrap gap-3 mb-5">
         <input
           type="text"
-          placeholder="Buscar por nombre o correo..."
+          placeholder={t.search}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="font-body text-sm px-3 py-2 rounded-[3px] border border-[rgba(20,25,43,0.15)] flex-1 min-w-[200px]"
         />
         <select value={status} onChange={(e) => setStatus(e.target.value)} className="font-body text-sm px-3 py-2 rounded-[3px] border border-[rgba(20,25,43,0.15)]">
-          <option value="">Todos los estados</option>
+          <option value="">{t.allStatuses}</option>
           {CONTACT_STATUSES.map((s) => (
             <option key={s} value={s}>
-              {STATUS_LABELS[s]}
+              {t.statuses[s] ?? s}
             </option>
           ))}
         </select>
         <select value={source} onChange={(e) => setSource(e.target.value)} className="font-body text-sm px-3 py-2 rounded-[3px] border border-[rgba(20,25,43,0.15)]">
-          <option value="">Todas las fuentes</option>
+          <option value="">{t.allSources}</option>
           {allSources.map((s) => (
             <option key={s} value={s}>
-              {s}
+              {t.sources[s] ?? s}
             </option>
           ))}
         </select>
         {allTags.length > 0 && (
           <select value={tag} onChange={(e) => setTag(e.target.value)} className="font-body text-sm px-3 py-2 rounded-[3px] border border-[rgba(20,25,43,0.15)]">
-            <option value="">Todos los tags</option>
+            <option value="">{t.allTags}</option>
             {allTags.map((t) => (
               <option key={t} value={t}>
                 {t}
@@ -63,20 +67,20 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
       </div>
 
       <p className="text-xs opacity-50 mb-3">
-        {filtered.length} de {contacts.length} contactos
+        {fmt(t.count, { shown: filtered.length, total: contacts.length })}
       </p>
 
       {filtered.length === 0 ? (
-        <p className="opacity-60">No hay contactos que coincidan.</p>
+        <p className="opacity-60">{t.noMatch}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Contacto</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Idioma</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Fuente</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Estado</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Desde</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.contact}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.language}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.source}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.status}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.since}</th>
             </tr>
           </thead>
           <tbody>
@@ -89,9 +93,9 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
                   <div className="text-xs opacity-60">{c.email}</div>
                 </td>
                 <td className="py-3 font-mono text-xs opacity-70">{(c.preferred_language ?? "es").toUpperCase()}</td>
-                <td className="py-3 opacity-70">{c.sources.join(", ") || "—"}</td>
-                <td className="py-3 opacity-70">{STATUS_LABELS[c.status as keyof typeof STATUS_LABELS] ?? c.status}</td>
-                <td className="py-3 opacity-70">{new Date(c.created_at).toLocaleDateString("es")}</td>
+                <td className="py-3 opacity-70">{c.sources.map((s) => t.sources[s] ?? s).join(", ") || "—"}</td>
+                <td className="py-3 opacity-70">{t.statuses[c.status] ?? c.status}</td>
+                <td className="py-3 opacity-70">{new Date(c.created_at).toLocaleDateString(locale)}</td>
               </tr>
             ))}
           </tbody>

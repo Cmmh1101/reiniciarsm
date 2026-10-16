@@ -1,6 +1,9 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import GA4SyncButton from "@/components/admin/GA4SyncButton";
 import SessionsBarChart from "@/components/admin/SessionsBarChart";
+import { fmt, getAdminDictionary } from "@/lib/admin/dictionary";
+import { getAdminLocale } from "@/lib/admin/i18n";
+import type { Locale } from "@/lib/i18n/config";
 
 interface DailyStatsRow {
   date: string;
@@ -26,28 +29,27 @@ async function getGA4Data(): Promise<DailyStatsRow[]> {
   return (data ?? []) as DailyStatsRow[];
 }
 
-function formatDayLabel(dateStr: string): string {
-  return new Date(`${dateStr}T00:00:00Z`).toLocaleDateString("es", { day: "numeric", month: "short", timeZone: "UTC" });
+function formatDayLabel(dateStr: string, locale: Locale): string {
+  return new Date(`${dateStr}T00:00:00Z`).toLocaleDateString(locale, { day: "numeric", month: "short", timeZone: "UTC" });
 }
 
 export default async function AdminAnalyticsPage() {
+  const locale = getAdminLocale();
+  const { analytics: t } = getAdminDictionary(locale);
   const rows = await getGA4Data();
   const isConfigured = !!process.env.GA4_PROPERTY_ID;
 
   if (!isConfigured) {
     return (
       <main className="p-10 max-w-2xl">
-        <h1 className="font-display text-2xl mb-4">Analytics</h1>
-        <p className="opacity-70 mb-3">
-          El tag de GA4 ya está instalado en el sitio, pero la sincronización diaria todavía no
-          tiene las credenciales configuradas (GA4_SERVICE_ACCOUNT_KEY / GA4_PROPERTY_ID).
-        </p>
+        <h1 className="font-display text-2xl mb-4">{t.title}</h1>
+        <p className="opacity-70 mb-3">{t.notConfigured}</p>
       </main>
     );
   }
 
   const last14 = [...rows].slice(0, 14).reverse();
-  const chartData = last14.map((row) => ({ label: formatDayLabel(row.date), value: row.sessions }));
+  const chartData = last14.map((row) => ({ label: formatDayLabel(row.date, locale), value: row.sessions }));
 
   const pageViewsByPath = new Map<string, number>();
   for (const row of rows) {
@@ -77,49 +79,46 @@ export default async function AdminAnalyticsPage() {
   return (
     <main className="p-10 max-w-4xl">
       <div className="flex items-center justify-between mb-2">
-        <h1 className="font-display text-2xl">Analytics</h1>
+        <h1 className="font-display text-2xl">{t.title}</h1>
         <GA4SyncButton />
       </div>
-      <p className="text-xs opacity-50 mb-8">Últimos {rows.length} días, desde GA4.</p>
+      <p className="text-xs opacity-50 mb-8">{fmt(t.lastDays, { n: rows.length })}</p>
 
       {rows.length === 0 ? (
-        <p className="opacity-60">
-          Todavía no hay datos sincronizados. La sincronización automática corre una vez al día —
-          o usa &ldquo;Sincronizar ahora&rdquo; arriba para traer el día de ayer de inmediato.
-        </p>
+        <p className="opacity-60">{t.noData}</p>
       ) : (
         <>
           <div className="grid grid-cols-3 gap-4 mb-12">
             <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
               <p className="font-display text-3xl mb-1">{totalActiveUsers}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">Usuarios activos</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">{t.activeUsers}</p>
             </div>
             <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
               <p className="font-display text-3xl mb-1">{totalSessions}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">Sesiones</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">{t.sessions}</p>
             </div>
             <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
               <p className="font-display text-3xl mb-1">{totalPageViews}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">Vistas de página</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">{t.pageViews}</p>
             </div>
           </div>
 
           <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-6 mb-12">
-            <h2 className="font-body font-semibold text-sm mb-6">Sesiones por día</h2>
+            <h2 className="font-body font-semibold text-sm mb-6">{t.sessionsPerDay}</h2>
             <SessionsBarChart data={chartData} />
           </div>
 
           <div className="grid md:grid-cols-2 gap-10">
             <div>
-              <h2 className="font-body font-semibold text-sm mb-4">Páginas más visitadas</h2>
+              <h2 className="font-body font-semibold text-sm mb-4">{t.topPages}</h2>
               {topPages.length === 0 ? (
-                <p className="opacity-50 text-sm">Sin datos de páginas todavía.</p>
+                <p className="opacity-50 text-sm">{t.noPages}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[rgba(20,25,43,0.12)]">
-                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Página</th>
-                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Vistas</th>
+                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.page}</th>
+                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.views}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -135,21 +134,21 @@ export default async function AdminAnalyticsPage() {
             </div>
 
             <div>
-              <h2 className="font-body font-semibold text-sm mb-4">Fuentes de tráfico</h2>
+              <h2 className="font-body font-semibold text-sm mb-4">{t.sources}</h2>
               {trafficSources.length === 0 ? (
-                <p className="opacity-50 text-sm">Sin datos de fuentes todavía.</p>
+                <p className="opacity-50 text-sm">{t.noSources}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[rgba(20,25,43,0.12)]">
-                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Canal</th>
-                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">Sesiones</th>
+                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.channel}</th>
+                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.sessions}</th>
                     </tr>
                   </thead>
                   <tbody>
                     {trafficSources.map((s) => (
                       <tr key={s.channel} className="border-b border-[rgba(20,25,43,0.06)]">
-                        <td className="py-2.5 pr-3">{s.channel || "Sin asignar"}</td>
+                        <td className="py-2.5 pr-3">{s.channel || t.unassigned}</td>
                         <td className="py-2.5 text-right tabular-nums">{s.sessions}</td>
                       </tr>
                     ))}

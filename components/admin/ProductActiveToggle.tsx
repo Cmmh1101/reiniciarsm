@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
 
 export default function ProductActiveToggle({ productId, active }: { productId: string; active: boolean }) {
   const router = useRouter();
+  const { t } = useAdminI18n();
   const [saving, setSaving] = useState(false);
 
   async function toggle() {
@@ -30,7 +32,7 @@ export default function ProductActiveToggle({ productId, active }: { productId: 
         active ? "border-sage text-sage" : "border-[rgba(20,25,43,0.2)] opacity-60"
       }`}
     >
-      {active ? "Activo" : "Inactivo"}
+      {active ? t.products.active : t.products.inactive}
     </button>
   );
 }

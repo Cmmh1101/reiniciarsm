@@ -6,9 +6,13 @@ import { slugify } from "@/lib/slugify";
 import { uploadProductFile } from "@/lib/uploadProductFile";
 import type { Product } from "@/lib/products";
 import { PRODUCT_CATEGORIES } from "@/lib/taxonomy";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
+import { fmt } from "@/lib/admin/dictionary";
 
 export default function ProductForm({ product }: { product?: Product }) {
   const router = useRouter();
+  const { t: all } = useAdminI18n();
+  const t = all.products.form;
   const isEdit = !!product;
 
   const [name, setName] = useState(product?.name ?? "");
@@ -33,10 +37,10 @@ export default function ProductForm({ product }: { product?: Product }) {
       formData.append("file", selected);
       const res = await fetch("/api/admin/upload-image", { method: "POST", body: formData });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo subir la imagen.");
+      if (!res.ok) throw new Error(data.error ?? t.errorImage);
       setImageUrl(data.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo subir la imagen.");
+      setError(err instanceof Error ? err.message : t.errorImage);
     } finally {
       setUploadingImage(false);
     }
@@ -53,11 +57,11 @@ export default function ProductForm({ product }: { product?: Product }) {
 
     const priceCents = Math.round(parseFloat(price) * 100);
     if (!name.trim() || !slug.trim() || !priceCents || priceCents <= 0) {
-      setError("Completa nombre, slug y un precio válido.");
+      setError(t.errorFields);
       return;
     }
     if (!isEdit && !file) {
-      setError("Sube el archivo del producto.");
+      setError(t.errorFile);
       return;
     }
 
@@ -71,7 +75,7 @@ export default function ProductForm({ product }: { product?: Product }) {
         fileName = uploaded.fileName;
       } catch (err) {
         setUploading(false);
-        setError(err instanceof Error ? err.message : "No se pudo subir el archivo.");
+        setError(err instanceof Error ? err.message : t.errorUpload);
         return;
       }
       setUploading(false);
@@ -95,11 +99,11 @@ export default function ProductForm({ product }: { product?: Product }) {
         body: JSON.stringify(payload),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo guardar el producto.");
+      if (!res.ok) throw new Error(data.error ?? t.errorSave);
       router.push("/admin/productos");
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo guardar el producto.");
+      setError(err instanceof Error ? err.message : t.errorSave);
     } finally {
       setSaving(false);
     }
@@ -107,10 +111,10 @@ export default function ProductForm({ product }: { product?: Product }) {
 
   return (
     <main className="p-10 max-w-xl">
-      <h1 className="font-display text-2xl mb-6">{isEdit ? "Editar producto" : "Nuevo producto"}</h1>
+      <h1 className="font-display text-2xl mb-6">{isEdit ? t.editTitle : t.newTitle}</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Nombre</span>
+          <span>{t.name}</span>
           <input
             value={name}
             onChange={(e) => handleNameChange(e.target.value)}
@@ -119,7 +123,7 @@ export default function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Slug (URL: /productos/{slug || "..."})</span>
+          <span>{fmt(t.slug, { slug: slug || "..." })}</span>
           <input
             value={slug}
             onChange={(e) => {
@@ -131,7 +135,7 @@ export default function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Descripción</span>
+          <span>{t.description}</span>
           <textarea
             rows={4}
             value={description}
@@ -141,7 +145,7 @@ export default function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Categoría</span>
+          <span>{t.category}</span>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
@@ -149,14 +153,14 @@ export default function ProductForm({ product }: { product?: Product }) {
           >
             {PRODUCT_CATEGORIES.map((c) => (
               <option key={c} value={c}>
-                {c}
+                {all.products.categories[c] ?? c}
               </option>
             ))}
           </select>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Precio (USD)</span>
+          <span>{t.price}</span>
           <input
             type="number"
             step="0.01"
@@ -169,9 +173,9 @@ export default function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Imagen del producto (opcional)</span>
+          <span>{t.image}</span>
           <span className="text-xs opacity-60 font-normal">
-            Captura de la página de inicio para plantillas, portada para ebooks/guías. Se muestra junto al producto en /productos.
+            {t.imageHelp}
           </span>
           {imageUrl && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -183,16 +187,16 @@ export default function ProductForm({ product }: { product?: Product }) {
             onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
             className="text-sm"
           />
-          {uploadingImage && <span className="text-xs opacity-60">Subiendo imagen...</span>}
+          {uploadingImage && <span className="text-xs opacity-60">{t.uploadingImage}</span>}
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>{isEdit ? "Reemplazar archivo (opcional)" : "Archivo del producto"}</span>
+          <span>{isEdit ? t.replaceFile : t.file}</span>
           {isEdit && product && (
-            <span className="text-xs opacity-60 font-normal">Archivo actual: {product.file_name}</span>
+            <span className="text-xs opacity-60 font-normal">{fmt(t.currentFile, { name: product.file_name })}</span>
           )}
           <input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="text-sm" />
-          {file && <span className="text-xs opacity-60">Nuevo: {file.name}</span>}
+          {file && <span className="text-xs opacity-60">{fmt(t.newFile, { name: file.name })}</span>}
         </label>
 
         {error && <p className="text-clay text-sm">{error}</p>}
@@ -202,7 +206,7 @@ export default function ProductForm({ product }: { product?: Product }) {
           disabled={uploading || uploadingImage || saving}
           className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
         >
-          {uploading ? "Subiendo archivo..." : saving ? "Guardando..." : isEdit ? "Guardar cambios" : "Crear producto"}
+          {uploading ? t.uploadingFile : saving ? all.common.saving : isEdit ? t.saveChanges : t.create}
         </button>
       </form>
     </main>

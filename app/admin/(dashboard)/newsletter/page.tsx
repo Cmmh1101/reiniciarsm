@@ -1,6 +1,8 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import NewsletterComposer from "@/components/admin/NewsletterComposer";
-import { AUDIENCE_LABELS, LANGUAGE_LABELS, type NewsletterAudience, type NewsletterLanguage } from "@/lib/newsletterAudience";
+import type { NewsletterAudience, NewsletterLanguage } from "@/lib/newsletterAudience";
+import { getAdminDictionary } from "@/lib/admin/dictionary";
+import { getAdminLocale } from "@/lib/admin/i18n";
 
 interface NewsletterIssue {
   id: string;
@@ -54,26 +56,28 @@ async function getData() {
 
 export default async function AdminNewsletterPage() {
   const { counts, issues, statsByIssue } = await getData();
+  const locale = getAdminLocale();
+  const { newsletter: t } = getAdminDictionary(locale);
 
   return (
     <main className="p-10">
-      <h1 className="font-display text-2xl mb-6">Newsletter</h1>
+      <h1 className="font-display text-2xl mb-6">{t.title}</h1>
 
       <NewsletterComposer counts={counts} />
 
-      <h2 className="font-semibold mb-3">Enviados anteriormente</h2>
+      <h2 className="font-semibold mb-3">{t.history}</h2>
       {issues.length === 0 ? (
-        <p className="opacity-60">Todavía no has enviado ningún newsletter.</p>
+        <p className="opacity-60">{t.noHistory}</p>
       ) : (
         <table className="w-full text-sm max-w-2xl">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Asunto</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Audiencia</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Enviados</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Abiertos</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Clics</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Fecha</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.subject}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.audience}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.sent}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.opened}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.clicks}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.date}</th>
             </tr>
           </thead>
           <tbody>
@@ -83,24 +87,21 @@ export default async function AdminNewsletterPage() {
               return (
                 <tr key={issue.id} className="border-b border-[rgba(20,25,43,0.08)]">
                   <td className="py-3">{issue.subject}</td>
-                  <td className="py-3 opacity-70">{AUDIENCE_LABELS[issue.audience ?? "all"] ?? issue.audience}
-                    {issue.language && issue.language !== "all" && <span className="block text-xs opacity-60">{LANGUAGE_LABELS[issue.language]}</span>}</td>
+                  <td className="py-3 opacity-70">{t.audiences[issue.audience ?? "all"] ?? issue.audience}
+                    {issue.language && issue.language !== "all" && <span className="block text-xs opacity-60">{t.languages[issue.language]}</span>}</td>
                   <td className="py-3 opacity-70">{issue.recipient_count}</td>
                   <td className="py-3 opacity-70">
                     {stats.opened} <span className="opacity-60">({openRate}%)</span>
                   </td>
                   <td className="py-3 opacity-70">{stats.clicked}</td>
-                  <td className="py-3 opacity-70">{new Date(issue.sent_at).toLocaleDateString("es")}</td>
+                  <td className="py-3 opacity-70">{new Date(issue.sent_at).toLocaleDateString(locale)}</td>
                 </tr>
               );
             })}
           </tbody>
         </table>
       )}
-      <p className="text-xs opacity-50 mt-3 max-w-2xl">
-        Los abiertos son aproximados — clientes como Apple Mail bloquean o precargan el píxel de apertura, así que
-        trátalos como una tendencia, no un número exacto. Los clics son más confiables.
-      </p>
+      <p className="text-xs opacity-50 mt-3 max-w-2xl">{t.opensNote}</p>
     </main>
   );
 }

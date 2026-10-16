@@ -7,6 +7,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
 
 // Images need their own width/align/href handling — none of this works out of the box:
 // - TextAlign only targets text-bearing nodes (paragraph/heading); an image is its own block
@@ -137,6 +138,8 @@ const Divider = () => <span className="w-px h-5 bg-[rgba(20,25,43,0.15)] mx-1" /
  * "+ Nombre").
  */
 export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.ReactNode }) {
+  const { t: all } = useAdminI18n();
+  const t = all.editor;
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -149,32 +152,32 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
       formData.append("file", file);
       const res = await fetch("/api/admin/upload-image", { method: "POST", body: formData });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo subir la imagen.");
+      if (!res.ok) throw new Error(data.error ?? t.uploadFailed);
       // New images start at full width, centered — adjust with the size/align buttons once selected.
       editor.chain().focus().setImage({ src: data.url }).updateAttributes("image", { width: "100%", align: "center" }).run();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo subir la imagen.");
+      setError(err instanceof Error ? err.message : t.uploadFailed);
     } finally {
       setUploading(false);
     }
   }
 
   function handleAddLink() {
-    const url = window.prompt("URL del enlace:");
+    const url = window.prompt(t.linkPrompt);
     if (!url) return;
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }
 
   function handleImageLink() {
     const current = (editor.getAttributes("image").href as string | null) ?? "";
-    const url = window.prompt("URL del enlace para esta imagen (déjalo vacío para quitarlo):", current);
+    const url = window.prompt(t.imageLinkPrompt, current);
     if (url === null) return;
     editor.chain().focus().updateAttributes("image", { href: url.trim() || null }).run();
   }
 
   function handleImageAlt() {
     const current = (editor.getAttributes("image").alt as string | null) ?? "";
-    const alt = window.prompt("Texto alternativo (describe la imagen para lectores de pantalla y buscadores):", current);
+    const alt = window.prompt(t.altPrompt, current);
     if (alt === null) return;
     editor.chain().focus().updateAttributes("image", { alt: alt.trim() || null }).run();
   }
@@ -195,20 +198,20 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
           H3
         </ToolbarButton>
         <ToolbarButton active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}>
-          • Lista
+          {t.bullets}
         </ToolbarButton>
         <ToolbarButton active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-          1. Lista
+          {t.numbered}
         </ToolbarButton>
         <ToolbarButton active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}>
-          Cita
+          {t.quote}
         </ToolbarButton>
         <ToolbarButton active={editor.isActive("link")} onClick={handleAddLink}>
-          Enlace
+          {t.link}
         </ToolbarButton>
         {extra}
         <ToolbarButton active={false} onClick={() => fileInputRef.current?.click()}>
-          {uploading ? "Subiendo..." : "Imagen"}
+          {uploading ? t.uploading : t.image}
         </ToolbarButton>
         <input
           ref={fileInputRef}
@@ -223,21 +226,21 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
         />
 
         <Divider />
-        <span className="text-[10px] font-mono opacity-50 mr-0.5">Texto</span>
-        <ToolbarButton title="Alinear a la izquierda" active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}>
+        <span className="text-[10px] font-mono opacity-50 mr-0.5">{t.textGroup}</span>
+        <ToolbarButton title={t.alignLeft} active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}>
           ⇤
         </ToolbarButton>
-        <ToolbarButton title="Centrar" active={editor.isActive({ textAlign: "center" })} onClick={() => editor.chain().focus().setTextAlign("center").run()}>
+        <ToolbarButton title={t.alignCenter} active={editor.isActive({ textAlign: "center" })} onClick={() => editor.chain().focus().setTextAlign("center").run()}>
           ⇹
         </ToolbarButton>
-        <ToolbarButton title="Alinear a la derecha" active={editor.isActive({ textAlign: "right" })} onClick={() => editor.chain().focus().setTextAlign("right").run()}>
+        <ToolbarButton title={t.alignRight} active={editor.isActive({ textAlign: "right" })} onClick={() => editor.chain().focus().setTextAlign("right").run()}>
           ⇥
         </ToolbarButton>
       </div>
 
       {editor.isActive("image") && (
         <div className="flex flex-wrap items-center gap-1 mt-2 pt-2 border-t border-[rgba(20,25,43,0.08)]">
-          <span className="text-[10px] font-mono opacity-50 mr-0.5">Imagen · tamaño</span>
+          <span className="text-[10px] font-mono opacity-50 mr-0.5">{t.imageGroup}</span>
           {IMAGE_SIZES.map((size) => (
             <ToolbarButton
               key={size.value}
@@ -247,7 +250,7 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
               {size.label}
             </ToolbarButton>
           ))}
-          <span className="text-[10px] font-mono opacity-50 mx-0.5">alinear</span>
+          <span className="text-[10px] font-mono opacity-50 mx-0.5">{t.imageAlign}</span>
           {IMAGE_ALIGNS.map((align) => (
             <ToolbarButton
               key={align.value}
@@ -258,13 +261,13 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
             </ToolbarButton>
           ))}
           <ToolbarButton active={!!editor.getAttributes("image").alt} onClick={handleImageAlt}>
-            Texto alt
+            {t.altText}
           </ToolbarButton>
           <ToolbarButton active={!!editor.getAttributes("image").href} onClick={handleImageLink}>
-            Enlace
+            {t.imageLink}
           </ToolbarButton>
           <ToolbarButton active={false} onClick={() => editor.chain().focus().deleteSelection().run()}>
-            Quitar
+            {t.removeImage}
           </ToolbarButton>
         </div>
       )}

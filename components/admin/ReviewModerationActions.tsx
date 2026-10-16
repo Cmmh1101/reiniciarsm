@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAdminI18n } from "@/components/admin/AdminI18n";
 
 export default function ReviewModerationActions({ reviewId }: { reviewId: string }) {
   const router = useRouter();
+  const { t } = useAdminI18n();
   const [saving, setSaving] = useState<"approved" | "rejected" | null>(null);
 
   async function setStatus(status: "approved" | "rejected") {
@@ -29,7 +31,7 @@ export default function ReviewModerationActions({ reviewId }: { reviewId: string
         disabled={saving !== null}
         className="font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-sage text-sage disabled:opacity-50"
       >
-        {saving === "approved" ? "..." : "Aprobar"}
+        {saving === "approved" ? "..." : t.reviews.approve}
       </button>
       <button
         type="button"
@@ -37,7 +39,7 @@ export default function ReviewModerationActions({ reviewId }: { reviewId: string
         disabled={saving !== null}
         className="font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-clay text-clay disabled:opacity-50"
       >
-        {saving === "rejected" ? "..." : "Rechazar"}
+        {saving === "rejected" ? "..." : t.reviews.reject}
       </button>
     </div>
   );

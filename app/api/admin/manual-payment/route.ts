@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAdminUser } from "@/lib/adminAuth";
+import { adminError } from "@/lib/admin/apiError";
+import { guardAdminWrite } from "@/lib/adminRequest";
 import { recordMentoriaPayment } from "@/lib/mentoriaPayments";
 import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT } from "@/lib/pricing";
 import { isLocale } from "@/lib/i18n/config";
@@ -9,8 +10,8 @@ const VALID_PRODUCTS = [MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, TECH_SO
 const VALID_METHODS = ["zelle", "paypal", "pago_movil", "otro"];
 
 export async function POST(request: Request) {
-  const admin = await getAdminUser();
-  if (!admin) return NextResponse.json({ error: "No autorizado." }, { status: 401 });
+  const denied = await guardAdminWrite(request);
+  if (denied) return denied;
 
   const body = await request.json().catch(() => null);
   const name = typeof body?.name === "string" ? body.name.trim() : "";
@@ -28,7 +29,7 @@ export async function POST(request: Request) {
     !Number.isFinite(amountCents) ||
     amountCents <= 0
   ) {
-    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
+    return adminError(400, "Invalid details.", "Datos inválidos.");
   }
 
   try {
@@ -44,7 +45,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     console.error("manual-payment: recordMentoriaPayment failed", err);
-    return NextResponse.json({ error: "No se pudo registrar el pago." }, { status: 500 });
+    return adminError(500, "Couldn't record the payment.", "No se pudo registrar el pago.");
   }
 
   return NextResponse.json({ ok: true });
