@@ -1,20 +1,78 @@
 {
-  "home": { "en": "", "es": "" },
-  "about": { "en": "about", "es": "sobre-mi" },
-  "workWithMe": { "en": "work-with-me", "es": "trabaja-conmigo" },
-  "mentoring": { "en": "work-with-me/mentoring", "es": "trabaja-conmigo/mentoria" },
-  "mentoringThanks": { "en": "work-with-me/mentoring/thanks", "es": "trabaja-conmigo/mentoria/gracias" },
-  "work": { "en": "work", "es": "mi-trabajo" },
-  "ventures": { "en": "ventures", "es": "proyectos" },
-  "nextYou": { "en": "ventures/next-you", "es": "proyectos/next-you" },
-  "nextYouStory": { "en": "ventures/next-you/story", "es": "proyectos/next-you/historia" },
-  "diagnostic": { "en": "ventures/next-you/diagnostic", "es": "proyectos/next-you/diagnostico" },
-  "shop": { "en": "shop", "es": "tienda" },
-  "shopThanks": { "en": "shop/thanks", "es": "tienda/gracias" },
-  "shopProduct": { "en": "shop/:slug", "es": "tienda/:slug" },
-  "resources": { "en": "resources", "es": "recursos" },
-  "resourcePost": { "en": "resources/:slug", "es": "recursos/:slug" },
-  "contact": { "en": "contact", "es": "contacto" },
-  "privacy": { "en": "privacy", "es": "privacidad" },
-  "terms": { "en": "terms", "es": "terminos" }
+  "home": {
+    "en": "",
+    "es": ""
+  },
+  "about": {
+    "en": "about",
+    "es": "sobre-mi"
+  },
+  "workWithMe": {
+    "en": "work-with-me",
+    "es": "trabaja-conmigo"
+  },
+  "mentoring": {
+    "en": "work-with-me/mentoring",
+    "es": "trabaja-conmigo/mentoria"
+  },
+  "mentoringThanks": {
+    "en": "work-with-me/mentoring/thanks",
+    "es": "trabaja-conmigo/mentoria/gracias"
+  },
+  "work": {
+    "en": "work",
+    "es": "mi-trabajo"
+  },
+  "ventures": {
+    "en": "ventures",
+    "es": "proyectos"
+  },
+  "nextYou": {
+    "en": "ventures/next-you",
+    "es": "proyectos/next-you"
+  },
+  "nextYouStory": {
+    "en": "ventures/next-you/story",
+    "es": "proyectos/next-you/historia"
+  },
+  "diagnostic": {
+    "en": "ventures/next-you/diagnostic",
+    "es": "proyectos/next-you/diagnostico"
+  },
+  "shop": {
+    "en": "shop",
+    "es": "tienda"
+  },
+  "shopThanks": {
+    "en": "shop/thanks",
+    "es": "tienda/gracias"
+  },
+  "shopProduct": {
+    "en": "shop/:slug",
+    "es": "tienda/:slug"
+  },
+  "resources": {
+    "en": "resources",
+    "es": "recursos"
+  },
+  "resourcePost": {
+    "en": "resources/:slug",
+    "es": "recursos/:slug"
+  },
+  "contact": {
+    "en": "contact",
+    "es": "contacto"
+  },
+  "privacy": {
+    "en": "privacy",
+    "es": "privacidad"
+  },
+  "terms": {
+    "en": "terms",
+    "es": "terminos"
+  },
+  "review": {
+    "en": "review/:purchaseId",
+    "es": "resena/:purchaseId"
+  }
 }

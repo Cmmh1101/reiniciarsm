@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getContactById, getContactEvents, EVENT_TYPE_INFO, type ContactEvent } from "@/lib/contacts";
 import { getEmailSendsForContact, type EmailSend } from "@/lib/emailTracking";
 import ContactStatusEditor from "@/components/admin/ContactStatusEditor";
+import ContactLanguageEditor from "@/components/admin/ContactLanguageEditor";
 
 function eventCaption(event: ContactEvent): string | null {
   const m = event.metadata;
@@ -53,6 +54,7 @@ export default async function AdminContactDetailPage({ params }: { params: { id:
 
       <div className="flex items-center gap-6 mb-8">
         <ContactStatusEditor contactId={contact.id} status={contact.status} />
+        <ContactLanguageEditor contactId={contact.id} language={contact.preferred_language === "en" ? "en" : "es"} />
         {contact.tags.length > 0 && (
           <div className="flex gap-1.5">
             {contact.tags.map((t) => (

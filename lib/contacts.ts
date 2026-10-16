@@ -31,6 +31,8 @@ export interface Contact {
   tags: string[];
   status: string;
   created_at: string;
+  // From migration 0019; absent (treated as Spanish) before it has been applied.
+  preferred_language?: "en" | "es";
 }
 
 export interface ContactEvent {

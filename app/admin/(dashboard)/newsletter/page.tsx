@@ -1,6 +1,6 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import NewsletterComposer from "@/components/admin/NewsletterComposer";
-import { AUDIENCE_LABELS, type NewsletterAudience } from "@/lib/newsletterAudience";
+import { AUDIENCE_LABELS, LANGUAGE_LABELS, type NewsletterAudience, type NewsletterLanguage } from "@/lib/newsletterAudience";
 
 interface NewsletterIssue {
   id: string;
@@ -8,6 +8,7 @@ interface NewsletterIssue {
   recipient_count: number;
   sent_at: string;
   audience: NewsletterAudience | null;
+  language?: NewsletterLanguage | null;
 }
 
 interface IssueStats {
@@ -17,17 +18,27 @@ interface IssueStats {
 
 async function getData() {
   const supabase = createSupabaseAdminClient();
-  const [{ data: subscribedContacts }, { data: purchases }, { data: issues }, { data: sends }] = await Promise.all([
-    supabase.from("contacts").select("id").eq("subscribed", true),
+  // preferred_language comes from migration 0019; until it exists every contact counts as Spanish.
+  const loadContacts = async () => {
+    const withLang = await supabase.from("contacts").select("id, preferred_language").eq("subscribed", true);
+    if (!withLang.error) return (withLang.data ?? []) as { id: string; preferred_language?: string }[];
+    const plain = await supabase.from("contacts").select("id").eq("subscribed", true);
+    return (plain.data ?? []) as { id: string; preferred_language?: string }[];
+  };
+  const [subscribedContacts, { data: purchases }, { data: issues }, { data: sends }] = await Promise.all([
+    loadContacts(),
     supabase.from("product_purchases").select("contact_id").eq("status", "completed"),
     supabase.from("newsletter_issues").select("*").order("sent_at", { ascending: false }),
     supabase.from("email_sends").select("newsletter_issue_id, opened_at, clicked_at").not("newsletter_issue_id", "is", null),
   ]);
 
-  const subscribedIds = new Set((subscribedContacts ?? []).map((c) => c.id));
   const buyerIds = new Set((purchases ?? []).map((p) => p.contact_id));
-  const clientsCount = [...buyerIds].filter((id) => subscribedIds.has(id)).length;
-  const audienceCounts = { all: subscribedIds.size, clients: clientsCount, non_buyers: subscribedIds.size - clientsCount };
+  const countFor = (language: NewsletterLanguage) => {
+    const pool = subscribedContacts.filter((c) => language === "all" || (c.preferred_language ?? "es") === language);
+    const clients = pool.filter((c) => buyerIds.has(c.id)).length;
+    return { all: pool.length, clients, non_buyers: pool.length - clients };
+  };
+  const counts: Record<NewsletterLanguage, Record<NewsletterAudience, number>> = { all: countFor("all"), en: countFor("en"), es: countFor("es") };
 
   const statsByIssue = new Map<string, IssueStats>();
   for (const send of sends ?? []) {
@@ -38,17 +49,17 @@ async function getData() {
     statsByIssue.set(id, stats);
   }
 
-  return { audienceCounts, issues: (issues ?? []) as NewsletterIssue[], statsByIssue };
+  return { counts, issues: (issues ?? []) as NewsletterIssue[], statsByIssue };
 }
 
 export default async function AdminNewsletterPage() {
-  const { audienceCounts, issues, statsByIssue } = await getData();
+  const { counts, issues, statsByIssue } = await getData();
 
   return (
     <main className="p-10">
       <h1 className="font-display text-2xl mb-6">Newsletter</h1>
 
-      <NewsletterComposer audienceCounts={audienceCounts} />
+      <NewsletterComposer counts={counts} />
 
       <h2 className="font-semibold mb-3">Enviados anteriormente</h2>
       {issues.length === 0 ? (
@@ -72,7 +83,8 @@ export default async function AdminNewsletterPage() {
               return (
                 <tr key={issue.id} className="border-b border-[rgba(20,25,43,0.08)]">
                   <td className="py-3">{issue.subject}</td>
-                  <td className="py-3 opacity-70">{AUDIENCE_LABELS[issue.audience ?? "all"] ?? issue.audience}</td>
+                  <td className="py-3 opacity-70">{AUDIENCE_LABELS[issue.audience ?? "all"] ?? issue.audience}
+                    {issue.language && issue.language !== "all" && <span className="block text-xs opacity-60">{LANGUAGE_LABELS[issue.language]}</span>}</td>
                   <td className="py-3 opacity-70">{issue.recipient_count}</td>
                   <td className="py-3 opacity-70">
                     {stats.opened} <span className="opacity-60">({openRate}%)</span>

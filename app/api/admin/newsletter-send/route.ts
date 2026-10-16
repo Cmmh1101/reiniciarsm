@@ -4,7 +4,7 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendHtmlEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
 import { wrapEmailShell, htmlToPlainTextFallback, styleTiptapHtml, applyNameToken } from "@/lib/emailHtml";
-import { NEWSLETTER_AUDIENCES, type NewsletterAudience } from "@/lib/newsletterAudience";
+import { NEWSLETTER_AUDIENCES, NEWSLETTER_LANGUAGES, type NewsletterAudience, type NewsletterLanguage } from "@/lib/newsletterAudience";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
   const html = typeof body?.html === "string" ? body.html.trim() : "";
   const audience: NewsletterAudience = NEWSLETTER_AUDIENCES.includes(body?.audience) ? body.audience : "all";
+  const language: NewsletterLanguage = NEWSLETTER_LANGUAGES.includes(body?.language) ? body.language : "all";
 
   if (!subject || !html) {
     return NextResponse.json({ error: "Asunto y contenido son requeridos." }, { status: 400 });
@@ -21,7 +22,19 @@ export async function POST(request: Request) {
 
   const supabase = createSupabaseAdminClient();
 
-  let recipientsQuery = supabase.from("contacts").select("id, email, name").eq("subscribed", true);
+  // preferred_language comes from migration 0019. It is only needed for a language-specific send
+  // or to pick each recipient's unsubscribe wording, so select it only once the column exists.
+  const probe = await supabase.from("contacts").select("preferred_language").limit(1);
+  const hasLanguageColumn = !probe.error;
+  if (language !== "all" && !hasLanguageColumn) {
+    return NextResponse.json({ error: "Falta correr la migración 0019 en Supabase para enviar por idioma." }, { status: 400 });
+  }
+
+  let recipientsQuery = supabase
+    .from("contacts")
+    .select(hasLanguageColumn ? "id, email, name, preferred_language" : "id, email, name")
+    .eq("subscribed", true);
+  if (language !== "all") recipientsQuery = recipientsQuery.eq("preferred_language", language);
   if (audience === "clients" || audience === "non_buyers") {
     const { data: purchases, error: purchasesError } = await supabase
       .from("product_purchases")
@@ -39,7 +52,8 @@ export async function POST(request: Request) {
     }
   }
 
-  const { data: recipients, error } = await recipientsQuery;
+  const { data, error } = await recipientsQuery;
+  const recipients = (data ?? []) as unknown as { id: string; email: string; name: string | null; preferred_language?: string }[];
 
   if (error) {
     console.error("newsletter-send: query failed", error);
@@ -50,7 +64,7 @@ export async function POST(request: Request) {
   // reference this issue's id for per-issue open/click stats.
   const { data: issue, error: issueError } = await supabase
     .from("newsletter_issues")
-    .insert({ subject, content: html, recipient_count: 0, audience })
+    .insert({ subject, content: html, recipient_count: 0, audience, ...(language !== "all" ? { language } : {}) })
     .select("id")
     .single();
 
@@ -63,13 +77,18 @@ export async function POST(request: Request) {
   const styledContentHtml = styleTiptapHtml(html);
   let sent = 0;
 
-  for (const contact of recipients ?? []) {
-    const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(contact.email)}`;
+  for (const contact of recipients) {
+    const contactLang = contact.preferred_language === "en" ? "en" : "es";
+    const unsubscribeUrl = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(contact.email)}&lang=${contactLang}`;
     const personalizedContentHtml = applyNameToken(styledContentHtml, contact.name);
     const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
-    const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.</p>`;
+    const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">${
+      contactLang === "en"
+        ? `Don't want more emails? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Unsubscribe here</a>.`
+        : `¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.`
+    }</p>`;
     const fullHtml = wrapEmailShell(personalizedContentHtml + signatureHtml + unsubscribeHtml);
-    const textFallback = htmlToPlainTextFallback(personalizedContentHtml + signatureHtml) + `\n\nDate de baja: ${unsubscribeUrl}`;
+    const textFallback = htmlToPlainTextFallback(personalizedContentHtml + signatureHtml) + `\n\n${contactLang === "en" ? "Unsubscribe" : "Date de baja"}: ${unsubscribeUrl}`;
 
     try {
       const resendId = await sendHtmlEmail(contact.email, subject, fullHtml, textFallback);
@@ -87,5 +106,5 @@ export async function POST(request: Request) {
 
   await supabase.from("newsletter_issues").update({ recipient_count: sent }).eq("id", issue.id);
 
-  return NextResponse.json({ sent, total: recipients?.length ?? 0 });
+  return NextResponse.json({ sent, total: recipients.length });
 }

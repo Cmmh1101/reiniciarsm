@@ -2,12 +2,14 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
 import { getSequenceSteps, type SequenceStep } from "@/lib/sequences";
+import { DEFAULT_LOCALE, isLocale, type Locale } from "@/lib/i18n/config";
 
 type SupabaseAdmin = ReturnType<typeof createSupabaseAdminClient>;
 
-function unsubscribeUrl(email: string) {
+// lang makes the unsubscribe confirmation page appear in the language of the email.
+function unsubscribeUrl(email: string, language: Locale) {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  return `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}`;
+  return `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}&lang=${language}`;
 }
 
 async function sendStepAndAdvance(
@@ -17,10 +19,11 @@ async function sendStepAndAdvance(
   name: string,
   sequence: string,
   steps: SequenceStep[],
-  stepIndex: number
+  stepIndex: number,
+  language: Locale
 ) {
   const step = steps[stepIndex];
-  const resendId = await sendConfirmationEmail(email, step.subject, step.body(name, unsubscribeUrl(email)));
+  const resendId = await sendConfirmationEmail(email, step.subject, step.body(name, unsubscribeUrl(email, language)));
   await recordEmailSend({ resendId, contactId, emailType: "sequence", subject: step.subject });
 
   const nextIndex = stepIndex + 1;
@@ -53,22 +56,28 @@ async function sendStepAndAdvance(
 }
 
 /** Enrolls a contact and sends step 0 immediately (synchronous, not via the scheduled function). */
-export async function enrollInSequence(contactId: string, email: string, name: string, sequence: string) {
-  const steps = getSequenceSteps(sequence);
+export async function enrollInSequence(contactId: string, email: string, name: string, sequence: string, language: Locale = DEFAULT_LOCALE) {
+  const steps = getSequenceSteps(sequence, language);
   if (!steps || steps.length === 0) return;
   const supabase = createSupabaseAdminClient();
-  await sendStepAndAdvance(supabase, contactId, email, name, sequence, steps, 0);
+  await sendStepAndAdvance(supabase, contactId, email, name, sequence, steps, 0, language);
 }
 
 /** Called by the daily scheduled function — sends every step that's due right now. */
 export async function processDueSequenceSteps(): Promise<{ candidates: number; sent: number }> {
   const supabase = createSupabaseAdminClient();
-  const { data: due, error } = await supabase
-    .from("contacts")
-    .select("id, email, name, sequence, sequence_step")
-    .not("sequence", "is", null)
-    .eq("subscribed", true)
-    .lte("sequence_next_send_at", new Date().toISOString());
+  // preferred_language comes from migration 0019; until it exists every contact is Spanish.
+  const query = (columns: string) =>
+    supabase
+      .from("contacts")
+      .select(columns)
+      .not("sequence", "is", null)
+      .eq("subscribed", true)
+      .lte("sequence_next_send_at", new Date().toISOString());
+  let result = await query("id, email, name, sequence, sequence_step, preferred_language");
+  if (result.error) result = await query("id, email, name, sequence, sequence_step");
+  const { data, error } = result;
+  const due = (data ?? []) as unknown as { id: string; email: string; name: string | null; sequence: string; sequence_step: number; preferred_language?: string }[];
 
   if (error) {
     console.error("processDueSequenceSteps: query failed", error);
@@ -76,16 +85,17 @@ export async function processDueSequenceSteps(): Promise<{ candidates: number; s
   }
 
   let sent = 0;
-  for (const contact of due ?? []) {
-    const steps = getSequenceSteps(contact.sequence);
+  for (const contact of due) {
+    const language: Locale = isLocale(contact.preferred_language) ? contact.preferred_language : "es";
+    const steps = getSequenceSteps(contact.sequence, language);
     if (!steps) continue;
     try {
-      await sendStepAndAdvance(supabase, contact.id, contact.email, contact.name ?? "", contact.sequence, steps, contact.sequence_step);
+      await sendStepAndAdvance(supabase, contact.id, contact.email, contact.name ?? "", contact.sequence, steps, contact.sequence_step, language);
       sent++;
     } catch (err) {
       console.error("processDueSequenceSteps: failed for", contact.email, err);
     }
   }
 
-  return { candidates: due?.length ?? 0, sent };
+  return { candidates: due.length, sent };
 }

@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
-export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
+export default function ReviewForm({ purchaseId, locale, copy }: { purchaseId: string; locale: Locale; copy: Dictionary["review"] }) {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState("");
@@ -15,7 +17,7 @@ export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
     setError("");
 
     if (rating < 1) {
-      setError("Selecciona una calificación de 1 a 5 estrellas.");
+      setError(copy.errorRating);
       return;
     }
 
@@ -24,13 +26,13 @@ export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
       const res = await fetch("/api/review-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ purchaseId, rating, comment: comment.trim() }),
+        body: JSON.stringify({ purchaseId, rating, comment: comment.trim(), locale }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo enviar tu reseña.");
+      if (!res.ok) throw new Error(data.error ?? copy.errorGeneric);
       setSent(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo enviar tu reseña.");
+      setError(err instanceof Error ? err.message : copy.errorGeneric);
     } finally {
       setLoading(false);
     }
@@ -39,8 +41,8 @@ export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
   if (sent) {
     return (
       <div className="text-center">
-        <p className="font-display text-2xl mb-3">¡Gracias por tu reseña!</p>
-        <p className="opacity-70">La vamos a revisar antes de publicarla.</p>
+        <p className="font-display text-2xl mb-3">{copy.thanksTitle}</p>
+        <p className="opacity-70">{copy.thanksBody}</p>
       </div>
     );
   }
@@ -49,14 +51,14 @@ export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5 max-w-[420px] mx-auto">
-      <div className="flex justify-center gap-1.5" role="radiogroup" aria-label="Calificación">
+      <div className="flex justify-center gap-1.5" role="radiogroup" aria-label={copy.rating}>
         {[1, 2, 3, 4, 5].map((n) => (
           <button
             key={n}
             type="button"
             role="radio"
             aria-checked={rating === n}
-            aria-label={`${n} estrellas`}
+            aria-label={copy.stars(n)}
             onMouseEnter={() => setHoverRating(n)}
             onMouseLeave={() => setHoverRating(0)}
             onClick={() => setRating(n)}
@@ -70,7 +72,7 @@ export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
       <textarea
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        placeholder="Cuéntanos qué te pareció (opcional)"
+        placeholder={copy.placeholder}
         rows={4}
         className="font-body text-sm px-4 py-3.5 rounded-[2px] border border-[rgba(20,25,43,0.15)] resize-none"
       />
@@ -82,7 +84,7 @@ export default function ReviewForm({ purchaseId }: { purchaseId: string }) {
         disabled={loading}
         className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper self-center disabled:opacity-60"
       >
-        {loading ? "Enviando..." : "Enviar reseña →"}
+        {loading ? copy.sending : copy.send}
       </button>
     </form>
   );

@@ -524,6 +524,23 @@ export const es: Dictionary = {
     finalCta: "Agenda tu sesión 1:1 →",
   },
 
+  review: {
+    notFoundEyebrow: "No encontrado",
+    notFoundBody: "No pudimos encontrar esa compra. Si crees que esto es un error, escríbeme a hello@carlamontano.io.",
+    alreadyTitle: "¡Ya recibimos tu reseña!",
+    alreadyBody: "Gracias por tomarte el tiempo de compartirla.",
+    title: "¿Qué te pareció?",
+    placeholder: "Cuéntanos qué te pareció (opcional)",
+    rating: "Calificación",
+    stars: (n: number) => `${n} estrellas`,
+    errorRating: "Selecciona una calificación de 1 a 5 estrellas.",
+    errorGeneric: "No se pudo enviar tu reseña.",
+    sending: "Enviando...",
+    send: "Enviar reseña →",
+    thanksTitle: "¡Gracias por tu reseña!",
+    thanksBody: "La vamos a revisar antes de publicarla.",
+  },
+
   newsletter: {
     title: "Recibe nuevos recursos por correo",
     body: "Correos ocasionales y prácticos. Date de baja cuando quieras.",

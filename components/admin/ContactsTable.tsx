@@ -73,6 +73,7 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Contacto</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Idioma</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Fuente</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Estado</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Desde</th>
@@ -87,6 +88,7 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
                   </Link>
                   <div className="text-xs opacity-60">{c.email}</div>
                 </td>
+                <td className="py-3 font-mono text-xs opacity-70">{(c.preferred_language ?? "es").toUpperCase()}</td>
                 <td className="py-3 opacity-70">{c.sources.join(", ") || "—"}</td>
                 <td className="py-3 opacity-70">{STATUS_LABELS[c.status as keyof typeof STATUS_LABELS] ?? c.status}</td>
                 <td className="py-3 opacity-70">{new Date(c.created_at).toLocaleDateString("es")}</td>

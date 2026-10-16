@@ -532,6 +532,23 @@ export const en = {
     finalCta: "Book your 1:1 session →",
   },
 
+  review: {
+    notFoundEyebrow: "Not found",
+    notFoundBody: "We couldn't find that purchase. If you think this is a mistake, write to me at hello@carlamontano.io.",
+    alreadyTitle: "We already got your review!",
+    alreadyBody: "Thank you for taking the time to share it.",
+    title: "What did you think?",
+    placeholder: "Tell us what you thought (optional)",
+    rating: "Rating",
+    stars: (n: number) => `${n} stars`,
+    errorRating: "Select a rating from 1 to 5 stars.",
+    errorGeneric: "We couldn't send your review.",
+    sending: "Sending...",
+    send: "Send review →",
+    thanksTitle: "Thank you for your review!",
+    thanksBody: "We'll check it before publishing it.",
+  },
+
   newsletter: {
     title: "Get new resources by email",
     body: "Occasional, practical emails. Unsubscribe anytime.",

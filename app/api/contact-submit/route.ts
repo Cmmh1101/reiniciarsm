@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
+import { upsertContact } from "@/lib/contactUpsert";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -24,11 +25,7 @@ export async function POST(request: Request) {
   }
 
   const supabase = createSupabaseAdminClient();
-  const { data: contact, error: contactError } = await supabase
-    .from("contacts")
-    .upsert({ email, name }, { onConflict: "email", ignoreDuplicates: false })
-    .select("id")
-    .single();
+  const { data: contact, error: contactError } = await upsertContact(supabase, { email, name, locale });
 
   if (contactError || !contact) {
     console.error("contact-submit: failed to upsert contact", contactError);

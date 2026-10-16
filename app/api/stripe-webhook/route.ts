@@ -47,6 +47,8 @@ export async function POST(request: Request) {
         productId: metadata.product_id,
         amountCents: session.amount_total ?? 0,
         stripePaymentId: paymentId,
+        // Checkouts created before language support carry no locale — those were Spanish.
+        locale: isLocale(metadata.locale) ? metadata.locale : "es",
       });
     } catch (err) {
       console.error("stripe-webhook: recordProductPurchase failed", err);

@@ -30,7 +30,7 @@ export async function sendEnglishQuizResult(contactId: string, email: string, na
   const archetype = getPillarText("en", pillar).archetype;
   const subject = `Your result: ${archetype}`;
   const greeting = name.trim() ? `Hi ${name.trim()},` : "Hi,";
-  const unsubscribe = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}`;
+  const unsubscribe = `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}&lang=en`;
 
   const text =
     `${greeting}\n\n` +

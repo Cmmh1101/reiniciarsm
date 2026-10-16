@@ -8,7 +8,14 @@ import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
-import { AUDIENCE_LABELS, NEWSLETTER_AUDIENCES, type NewsletterAudience } from "@/lib/newsletterAudience";
+import {
+  AUDIENCE_LABELS,
+  LANGUAGE_LABELS,
+  NEWSLETTER_AUDIENCES,
+  NEWSLETTER_LANGUAGES,
+  type NewsletterAudience,
+  type NewsletterLanguage,
+} from "@/lib/newsletterAudience";
 
 // Images need their own width/align/href handling — none of this works out of the box:
 // - TextAlign only targets text-bearing nodes (paragraph/heading); an image is its own block
@@ -112,11 +119,12 @@ const IMAGE_ALIGNS: { label: string; value: string }[] = [
   { label: "⇥", value: "right" },
 ];
 
-export default function NewsletterComposer({ audienceCounts }: { audienceCounts: Record<NewsletterAudience, number> }) {
+export default function NewsletterComposer({ counts }: { counts: Record<NewsletterLanguage, Record<NewsletterAudience, number>> }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [subject, setSubject] = useState("");
   const [audience, setAudience] = useState<NewsletterAudience>("all");
+  const [language, setLanguage] = useState<NewsletterLanguage>("all");
   const [error, setError] = useState("");
   const [result, setResult] = useState<{ sent: number; total: number } | null>(null);
   const [sending, setSending] = useState(false);
@@ -125,6 +133,7 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
   const [testError, setTestError] = useState("");
   const [testSent, setTestSent] = useState(false);
   const [sendingTest, setSendingTest] = useState(false);
+  const audienceCounts = counts[language];
   const recipientCount = audienceCounts[audience];
 
   const editor = useEditor({
@@ -225,7 +234,7 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
     }
     if (
       !confirm(
-        `¿Enviar este correo a ${recipientCount} contactos (${AUDIENCE_LABELS[audience].toLowerCase()})? Esta acción no se puede deshacer.`
+        `¿Enviar este correo a ${recipientCount} contactos (${AUDIENCE_LABELS[audience].toLowerCase()} · ${LANGUAGE_LABELS[language]})? Esta acción no se puede deshacer.`
       )
     ) {
       return;
@@ -236,7 +245,7 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
       const res = await fetch("/api/admin/newsletter-send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...composed, audience }),
+        body: JSON.stringify({ ...composed, audience, language }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No se pudo enviar.");
@@ -268,6 +277,22 @@ export default function NewsletterComposer({ audienceCounts }: { audienceCounts:
             onChange={(e) => setSubject(e.target.value)}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
           />
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm font-semibold">
+          <span>Idioma de los contactos</span>
+          <select
+            value={language}
+            onChange={(e) => setLanguage(e.target.value as NewsletterLanguage)}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+          >
+            {NEWSLETTER_LANGUAGES.map((l) => (
+              <option key={l} value={l}>
+                {LANGUAGE_LABELS[l]} ({counts[l].all})
+              </option>
+            ))}
+          </select>
+          <span className="text-xs font-normal opacity-60">Escribe el correo en el idioma que elijas aquí. El enlace de baja se adapta al idioma de cada contacto.</span>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">

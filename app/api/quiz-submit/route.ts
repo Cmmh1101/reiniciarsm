@@ -3,6 +3,7 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { computeWinner, isValidScores, type QuizScores } from "@/lib/diagnostic";
 import { enrollInSequence } from "@/lib/sequenceEngine";
 import { sendEnglishQuizResult } from "@/lib/quizEmailEn";
+import { upsertContact } from "@/lib/contactUpsert";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -23,14 +24,7 @@ export async function POST(request: Request) {
 
   const supabase = createSupabaseAdminClient();
 
-  const { data: contact, error: contactError } = await supabase
-    .from("contacts")
-    .upsert(
-      { email, name, tags: [winner.tag] },
-      { onConflict: "email", ignoreDuplicates: false }
-    )
-    .select("id, tags")
-    .single();
+  const { data: contact, error: contactError } = await upsertContact(supabase, { email, name, locale, extra: { tags: [winner.tag] }, select: "id, tags" });
 
   if (contactError || !contact) {
     console.error("quiz-submit: failed to upsert contact", contactError);
@@ -66,7 +60,7 @@ export async function POST(request: Request) {
     if (locale === "en") {
       await sendEnglishQuizResult(contact.id, email, name, winner.key);
     } else {
-      await enrollInSequence(contact.id, email, name, `quiz_${winner.key}`);
+      await enrollInSequence(contact.id, email, name, `quiz_${winner.key}`, "es");
     }
   } catch (err) {
     console.error("quiz-submit: sending the result email failed", err);

@@ -4,6 +4,7 @@ import { recordEmailSend } from "@/lib/emailTracking";
 import { MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT, isSlotProduct } from "@/lib/pricing";
 import { formatSlotLabel, packConfirmationEmail, slotConfirmationEmail, slotConflictEmail } from "@/lib/bookingCopy";
 import { bookSlot } from "@/lib/mentorias";
+import { upsertContact } from "@/lib/contactUpsert";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { buildGoogleCalendarLink } from "@/lib/googleCalendar";
 
@@ -41,11 +42,7 @@ export async function recordMentoriaPayment({
 }: RecordPaymentInput) {
   const supabase = createSupabaseAdminClient();
 
-  const { data: contact, error: contactError } = await supabase
-    .from("contacts")
-    .upsert({ email, name }, { onConflict: "email", ignoreDuplicates: false })
-    .select("id")
-    .single();
+  const { data: contact, error: contactError } = await upsertContact(supabase, { email, name, locale });
 
   if (contactError || !contact) {
     console.error("recordMentoriaPayment: failed to upsert contact", contactError);

@@ -32,6 +32,7 @@ export async function POST(request: Request) {
       productId: product.id,
       amountCents: 0,
       stripePaymentId: null,
+      locale,
     });
     return NextResponse.json({ url: `${siteUrl}${localizedPath(locale, "shopThanks")}?token=${downloadToken}` });
   }
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
       },
     ],
     locale: locale === "es" ? "es" : "en",
-    metadata: { type: "product", product_id: product.id, name, email },
+    metadata: { type: "product", product_id: product.id, name, email, locale },
     success_url: `${siteUrl}${localizedPath(locale, "shopThanks")}?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${siteUrl}${localizedPath(locale, "shopProduct", { slug: product.slug })}?canceled=1`,
   });

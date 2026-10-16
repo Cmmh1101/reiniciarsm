@@ -12,3 +12,13 @@ export const AUDIENCE_LABELS: Record<NewsletterAudience, string> = {
   clients: "Clientes (compraron un producto)",
   non_buyers: "No han comprado ningún producto",
 };
+
+// Language filter, independent of the segment above: a Spanish broadcast shouldn't reach English readers.
+export const NEWSLETTER_LANGUAGES = ["all", "en", "es"] as const;
+export type NewsletterLanguage = (typeof NEWSLETTER_LANGUAGES)[number];
+
+export const LANGUAGE_LABELS: Record<NewsletterLanguage, string> = {
+  all: "Todos los idiomas",
+  en: "English",
+  es: "Español",
+};

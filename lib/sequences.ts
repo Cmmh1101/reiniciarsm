@@ -1,4 +1,5 @@
 import { PILLARS, type PillarKey } from "@/lib/diagnostic";
+import type { Locale } from "@/lib/i18n/config";
 
 export interface SequenceStep {
   delayDays: number; // days after the PREVIOUS step (0 for the immediate one)
@@ -213,9 +214,92 @@ export const NEWSLETTER_SEQUENCE: SequenceStep[] = [
   },
 ];
 
-export function getSequenceSteps(sequence: string): SequenceStep[] | null {
-  if (sequence === "newsletter") return NEWSLETTER_SEQUENCE;
-  if (sequence.startsWith("quiz_")) {
+// English version of the newsletter welcome sequence. Same four emails, translated; the wording about
+// Carla's current work is kept accurate to today (the Spanish text predates her return to Venezuela).
+function greetingEn(name: string) {
+  return name.trim() ? `Hi ${name.trim()},` : "Hi,";
+}
+
+function footerEn(unsubscribeUrl: string) {
+  return `\n\n—\nCarla\n\nDon't want more emails? Unsubscribe here: ${unsubscribeUrl}`;
+}
+
+function siteUrl() {
+  return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+}
+
+export const NEWSLETTER_SEQUENCE_EN: SequenceStep[] = [
+  {
+    delayDays: 0,
+    subject: "You're in. Here's what happens next",
+    body: (name, unsubscribeUrl) =>
+      `${greetingEn(name)}\n\n` +
+      `Thank you for being here.\n\n` +
+      `My name is Carla Montaño. My first job in the United States was waiting tables without speaking English. After that I cleaned houses, cared for babies, and worked at a gym and in a school cafeteria. Today I'm a software engineer without a traditional tech degree, and I help other people rebuild their careers from scratch.\n\n` +
+      `I'm not telling you this to impress you. I'm telling you because if your professional life no longer feels like you, I want you to know something from day one: you don't need to have everything figured out to start changing it.\n\n` +
+      `This is Reiniciar Sin Mapa — Restart Without a Map.\n\n` +
+      `Over the next few days I'll send you:\n` +
+      `— The full story behind this movement (and why it isn't a motivational speech, it's a method).\n` +
+      `— The 8 pillars that hold up any real professional reinvention.\n` +
+      `— An invitation to the NEXT YOU community, if you'd like to stop doing this alone.\n\n` +
+      `For now, just one question: what part of your professional life no longer feels like you? Reply to this email — I read every answer.` +
+      footerEn(unsubscribeUrl),
+  },
+  {
+    delayDays: 2,
+    subject: `"Educator, Latina, woman, mom... impossible"`,
+    body: (name, unsubscribeUrl) =>
+      `${greetingEn(name)}\n\n` +
+      `For almost 2 years I told myself the same sentence every time I tried to learn technology: "educator, Latina, woman, mom... impossible."\n\n` +
+      `I'd learn a little HTML and CSS. I'd doubt myself. I'd stop. I'd try again months later. That cycle lasted from 2019 to 2021.\n\n` +
+      `What broke it wasn't feeling less afraid. It was a weekend as a volunteer at an event called GiveCamp, building a website for a nonprofit. I didn't just contribute to the team — I ended up leading it. That real result was the first proof that it was possible.\n\n` +
+      `Months later I joined a coding bootcamp while working full time as a teacher and raising three kids. I slept from 1am to 5am for 6 months. In September 2021 I landed my first remote job as a Software Engineer.\n\n` +
+      `I'm telling you this because the "impossible" you're telling yourself today — whatever it is — is probably also a belief, not a fact.\n\n` +
+      `Tomorrow I'll tell you what I did differently so that cycle of trying and stopping finally broke.` +
+      footerEn(unsubscribeUrl),
+  },
+  {
+    delayDays: 3,
+    subject: "The 8 pillars that hold up any real restart",
+    body: (name, unsubscribeUrl) =>
+      `${greetingEn(name)}\n\n` +
+      `One of the most common mistakes when trying to reinvent yourself is thinking everything gets solved with "positive thinking." Mindset matters, but on its own it doesn't hold anything up.\n\n` +
+      `After restarting my professional life several times — moving countries, changing careers, starting over — I identified 8 areas that have to move together. I call it NEXT YOU™:\n\n` +
+      `1. Mindset — the belief that it's possible\n` +
+      `2. Direction — knowing where you're headed, even imperfectly\n` +
+      `3. Technology & AI — the tools of the moment we live in\n` +
+      `4. Employability — making visible what you already know how to do\n` +
+      `5. Professional English — when it applies, no longer a barrier\n` +
+      `6. Productivity — sustaining change without sacrificing your life\n` +
+      `7. Wellbeing — so restarting doesn't cost you your health\n` +
+      `8. Community — not doing it alone\n\n` +
+      `If you'd like to know which of these 8 pillars is your priority right now, here's a short, free diagnostic: ${siteUrl()}/en/ventures/next-you/diagnostic\n\n` +
+      `In the next email I'll show you what this looks like in practice, inside a real community.` +
+      footerEn(unsubscribeUrl),
+  },
+  {
+    delayDays: 4,
+    subject: "You won't restart alone",
+    body: (name, unsubscribeUrl) =>
+      `${greetingEn(name)}\n\n` +
+      `You've been with me for a few days and you already know my story and the method behind Reiniciar Sin Mapa. Today I want to tell you where all of this lives in practice: the NEXT YOU community.\n\n` +
+      `It isn't a silent Facebook group or a recorded course nobody finishes. This is what a week inside looks like:\n\n` +
+      `— Monday: I set the week's intention, tied to a specific pillar and a concrete micro-challenge.\n` +
+      `— Wednesday: check-in with your accountability partner for the month.\n` +
+      `— Friday: we share progress on the Wall of Wins — big or small, everything counts.\n` +
+      `— Once a month: a live session with me, going deep on one pillar.\n\n` +
+      `Inside are people who are today where you could be in six months. And others who are exactly where you are now.\n\n` +
+      `A heads-up: the live sessions and most conversations are in Spanish today.\n\n` +
+      `If you don't want to try this alone anymore, the door is open here: ${siteUrl()}/en/ventures/next-you\n\n` +
+      `You don't need to have everything figured out to join. Just the next step.` +
+      footerEn(unsubscribeUrl),
+  },
+];
+
+export function getSequenceSteps(sequence: string, language: Locale = "es"): SequenceStep[] | null {
+  if (sequence === "newsletter") return language === "en" ? NEWSLETTER_SEQUENCE_EN : NEWSLETTER_SEQUENCE;
+  // The quiz drip exists in Spanish only for now; English takers get a single result email instead.
+  if (sequence.startsWith("quiz_") && language === "es") {
     const pillarKey = sequence.slice("quiz_".length) as PillarKey;
     if (PILLARS.some((p) => p.key === pillarKey)) return getQuizSequence(pillarKey);
   }
