@@ -49,7 +49,6 @@ export const es: Dictionary = {
     viewAll: "Ver todo",
     readMore: "Leer más",
     status: { active: "Activo", development: "En desarrollo", initiative: "Iniciativa", beta: "Beta", volunteer: "Proyecto voluntario", experience: "Experiencia" },
-    partlySpanish: "",
     allCategories: "Todos",
     purchases: "compras",
     backToShop: "← Volver a la tienda",
@@ -358,7 +357,6 @@ export const es: Dictionary = {
       title: "Diagnóstico Next You — Carla Montaño",
       description: "Ocho preguntas para descubrir qué área de tu transición de carrera necesita atención primero.",
     },
-    spanishOnly: "",
   },
 
   shop: {
@@ -394,7 +392,8 @@ export const es: Dictionary = {
     readingTime: "min de lectura",
     byline: "Por Carla Montaño",
     moreTitle: "Sigue leyendo",
-    spanishOnly: "",
+    otherLanguageTitle: "También disponibles en inglés",
+    postOtherLanguage: "Este artículo solo está disponible en inglés.",
   },
 
   contact: {

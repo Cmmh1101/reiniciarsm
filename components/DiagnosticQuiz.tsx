@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { PILLARS, PHASES, PILLAR_PHASE, computeWinner, type Pillar, type QuizScores } from "@/lib/diagnostic";
+import { PILLARS, PILLAR_PHASE, computeWinner, type Pillar, type QuizScores } from "@/lib/diagnostic";
+import { DIAGNOSTIC_UI, getPhaseText, getPillarText } from "@/lib/i18n/content/diagnostic";
+import type { Locale } from "@/lib/i18n/config";
+import { localizedPath } from "@/lib/i18n/routes";
 
 type Screen = "cover" | "questions" | "capture" | "result";
 
-export default function DiagnosticQuiz() {
+export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
+  const ui = DIAGNOSTIC_UI[locale];
   const [screen, setScreen] = useState<Screen>("cover");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState<QuizScores>({});
@@ -47,11 +51,11 @@ export default function DiagnosticQuiz() {
       return;
     }
     if (!name.trim()) {
-      setError("Por favor escribe tu nombre.");
+      setError(ui.errorName);
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("Por favor escribe un correo válido.");
+      setError(ui.errorEmail);
       return;
     }
 
@@ -60,7 +64,7 @@ export default function DiagnosticQuiz() {
       const res = await fetch("/api/quiz-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), email: email.trim(), scores }),
+        body: JSON.stringify({ name: name.trim(), email: email.trim(), scores, locale }),
       });
       if (!res.ok) throw new Error("Request failed");
       const data = await res.json();
@@ -92,21 +96,20 @@ export default function DiagnosticQuiz() {
         {screen === "cover" && (
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">
-              Diagnóstico Next You
+              {ui.eyebrow}
             </p>
             <h2 className="font-display font-semibold text-2xl md:text-4xl mb-4">
-              8 preguntas para descubrir tu próximo paso.
+              {ui.coverTitle}
             </h2>
             <p className="text-[rgba(237,230,216,0.8)] mb-7">
-              Identifica cuál de los 8 pilares de NEXT YOU™ necesita tu atención ahora mismo. Toma
-              menos de 3 minutos y no necesitas tener nada resuelto para empezar.
+              {ui.coverBody}
             </p>
             <button
               type="button"
               onClick={start}
               className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform"
             >
-              Empezar diagnóstico →
+              {ui.start}
             </button>
           </div>
         )}
@@ -114,20 +117,20 @@ export default function DiagnosticQuiz() {
         {screen === "questions" && (
           <div>
             <p className="font-mono text-[13px] text-sage mb-2">
-              Pregunta {currentQuestion + 1} de {PILLARS.length}
+              {ui.question(currentQuestion + 1, PILLARS.length)}
             </p>
             <h2 className="font-display font-semibold text-xl md:text-[26px] mb-6">
-              {PILLARS[currentQuestion].question}
+              {getPillarText(locale, PILLARS[currentQuestion].key).question}
             </h2>
             <div className="flex flex-col gap-2.5">
-              {PILLARS[currentQuestion].options.map((opt) => (
+              {PILLARS[currentQuestion].options.map((opt, i) => (
                 <button
-                  key={opt.label}
+                  key={opt.score}
                   type="button"
                   onClick={() => selectOption(opt.score)}
                   className="text-left bg-white text-ink border border-[rgba(20,25,43,0.15)] rounded-[3px] px-[18px] py-3.5 text-[15px] hover:border-clay hover:bg-[#fdf1ec] transition-colors"
                 >
-                  {opt.label}
+                  {getPillarText(locale, PILLARS[currentQuestion].key).options[i]}
                 </button>
               ))}
             </div>
@@ -137,14 +140,14 @@ export default function DiagnosticQuiz() {
         {screen === "capture" && (
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">
-              Ya casi tienes tu resultado
+              {ui.captureEyebrow}
             </p>
             <h2 className="font-display font-semibold text-xl md:text-[28px] mb-4">
-              ¿A dónde te enviamos tu diagnóstico?
+              {ui.captureTitle}
             </h2>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-[420px]" noValidate>
               <label className="flex flex-col gap-1.5 text-sm font-semibold">
-                <span>Nombre</span>
+                <span>{ui.name}</span>
                 <input
                   type="text"
                   autoComplete="given-name"
@@ -155,7 +158,7 @@ export default function DiagnosticQuiz() {
                 />
               </label>
               <label className="flex flex-col gap-1.5 text-sm font-semibold">
-                <span>Correo electrónico</span>
+                <span>{ui.email}</span>
                 <input
                   type="email"
                   autoComplete="email"
@@ -167,7 +170,7 @@ export default function DiagnosticQuiz() {
               </label>
               {/* Honeypot anti-spam: hidden from real users, a bot will fill it in */}
               <label className="absolute -left-[9999px] w-px h-px overflow-hidden" aria-hidden="true">
-                <span>No llenar este campo</span>
+                <span>{ui.honeypot}</span>
                 <input
                   type="text"
                   tabIndex={-1}
@@ -186,7 +189,7 @@ export default function DiagnosticQuiz() {
                 disabled={submitting}
                 className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform disabled:opacity-60"
               >
-                {submitting ? "Enviando..." : "Ver mi resultado"}
+                {submitting ? ui.sending : ui.seeResult}
               </button>
             </form>
           </div>
@@ -195,32 +198,35 @@ export default function DiagnosticQuiz() {
         {screen === "result" && winner && (
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">
-              Tu arquetipo Next You
+              {ui.resultEyebrow}
             </p>
             <h2 className="font-display font-semibold text-xl md:text-[28px] mb-4">
-              {winner.archetype}
+              {getPillarText(locale, winner.key).archetype}
             </h2>
             {(() => {
               const phaseKey = PILLAR_PHASE[winner.key];
-              const phase = phaseKey ? PHASES[phaseKey] : null;
+              const phase = phaseKey ? getPhaseText(locale, phaseKey) : null;
+              const label = getPillarText(locale, winner.key).label;
               return (
                 <p className="font-mono text-sm uppercase tracking-wide text-[#E1D6C2] mb-4">
                   {phase ? (
                     <>
-                      Est&aacute;s en la fase: <span className="text-clay">{phase.name}</span> &middot; Pilar prioritario: {winner.label}
+                      {ui.inPhase} <span className="text-clay">{phase.name}</span> &middot; {ui.priorityPillar} {label}
                     </>
                   ) : (
-                    <>Pilar prioritario: {winner.label} &middot; te acompa&ntilde;a en las 3 fases</>
+                    <>
+                      {ui.priorityPillar} {label} &middot; {ui.allPhases}
+                    </>
                   )}
                 </p>
               );
             })()}
-            <p className="text-[rgba(237,230,216,0.8)] mb-7">{winner.description}</p>
+            <p className="text-[rgba(237,230,216,0.8)] mb-7">{getPillarText(locale, winner.key).description}</p>
             <Link
-              href="/es/proyectos/next-you"
+              href={localizedPath(locale, "nextYou")}
               className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform"
             >
-              Únete a la Comunidad Next You
+              {ui.join}
             </Link>
           </div>
         )}

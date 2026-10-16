@@ -57,7 +57,6 @@ export const en = {
     viewAll: "View all",
     readMore: "Read more",
     status: { active: "Active", development: "In development", initiative: "Initiative", beta: "Beta", volunteer: "Volunteer project", experience: "Experience" },
-    partlySpanish: "Part of this page is currently available in Spanish only.",
     allCategories: "All",
     purchases: "purchases",
     backToShop: "← Back to the shop",
@@ -341,7 +340,7 @@ export const en = {
     },
     eyebrow: "NEXT YOU · Reiniciar sin mapa",
     title: "You don't have to reinvent yourself alone.",
-    lead: "NEXT YOU is a community and method for people navigating a career transition. It grew out of my own journey and is mostly in Spanish today.",
+    lead: "NEXT YOU is a community and method for people navigating a career transition. It grew out of my own journey.",
     methodEyebrow: "The method",
     methodTitle: "Giro. Ruta. Ritmo.",
     methodLead: "Three phases, in order — each with a clear destination.",
@@ -354,9 +353,9 @@ export const en = {
     communityNote: "Not a phase — the space that accompanies all three. You don't reinvent alone.",
     actionsTitle: "Where to go from here",
     actions: [
-      { title: "Take the diagnostic", body: "Eight questions to see which area needs your attention first. Currently in Spanish.", key: "diagnostic" },
-      { title: "Join the community", body: "The Spanish-speaking community on Skool, with live sessions and accountability.", key: "community" },
-      { title: "Read the origin story", body: "The personal journey behind NEXT YOU. Currently in Spanish.", key: "story" },
+      { title: "Take the diagnostic", body: "Eight questions to see which area needs your attention first.", key: "diagnostic" },
+      { title: "Join the community", body: "A community on Skool, with live sessions and accountability. Sessions are mostly in Spanish today.", key: "community" },
+      { title: "Read the origin story", body: "The personal journey behind NEXT YOU.", key: "story" },
       { title: "Mentoring", body: "One-to-one mentoring for your transition.", key: "mentoring" },
     ],
   },
@@ -366,7 +365,6 @@ export const en = {
       title: "NEXT YOU Diagnostic — Carla Montaño",
       description: "Eight questions to discover which area of your career transition needs attention first.",
     },
-    spanishOnly: "The diagnostic is currently available in Spanish only. An English version is planned.",
   },
 
   shop: {
@@ -402,7 +400,8 @@ export const en = {
     readingTime: "min read",
     byline: "By Carla Montaño",
     moreTitle: "Keep reading",
-    spanishOnly: "These articles are currently in Spanish. English versions are planned.",
+    otherLanguageTitle: "Also available in Spanish",
+    postOtherLanguage: "This article is available in Spanish only.",
   },
 
   contact: {

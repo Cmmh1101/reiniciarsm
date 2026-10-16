@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import type { BlogPost } from "@/lib/posts";
+import { postLocale, type BlogPost } from "@/lib/posts";
 
 async function getAllPosts(): Promise<BlogPost[]> {
   const supabase = createSupabaseAdminClient();
@@ -34,6 +34,7 @@ export default async function AdminBlogListPage() {
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Título</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Idioma</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Pilar</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Estado</th>
             </tr>
@@ -46,6 +47,7 @@ export default async function AdminBlogListPage() {
                     {post.title}
                   </Link>
                 </td>
+                <td className="py-3 font-mono text-xs opacity-70">{postLocale(post).toUpperCase()}</td>
                 <td className="py-3 opacity-70">{post.pillar}</td>
                 <td className="py-3">
                   {post.published_at ? (

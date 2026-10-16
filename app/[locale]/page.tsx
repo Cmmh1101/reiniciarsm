@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPublishedPosts } from "@/lib/posts";
+import { getPostsPreferLocale, postLocale } from "@/lib/posts";
+import { pillarLabel } from "@/lib/taxonomy";
 import { getActiveProducts } from "@/lib/products";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -22,7 +23,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
   const locale = params.locale;
   const { home: h, site, common, nav } = getDictionary(locale);
 
-  const [posts, products] = await Promise.all([getPublishedPosts(3), getActiveProducts()]);
+  const [posts, products] = await Promise.all([getPostsPreferLocale(locale, 3), getActiveProducts()]);
   const featuredProducts = products.slice(0, 3);
 
   return (
@@ -105,8 +106,8 @@ export default async function Home({ params }: { params: { locale: string } }) {
             <h3 className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.learn.latestPosts}</h3>
             <div className="grid md:grid-cols-3 gap-7 mb-12">
               {posts.map((post) => (
-                <Link key={post.id} href={localizedPath(locale, "resourcePost", { slug: post.slug })} className="flex flex-col gap-2">
-                  <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{post.pillar}</span>
+                <Link key={post.id} href={localizedPath(postLocale(post), "resourcePost", { slug: post.slug })} className="flex flex-col gap-2">
+                  <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{pillarLabel(post.pillar, postLocale(post))}</span>
                   <span className="font-display text-lg leading-snug">{post.title}</span>
                   {post.excerpt && <span className="text-[13.5px] opacity-65">{post.excerpt}</span>}
                 </Link>

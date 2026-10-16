@@ -8,11 +8,21 @@ import { PILLARS, ARC_PHASES, ARC_PHASE_NOT_APPLICABLE } from "@/lib/taxonomy";
 import { slugify } from "@/lib/slug";
 import type { BlogPost } from "@/lib/posts";
 
-interface Props {
-  post?: BlogPost;
+export interface TranslationCandidate {
+  id: string;
+  title: string;
+  locale: "en" | "es";
 }
 
-export default function PostEditor({ post }: Props) {
+interface Props {
+  post?: BlogPost;
+  // Other posts that this one could be the translation of.
+  candidates?: TranslationCandidate[];
+  // Id of the post this one is currently linked to as a translation, if any.
+  linkedPostId?: string;
+}
+
+export default function PostEditor({ post, candidates = [], linkedPostId = "" }: Props) {
   const router = useRouter();
   const isEditing = !!post;
 
@@ -25,6 +35,8 @@ export default function PostEditor({ post }: Props) {
   const [featuredImageUrl, setFeaturedImageUrl] = useState(post?.featured_image_url ?? "");
   const [readingTime, setReadingTime] = useState(post?.reading_time_minutes?.toString() ?? "");
   const [published, setPublished] = useState(!!post?.published_at);
+  const [locale, setLocale] = useState<"en" | "es">(post?.locale === "en" ? "en" : "es");
+  const [translationOf, setTranslationOf] = useState(linkedPostId);
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -57,6 +69,9 @@ export default function PostEditor({ post }: Props) {
       featured_image_url: featuredImageUrl.trim(),
       reading_time_minutes: readingTime ? Number(readingTime) : null,
       published,
+      locale,
+      // "" unlinks, an id links, and the field is left out when nothing changed.
+      ...(translationOf !== linkedPostId ? { translation_of: translationOf } : {}),
     };
 
     try {
@@ -95,6 +110,40 @@ export default function PostEditor({ post }: Props) {
       {error && <p className="text-clay text-sm mb-4">{error}</p>}
 
       <div className="flex flex-col gap-4 mb-6">
+        <div className="grid grid-cols-2 gap-4">
+          <label className="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Idioma del artículo</span>
+            <select
+              value={locale}
+              onChange={(e) => {
+                setLocale(e.target.value as "en" | "es");
+                setTranslationOf("");
+              }}
+              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+            >
+              <option value="es">Español</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <label className="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Es la traducción de…</span>
+            <select
+              value={translationOf}
+              onChange={(e) => setTranslationOf(e.target.value)}
+              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+            >
+              <option value="">Ninguno</option>
+              {candidates
+                .filter((c) => c.locale !== locale)
+                .map((c) => (
+                  <option key={c.id} value={c.id}>
+                    [{c.locale.toUpperCase()}] {c.title}
+                  </option>
+                ))}
+            </select>
+          </label>
+        </div>
+
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           <span>Título</span>
           <input

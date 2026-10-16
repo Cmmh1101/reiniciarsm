@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { resolveTranslationGroup } from "@/lib/postTranslations";
 
 export async function POST(request: Request) {
   const admin = await getAdminUser();
@@ -12,9 +13,13 @@ export async function POST(request: Request) {
   }
 
   const supabase = createSupabaseAdminClient();
+  const group = await resolveTranslationGroup(body.translation_of);
   const { data, error } = await supabase
     .from("blog_posts")
     .insert({
+      // Only sent when set, so creating a plain Spanish post keeps working before migration 0018.
+      ...(body.locale === "en" ? { locale: "en" } : {}),
+      ...(group ? { translation_group: group } : {}),
       title: body.title,
       slug: body.slug,
       excerpt: body.excerpt || null,

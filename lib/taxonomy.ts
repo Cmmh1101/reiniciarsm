@@ -31,3 +31,19 @@ export const ARC_PHASE_NOT_APPLICABLE = "No aplica";
 // Fixed product categories (digital products, Fase 5+) — same closed-dropdown reasoning as
 // above: keeps values consistent for the public /productos category filter.
 export const PRODUCT_CATEGORIES = ["Ebook", "Plantilla", "Guía", "Curso", "Otro"] as const;
+
+// English display labels for the (Spanish-keyed) blog pillars — posts always store the Spanish key.
+export const PILLAR_LABEL_EN: Record<string, string> = {
+  Mentalidad: "Mindset",
+  "Dirección": "Direction",
+  "Tecnología e IA": "Technology & AI",
+  Empleabilidad: "Employability",
+  "Inglés profesional": "Professional English",
+  Productividad: "Productivity",
+  Bienestar: "Wellbeing",
+  Comunidad: "Community",
+};
+
+export function pillarLabel(pillar: string, locale: "en" | "es"): string {
+  return locale === "en" ? PILLAR_LABEL_EN[pillar] ?? pillar : pillar;
+}

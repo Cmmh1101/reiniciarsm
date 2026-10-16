@@ -1,29 +1,39 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { getPostBySlug, getPublishedPosts } from "@/lib/posts";
-import { isLocale } from "@/lib/i18n/config";
+import { notFound, redirect } from "next/navigation";
+import { getPostBySlug, getPostsByLocale, getTranslation, postLocale } from "@/lib/posts";
+import { pillarLabel } from "@/lib/taxonomy";
+import { isLocale, type Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
-import { pageMetadata } from "@/lib/i18n/metadata";
 import { localizedPath } from "@/lib/i18n/routes";
 
 // Posts (and edits to them) publish through the admin CMS at runtime — fetch fresh every request.
 export const dynamic = "force-dynamic";
 
-// Posts only exist in Spanish for now, so the Spanish URL is always the canonical one.
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
   if (!isLocale(params.locale)) return {};
   const post = await getPostBySlug(params.slug);
   if (!post) return {};
-  return pageMetadata({
-    locale: "es",
-    route: "resourcePost",
-    params: { slug: post.slug },
-    title: `${post.title} — Carla Montaño`,
-    description: post.excerpt ?? getDictionary("es").resources.meta.description,
-    availableIn: ["es"],
-    type: "article",
-  });
+
+  // The canonical page is always the one in the article's own language; a linked translation
+  // is advertised as its hreflang alternate.
+  const own = postLocale(post);
+  const otherLocale: Locale = own === "en" ? "es" : "en";
+  const translation = await getTranslation(post, otherLocale);
+  const ownUrl = localizedPath(own, "resourcePost", { slug: post.slug });
+  const languages: Record<string, string> = { [own]: ownUrl };
+  if (translation) languages[otherLocale] = localizedPath(otherLocale, "resourcePost", { slug: translation.slug });
+  languages["x-default"] = languages.en ?? ownUrl;
+
+  const title = `${post.title} — Carla Montaño`;
+  const description = post.excerpt ?? getDictionary(own).resources.meta.description;
+  return {
+    title,
+    description,
+    alternates: { canonical: ownUrl, languages },
+    openGraph: { title, description, url: ownUrl, locale: own === "es" ? "es_ES" : "en_US", type: "article" },
+    twitter: { card: "summary_large_image", title, description },
+  };
 }
 
 export default async function ResourcePostPage({ params }: { params: { locale: string; slug: string } }) {
@@ -34,7 +44,16 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
   const post = await getPostBySlug(params.slug);
   if (!post) notFound();
 
-  const related = (await getPublishedPosts()).filter((p) => p.id !== post.id).slice(0, 3);
+  // Arrived (e.g. through the language switcher) on an article written in the other language:
+  // if it has a translation in this language, go there instead.
+  if (postLocale(post) !== locale) {
+    const translation = await getTranslation(post, locale);
+    if (translation) redirect(localizedPath(locale, "resourcePost", { slug: translation.slug }));
+  }
+  const inOtherLanguage = postLocale(post) !== locale;
+
+  const { native, other } = await getPostsByLocale(locale);
+  const related = [...native, ...other].filter((p) => p.id !== post.id).slice(0, 3);
 
   return (
     <main>
@@ -46,7 +65,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
           {common.backToResources}
         </Link>
         <div className="flex gap-2.5 mb-5 flex-wrap">
-          <span className="font-mono text-[10.5px] uppercase text-clay-soft border border-[rgba(237,230,216,0.14)] px-3 py-1.5 rounded-full">{post.pillar}</span>
+          <span className="font-mono text-[10.5px] uppercase text-clay-soft border border-[rgba(237,230,216,0.14)] px-3 py-1.5 rounded-full">{pillarLabel(post.pillar, postLocale(post))}</span>
         </div>
         <h1 className="font-display text-[clamp(28px,4.4vw,46px)] max-w-[22ch] mb-4 leading-[1.1]">{post.title}</h1>
         {post.excerpt && <p className="opacity-70 text-[17px] max-w-[60ch]">{post.excerpt}</p>}
@@ -67,7 +86,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
             </>
           )}
         </div>
-        {resources.spanishOnly && <p className="font-mono text-[11px] opacity-55 mt-5">{resources.spanishOnly}</p>}
+        {inOtherLanguage && <p className="font-mono text-[11px] opacity-55 mt-5">{resources.postOtherLanguage}</p>}
       </header>
 
       {post.featured_image_url ? (
@@ -77,7 +96,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
         <div className="aspect-[16/7] bg-gradient-to-br from-[#8a7458] to-[#3a4562]" />
       )}
 
-      <article className="max-w-[680px] mx-auto px-[8vw] py-[70px] prose-post" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <article lang={postLocale(post)} className="max-w-[680px] mx-auto px-[8vw] py-[70px] prose-post" dangerouslySetInnerHTML={{ __html: post.content }} />
 
       <section className="bg-clay text-paper text-center px-[8vw] py-[70px]">
         <h2 className="font-display text-[clamp(24px,3.4vw,38px)] mb-5 max-w-[20ch] mx-auto">{home.contact.title}</h2>
@@ -95,14 +114,14 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
           <h2 className="font-display text-2xl mb-8">{resources.moreTitle}</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {related.map((r) => (
-              <Link key={r.id} href={localizedPath(locale, "resourcePost", { slug: r.slug })} className="flex flex-col gap-2.5">
+              <Link key={r.id} href={localizedPath(postLocale(r), "resourcePost", { slug: r.slug })} className="flex flex-col gap-2.5">
                 {r.featured_image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={r.featured_image_url} alt="" className="w-full aspect-[4/3] rounded-[2px] object-cover" />
                 ) : (
                   <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#6E7F5C] to-[#2f3a26]" />
                 )}
-                <span className="font-mono text-[10px] uppercase text-clay">{r.pillar}</span>
+                <span className="font-mono text-[10px] uppercase text-clay">{pillarLabel(r.pillar, postLocale(r))}</span>
                 <h4 className="text-base leading-snug">{r.title}</h4>
               </Link>
             ))}

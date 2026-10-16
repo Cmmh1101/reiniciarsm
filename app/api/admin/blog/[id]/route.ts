@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { resolveTranslationGroup } from "@/lib/postTranslations";
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const admin = await getAdminUser();
@@ -15,15 +16,15 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
   // Publishing sets published_at once and leaves it alone on later edits, so
   // post dates don't shift every time a typo gets fixed. Unpublishing clears it.
+  const { data: existing } = await supabase.from("blog_posts").select("*").eq("id", params.id).single();
   let published_at: string | null = null;
   if (body.published) {
-    const { data: existing } = await supabase
-      .from("blog_posts")
-      .select("published_at")
-      .eq("id", params.id)
-      .single();
     published_at = existing?.published_at ?? new Date().toISOString();
   }
+
+  // locale / translation_group exist after migration 0018 — only write them once the columns are there.
+  const hasLocaleColumn = !!existing && "locale" in existing;
+  const group = hasLocaleColumn ? await resolveTranslationGroup(body.translation_of) : undefined;
 
   const { data, error } = await supabase
     .from("blog_posts")
@@ -37,6 +38,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       featured_image_url: body.featured_image_url || null,
       reading_time_minutes: body.reading_time_minutes || null,
       published_at,
+      ...(hasLocaleColumn && (body.locale === "en" || body.locale === "es") ? { locale: body.locale } : {}),
+      ...(group !== undefined ? { translation_group: group } : {}),
     })
     .eq("id", params.id)
     .select()
