@@ -85,6 +85,12 @@ export const en = {
       title: "I connect people, ideas and technology.",
       body: "I started as an educator and became a software engineer. Today I help people and organizations make sense of technology, fix the systems that slow them down and turn ideas into practical solutions — and I teach what I learn along the way.",
     },
+    quiz: {
+      eyebrow: "Not sure where to start?",
+      title: "Find your next step with technology",
+      body: "Eight quick questions, two minutes. You'll get a clear recommendation — a quick fix, a plan, a career move, something to learn on your own, or help with your systems.",
+      cta: "Take the quiz",
+    },
     help: {
       eyebrow: "How I can help",
       title: "Pick the kind of help you need",

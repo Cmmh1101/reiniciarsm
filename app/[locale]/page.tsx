@@ -57,6 +57,18 @@ export default async function Home({ params }: { params: { locale: string } }) {
         <p className="text-base opacity-85 max-w-[58ch]">{h.intro.body}</p>
       </section>
 
+      {/* QUIZ */}
+      <section className="bg-ink text-paper px-[8vw] py-14 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div className="max-w-[58ch]">
+          <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">{h.quiz.eyebrow}</p>
+          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.1] mb-3">{h.quiz.title}</h2>
+          <p className="opacity-80 text-[15px]">{h.quiz.body}</p>
+        </div>
+        <Link href={localizedPath(locale, "nextStep")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform shrink-0 self-start md:self-auto">
+          {h.quiz.cta} →
+        </Link>
+      </section>
+
       {/* HOW I CAN HELP */}
       <section className="bg-paper-soft px-[8vw] py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.help.eyebrow}</p>

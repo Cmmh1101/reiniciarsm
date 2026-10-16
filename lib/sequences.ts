@@ -1,5 +1,7 @@
 import { PILLARS, type PillarKey } from "@/lib/diagnostic";
 import type { Locale } from "@/lib/i18n/config";
+import { PROFILES, type ProfileKey } from "@/lib/nextStep";
+import { getNextStepSequence } from "@/lib/nextStepSequences";
 
 export interface SequenceStep {
   delayDays: number; // days after the PREVIOUS step (0 for the immediate one)
@@ -154,7 +156,7 @@ export const NEWSLETTER_SEQUENCE: SequenceStep[] = [
     body: (name, unsubscribeUrl) =>
       `${greeting(name)}\n\n` +
       `Gracias por estar aquí.\n\n` +
-      `Mi nombre es Carla Montaño. Fui mesera sin hablar inglés en mi primer trabajo en Estados Unidos. Después limpié casas, cuidé bebés, trabajé en un gimnasio y en un comedor escolar. Hoy trabajo remoto como Software Engineer, sin título en tecnología, y ayudo a otras personas a reconstruir su carrera desde cero.\n\n` +
+      `Mi nombre es Carla Montaño. Fui mesera sin hablar inglés en mi primer trabajo en Estados Unidos. Después limpié casas, cuidé bebés, trabajé en un gimnasio y en un comedor escolar. Hoy trabajo como Software Engineer de forma independiente, sin título en tecnología, y ayudo a otras personas a reconstruir su carrera desde cero.\n\n` +
       `No te cuento esto para impresionarte. Te lo cuento porque si sientes que tu vida profesional ya no te representa, quiero que sepas algo desde el primer día: no necesitas tener todo resuelto para empezar a cambiarla.\n\n` +
       `Esto es Reiniciar Sin Mapa.\n\n` +
       `En los próximos días te voy a mandar:\n` +
@@ -214,8 +216,7 @@ export const NEWSLETTER_SEQUENCE: SequenceStep[] = [
   },
 ];
 
-// English version of the newsletter welcome sequence. Same four emails, translated; the wording about
-// Carla's current work is kept accurate to today (the Spanish text predates her return to Venezuela).
+// English version of the newsletter welcome sequence: the same four emails, translated.
 function greetingEn(name: string) {
   return name.trim() ? `Hi ${name.trim()},` : "Hi,";
 }
@@ -235,7 +236,7 @@ export const NEWSLETTER_SEQUENCE_EN: SequenceStep[] = [
     body: (name, unsubscribeUrl) =>
       `${greetingEn(name)}\n\n` +
       `Thank you for being here.\n\n` +
-      `My name is Carla Montaño. My first job in the United States was waiting tables without speaking English. After that I cleaned houses, cared for babies, and worked at a gym and in a school cafeteria. Today I'm a software engineer without a traditional tech degree, and I help other people rebuild their careers from scratch.\n\n` +
+      `My name is Carla Montaño. My first job in the United States was waiting tables without speaking English. After that I cleaned houses, cared for babies, and worked at a gym and in a school cafeteria. Today I work independently as a software engineer without a traditional tech degree, and I help other people rebuild their careers from scratch.\n\n` +
       `I'm not telling you this to impress you. I'm telling you because if your professional life no longer feels like you, I want you to know something from day one: you don't need to have everything figured out to start changing it.\n\n` +
       `This is Reiniciar Sin Mapa — Restart Without a Map.\n\n` +
       `Over the next few days I'll send you:\n` +
@@ -297,6 +298,10 @@ export const NEWSLETTER_SEQUENCE_EN: SequenceStep[] = [
 ];
 
 export function getSequenceSteps(sequence: string, language: Locale = "es"): SequenceStep[] | null {
+  if (sequence.startsWith("nextstep_")) {
+    const profile = sequence.slice("nextstep_".length) as ProfileKey;
+    return PROFILES.includes(profile) ? getNextStepSequence(profile, language) : null;
+  }
   if (sequence === "newsletter") return language === "en" ? NEWSLETTER_SEQUENCE_EN : NEWSLETTER_SEQUENCE;
   // The quiz drip exists in Spanish only for now; English takers get a single result email instead.
   if (sequence.startsWith("quiz_") && language === "es") {

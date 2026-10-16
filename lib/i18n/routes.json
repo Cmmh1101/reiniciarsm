@@ -74,5 +74,9 @@
   "review": {
     "en": "review/:purchaseId",
     "es": "resena/:purchaseId"
+  },
+  "nextStep": {
+    "en": "find-your-next-step",
+    "es": "tu-siguiente-paso"
   }
 }

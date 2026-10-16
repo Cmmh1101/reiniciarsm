@@ -14,6 +14,7 @@ export const STATUS_LABELS: Record<ContactStatus, string> = {
 // bucket, used for the /admin/contactos filter and the event timeline.
 export const EVENT_TYPE_INFO: Record<string, { label: string; source: string }> = {
   quiz_completed: { label: "Completó el Diagnóstico Next You", source: "Diagnóstico" },
+  next_step_completed: { label: "Completó el diagnóstico “Tu siguiente paso”", source: "Diagnóstico" },
   newsletter_signup: { label: "Se suscribió al newsletter", source: "Newsletter" },
   booking_created: { label: "Reservó una sesión de Mentoría", source: "Mentoría" },
   payment_completed: { label: "Compró el paquete de Mentoría", source: "Mentoría" },

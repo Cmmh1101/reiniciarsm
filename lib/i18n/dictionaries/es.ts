@@ -77,6 +77,12 @@ export const es: Dictionary = {
       title: "Conecto personas, ideas y tecnología.",
       body: "Empecé como educadora y me convertí en ingeniera de software. Hoy ayudo a personas y organizaciones a darle sentido a la tecnología, a mejorar los sistemas que les quitan tiempo y a convertir ideas en soluciones prácticas — y enseño lo que voy aprendiendo en el camino.",
     },
+    quiz: {
+      eyebrow: "¿No sabes por dónde empezar?",
+      title: "Descubre tu siguiente paso con la tecnología",
+      body: "Ocho preguntas rápidas, dos minutos. Recibirás una recomendación clara: una solución rápida, un plan, un cambio de carrera, algo para aprender por tu cuenta o ayuda con tus sistemas.",
+      cta: "Hacer el diagnóstico",
+    },
     help: {
       eyebrow: "Cómo puedo ayudarte",
       title: "Elige el tipo de ayuda que necesitas",
