@@ -10,9 +10,9 @@ export const dynamic = "force-dynamic";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://carlamontano.io";
 
 // Pages that exist in both languages.
-const BILINGUAL_ROUTES: RouteKey[] = ["home", "about", "workWithMe", "work", "ventures", "nextYou", "shop", "resources", "contact", "privacy", "terms"];
+const BILINGUAL_ROUTES: RouteKey[] = ["home", "about", "workWithMe", "mentoring", "work", "ventures", "nextYou", "shop", "resources", "contact", "privacy", "terms"];
 // Pages that are Spanish-only for now (listed under their Spanish URL only).
-const SPANISH_ONLY_ROUTES: RouteKey[] = ["mentoring", "diagnostic", "nextYouStory"];
+const SPANISH_ONLY_ROUTES: RouteKey[] = ["diagnostic", "nextYouStory"];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [posts, products] = await Promise.all([getPublishedPosts(), getActiveProducts()]);

@@ -61,3 +61,17 @@ export function packConfirmationEmail(locale: Locale, name: string) {
     text: `Hi ${name},\n\nThank you for your purchase! Your package of four 1:1 sessions is confirmed, and it includes one month of the community as a gift.\n\nI'll write to you soon to schedule your sessions.\n\nBest,\nCarla`,
   };
 }
+
+/** Sent when payment arrived but the chosen time was no longer free — Carla follows up personally. */
+export function slotConflictEmail(locale: Locale, name: string) {
+  if (locale === "es") {
+    return {
+      subject: "Recibimos tu pago — necesitamos acordar el horario",
+      text: `Hola ${name},\n\nRecibimos tu pago, pero el horario que elegiste fue tomado justo antes de confirmarse. Te escribo personalmente hoy para acordar otro horario que te convenga (o reembolsarte si prefieres).\n\nDisculpa el inconveniente,\nCarla`,
+    };
+  }
+  return {
+    subject: "We received your payment — let's agree on a time",
+    text: `Hi ${name},\n\nWe received your payment, but the time you picked was taken just before it could be confirmed. I'll write to you personally today to find another time that works for you (or refund you if you prefer).\n\nSorry for the inconvenience,\nCarla`,
+  };
+}

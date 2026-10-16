@@ -2,7 +2,8 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
 import { MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT, isSlotProduct } from "@/lib/pricing";
-import { formatSlotLabel, packConfirmationEmail, slotConfirmationEmail } from "@/lib/bookingCopy";
+import { formatSlotLabel, packConfirmationEmail, slotConfirmationEmail, slotConflictEmail } from "@/lib/bookingCopy";
+import { bookSlot } from "@/lib/mentorias";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { buildGoogleCalendarLink } from "@/lib/googleCalendar";
 
@@ -65,18 +66,11 @@ export async function recordMentoriaPayment({
     const serviceLabel = sos ? "Tech SOS (30 min)" : "Sesión 1:1 (60 min)";
 
     if (slotId) {
-      // Atomic: only succeeds if the slot is still unbooked, guarding against
-      // a race between checkout-session creation and the webhook (or, for a
-      // manual entry, against picking a slot someone else just booked).
-      const { data: updatedSlots } = await supabase
-        .from("mentoria_slots")
-        .update({ is_booked: true })
-        .eq("id", slotId)
-        .eq("is_booked", false)
-        .select("id, start_time, duration_minutes");
+      // Atomic and overlap-aware (see migration 0017): fails if this slot, or any slot overlapping
+      // it, was booked in the meantime.
+      const slot = await bookSlot(slotId);
 
-      if (updatedSlots && updatedSlots.length > 0) {
-        const slot = updatedSlots[0];
+      if (slot) {
         await supabase.from("mentoria_bookings").insert({
           slot_id: slotId,
           contact_id: contact.id,
@@ -101,7 +95,15 @@ export async function recordMentoriaPayment({
           `${name} (${email}) reservó ${serviceLabel} para el ${slotLabel}.\n\nMétodo de pago: ${paymentMethod} · $${(amountCents / 100).toFixed(2)} · Idioma: ${locale}\n\nAgregar a Google Calendar → ${calendarLink}`
         );
       } else {
-        console.error("recordMentoriaPayment: slot already booked at payment time", slotId);
+        // Rare: the payment arrived but the time was taken (e.g. the checkout was left open past its hold).
+        console.error("recordMentoriaPayment: slot unavailable at payment time", slotId);
+        const apology = slotConflictEmail(locale, name);
+        const resendId = await sendConfirmationEmail(email, apology.subject, apology.text);
+        await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject: apology.subject });
+        await notifyAdmin(
+          `ACCIÓN NECESARIA: horario no disponible — ${name}`,
+          `${name} (${email}) pagó ${serviceLabel} ($${(amountCents / 100).toFixed(2)}, ${paymentMethod}) pero el horario elegido ya estaba ocupado. Ya le escribí automáticamente para que sepa que recibiste su pago; contáctalo para acordar otro horario o reembolsarlo.`
+        );
       }
     }
 

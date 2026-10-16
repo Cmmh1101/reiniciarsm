@@ -3,6 +3,7 @@ import { createStripeClient } from "@/lib/stripe";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { MENTORIA_SESSION_PRICE_CENTS, MENTORIA_SESSION_PRODUCT, TECH_SOS_PRICE_CENTS, TECH_SOS_PRODUCT } from "@/lib/pricing";
 import { checkoutLine, formatSlotLabel } from "@/lib/bookingCopy";
+import { releaseSlot, reserveSlot } from "@/lib/mentorias";
 import { isLocale, DEFAULT_LOCALE } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/i18n/routes";
 
@@ -37,31 +38,44 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: locale === "es" ? "Ese horario no corresponde a este tipo de sesión." : "That time isn't available for this type of session." }, { status: 409 });
   }
 
+  // Hold this time (and anything overlapping it) while the person pays, so nobody else can book it.
+  if (!(await reserveSlot(slotId))) {
+    return NextResponse.json({ error: locale === "es" ? "Ese horario ya no está disponible." : "That time is no longer available." }, { status: 409 });
+  }
+
   const product = sessionType === "sos" ? TECH_SOS_PRODUCT : MENTORIA_SESSION_PRODUCT;
   const price = sessionType === "sos" ? TECH_SOS_PRICE_CENTS : MENTORIA_SESSION_PRICE_CENTS;
   const line = checkoutLine(locale, product, formatSlotLabel(locale, slot.start_time));
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-  const stripe = createStripeClient();
-  const session = await stripe.checkout.sessions.create({
-    mode: "payment",
-    locale,
-    customer_email: email,
-    allow_promotion_codes: true,
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          unit_amount: price,
-          product_data: { name: line.name, description: line.description },
+  try {
+    const stripe = createStripeClient();
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      locale,
+      customer_email: email,
+      allow_promotion_codes: true,
+      // Stripe's minimum is 30 minutes; the slot hold (35 min) outlasts it.
+      expires_at: Math.floor(Date.now() / 1000) + 31 * 60,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            unit_amount: price,
+            product_data: { name: line.name, description: line.description },
+          },
+          quantity: 1,
         },
-        quantity: 1,
-      },
-    ],
-    metadata: { product, slot_id: slotId, name, email, locale },
-    success_url: `${siteUrl}${localizedPath(locale, "mentoringThanks")}?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${siteUrl}${localizedPath(locale, returnRoute)}?canceled=1#book`,
-  });
+      ],
+      metadata: { product, slot_id: slotId, name, email, locale },
+      success_url: `${siteUrl}${localizedPath(locale, "mentoringThanks")}?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${siteUrl}${localizedPath(locale, returnRoute)}?canceled=1#book`,
+    });
 
-  return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: session.url });
+  } catch (err) {
+    console.error("booking-create: stripe checkout failed", err);
+    await releaseSlot(slotId);
+    return NextResponse.json({ error: locale === "es" ? "No se pudo iniciar el pago." : "We couldn't start the payment." }, { status: 500 });
+  }
 }
