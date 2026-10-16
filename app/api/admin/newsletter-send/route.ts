@@ -13,6 +13,7 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
   const html = typeof body?.html === "string" ? body.html.trim() : "";
+  const preheader = typeof body?.preheader === "string" ? body.preheader.trim().slice(0, 140) : "";
   const audience: NewsletterAudience = NEWSLETTER_AUDIENCES.includes(body?.audience) ? body.audience : "all";
   const language: NewsletterLanguage = NEWSLETTER_LANGUAGES.includes(body?.language) ? body.language : "all";
 
@@ -87,7 +88,7 @@ export async function POST(request: Request) {
         ? `Don't want more emails? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Unsubscribe here</a>.`
         : `¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.`
     }</p>`;
-    const fullHtml = wrapEmailShell(personalizedContentHtml + signatureHtml + unsubscribeHtml);
+    const fullHtml = wrapEmailShell(personalizedContentHtml + signatureHtml + unsubscribeHtml, { preheader, lang: contactLang });
     const textFallback = htmlToPlainTextFallback(personalizedContentHtml + signatureHtml) + `\n\n${contactLang === "en" ? "Unsubscribe" : "Date de baja"}: ${unsubscribeUrl}`;
 
     try {

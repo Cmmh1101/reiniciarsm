@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { buildExtensions, RichToolbar } from "@/components/admin/richText";
+import ImageUploadField from "@/components/admin/ImageUploadField";
 import { PILLARS, ARC_PHASES, ARC_PHASE_NOT_APPLICABLE } from "@/lib/taxonomy";
 import { slugify } from "@/lib/slug";
 import type { BlogPost } from "@/lib/posts";
@@ -44,7 +45,7 @@ export default function PostEditor({ post }: Props) {
   const [saving, setSaving] = useState(false);
 
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: buildExtensions(),
     content: fields[lang].content || "<p></p>",
     immediatelyRender: false,
   });
@@ -218,55 +219,25 @@ export default function PostEditor({ post }: Props) {
           </label>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Imagen destacada (URL)</span>
-            <input
-              value={featuredImageUrl}
-              onChange={(e) => setFeaturedImageUrl(e.target.value)}
-              className="font-body text-sm px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
-            />
-          </label>
-          <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>Minutos de lectura</span>
-            <input
-              type="number"
-              min={1}
-              value={readingTime}
-              onChange={(e) => setReadingTime(e.target.value)}
-              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
-            />
-          </label>
-        </div>
+        <ImageUploadField label="Imagen destacada" value={featuredImageUrl} onChange={setFeaturedImageUrl} />
+
+        <label className="flex flex-col gap-1.5 text-sm font-semibold max-w-[200px]">
+          <span>Minutos de lectura</span>
+          <input
+            type="number"
+            min={1}
+            value={readingTime}
+            onChange={(e) => setReadingTime(e.target.value)}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+          />
+        </label>
       </div>
 
       <div className="mb-6">
         <span className="text-sm font-semibold block mb-1.5">Contenido ({LANG_LABEL[lang]})</span>
         {editor && (
           <div className="border border-[rgba(20,25,43,0.15)] rounded-[3px] bg-white">
-            <div className="flex flex-wrap gap-1 border-b border-[rgba(20,25,43,0.1)] p-2">
-              <ToolbarButton active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
-                B
-              </ToolbarButton>
-              <ToolbarButton active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}>
-                I
-              </ToolbarButton>
-              <ToolbarButton active={editor.isActive("heading", { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
-                H2
-              </ToolbarButton>
-              <ToolbarButton active={editor.isActive("heading", { level: 3 })} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}>
-                H3
-              </ToolbarButton>
-              <ToolbarButton active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}>
-                • Lista
-              </ToolbarButton>
-              <ToolbarButton active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-                1. Lista
-              </ToolbarButton>
-              <ToolbarButton active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}>
-                Cita
-              </ToolbarButton>
-            </div>
+            <RichToolbar editor={editor} />
             <EditorContent editor={editor} className="prose-post px-4 py-3 min-h-[300px] [&_.ProseMirror]:outline-none" />
           </div>
         )}
@@ -297,25 +268,5 @@ export default function PostEditor({ post }: Props) {
         )}
       </div>
     </div>
-  );
-}
-
-function ToolbarButton({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`text-xs font-mono px-2.5 py-1.5 rounded-[3px] ${active ? "bg-ink text-paper" : "bg-paper-soft text-ink"}`}
-    >
-      {children}
-    </button>
   );
 }

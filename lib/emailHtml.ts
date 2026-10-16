@@ -39,22 +39,53 @@ function renderParagraph(paragraph: string): string {
   return `<p style="margin:0 0 20px;">${linkifyEscaped(withBreaks)}</p>`;
 }
 
-export function wrapEmailShell(bodyHtml: string): string {
+// Carla's logo (light lettering, transparent background) is hosted in the public newsletter-images
+// storage bucket, so it loads in any email client no matter which deploy sent the email. It sits on
+// the dark brand band below because the lettering is light.
+function emailLogoUrl(): string {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  if (supabaseUrl) return `${supabaseUrl}/storage/v1/object/public/newsletter-images/brand/email-logo.png`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  return `${siteUrl}/images/brand/logo-light.png`;
+}
+
+interface ShellOptions {
+  // Inbox preview text shown beside the subject line. Hidden in the email itself.
+  preheader?: string;
+  lang?: "en" | "es";
+}
+
+// The preheader is a hidden block at the very top of the body. The trailing run of zero-width and
+// non-breaking spaces stops mail clients from pulling the start of the email body into the preview
+// when the preheader is short.
+function preheaderHtml(preheader: string | undefined): string {
+  const text = preheader?.trim();
+  if (!text) return "";
+  return `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;color:#EDE6D8;">${escapeHtml(text)}${"&#8204;&nbsp;".repeat(90)}</div>`;
+}
+
+export function wrapEmailShell(bodyHtml: string, { preheader, lang = "es" }: ShellOptions = {}): string {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const logo = emailLogoUrl();
   return `<!doctype html>
-<html lang="es">
+<html lang="${lang}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
 <body style="margin:0;padding:0;background:#EDE6D8;">
+  ${preheaderHtml(preheader)}
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#EDE6D8;">
-    <tr><td align="center" style="padding:40px 20px;">
+    <tr><td align="center" style="padding:32px 16px;">
       <table role="presentation" width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
-        <tr><td style="padding-bottom:24px;">
-          <span style="font-family:Georgia,serif;font-size:18px;color:#14192B;font-weight:600;">Reiniciar Sin Mapa</span>
+        <tr><td style="background:#14192B;border-radius:4px 4px 0 0;padding:20px 32px;">
+          <a href="${siteUrl}" style="text-decoration:none;"><img src="${logo}" alt="Carla Montaño" width="160" style="display:block;border:0;width:160px;max-width:100%;height:auto;"></a>
         </td></tr>
-        <tr><td style="background:#ffffff;border-radius:4px;padding:32px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#14192B;">
+        <tr><td style="background:#ffffff;padding:32px;font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#14192B;">
           ${bodyHtml}
         </td></tr>
-        <tr><td style="padding-top:20px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#14192B;opacity:0.5;">
-          Carla Montaño — Reiniciar Sin Mapa / NEXT YOU™
+        <tr><td style="background:#14192B;border-radius:0 0 4px 4px;padding:20px 32px;">
+          <a href="${siteUrl}" style="text-decoration:none;"><img src="${logo}" alt="Carla Montaño" width="96" style="display:block;border:0;width:96px;max-width:100%;height:auto;"></a>
+          <p style="margin:10px 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#EDE6D8;opacity:0.7;">
+            <a href="${siteUrl}" style="color:#EDE6D8;text-decoration:underline;">carlamontano.io</a>
+          </p>
         </td></tr>
       </table>
     </td></tr>
@@ -100,13 +131,13 @@ export function styleTiptapHtml(html: string): string {
   return out;
 }
 
-export function textToEmailHtml(text: string): string {
+export function textToEmailHtml(text: string, options?: ShellOptions): string {
   const paragraphs = text
     .split("\n\n")
     .map((p) => p.trim())
     .filter(Boolean);
 
-  return wrapEmailShell(paragraphs.map(renderParagraph).join("\n"));
+  return wrapEmailShell(paragraphs.map(renderParagraph).join("\n"), options);
 }
 
 /** Strips tags for a plain-text fallback of Tiptap-authored HTML (Resend's `text` field). */

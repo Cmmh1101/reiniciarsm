@@ -108,6 +108,12 @@ body {
   font-size: 17px;
   opacity: 0.88;
 }
+.prose-post img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 3px;
+  margin: 24px 0;
+}
 .prose-post a {
   color: var(--clay);
   text-decoration: underline;

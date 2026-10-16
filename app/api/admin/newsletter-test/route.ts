@@ -13,6 +13,7 @@ export async function POST(request: Request) {
   const body = await request.json().catch(() => null);
   const subject = typeof body?.subject === "string" ? body.subject.trim() : "";
   const html = typeof body?.html === "string" ? body.html.trim() : "";
+  const preheader = typeof body?.preheader === "string" ? body.preheader.trim().slice(0, 140) : "";
   const testEmail = typeof body?.testEmail === "string" ? body.testEmail.trim() : "";
 
   if (!subject || !html) {
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
   const styledContentHtml = applyNameToken(styleTiptapHtml(html), "Camila");
   const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
   const testNoticeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">Este es un correo de prueba — no se envió a tus suscriptores. El token {{Nombre}} se reemplazó aquí por "Camila" como ejemplo, y no lleva enlace de baja porque no hay un suscriptor real detrás; los envíos reales sí lo incluyen siempre.</p>`;
-  const fullHtml = wrapEmailShell(styledContentHtml + signatureHtml + testNoticeHtml);
+  const fullHtml = wrapEmailShell(styledContentHtml + signatureHtml + testNoticeHtml, { preheader });
   const textFallback = htmlToPlainTextFallback(styledContentHtml + signatureHtml);
 
   const resendId = await sendHtmlEmail(testEmail, `[PRUEBA] ${subject}`, fullHtml, textFallback);

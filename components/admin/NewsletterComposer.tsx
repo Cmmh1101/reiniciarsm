@@ -1,13 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useEditor, EditorContent } from "@tiptap/react";
-import { mergeAttributes } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
-import Link from "@tiptap/extension-link";
-import TextAlign from "@tiptap/extension-text-align";
+import { buildExtensions, RichToolbar, ToolbarButton } from "@/components/admin/richText";
 import {
   AUDIENCE_LABELS,
   LANGUAGE_LABELS,
@@ -17,118 +13,15 @@ import {
   type NewsletterLanguage,
 } from "@/lib/newsletterAudience";
 
-// Images need their own width/align/href handling — none of this works out of the box:
-// - TextAlign only targets text-bearing nodes (paragraph/heading); an image is its own block
-//   node with no text content for text-align to apply to.
-// - The Link mark can't attach to a non-text node like an image, so "select image, click Link"
-//   silently does nothing.
-// Kept local to this composer rather than shared with the blog editor — the newsletter's HTML
-// goes through styleTiptapHtml's email-safe styling, which the blog post editor doesn't need.
-const ALIGN_STYLES: Record<string, string> = {
-  left: "display:block;margin:0 auto 0 0;",
-  center: "display:block;margin:0 auto;",
-  right: "display:block;margin:0 0 0 auto;",
-};
-
-const ResizableImage = Image.extend({
-  addAttributes() {
-    return {
-      ...this.parent?.(),
-      width: {
-        default: null,
-        renderHTML: (attributes: { width?: string | null }) => {
-          if (!attributes.width) return {};
-          return { style: `width: ${attributes.width}` };
-        },
-      },
-      align: {
-        default: null,
-        renderHTML: (attributes: { align?: string | null }) => {
-          if (!attributes.align || !ALIGN_STYLES[attributes.align]) return {};
-          return { style: ALIGN_STYLES[attributes.align] };
-        },
-      },
-      href: {
-        default: null,
-        parseHTML: (element: HTMLElement) => element.closest("a")?.getAttribute("href") ?? null,
-        renderHTML: () => ({}),
-      },
-    };
-  },
-  // Used only for HTML export (getHTML()) — ProseMirror serializes from the schema's toDOM
-  // regardless of what addNodeView() below renders, so the <a> wrap only ever reaches the actual
-  // email HTML, never the live editing surface.
-  renderHTML({ node, HTMLAttributes }) {
-    const merged = mergeAttributes(this.options.HTMLAttributes, HTMLAttributes);
-    const href = node.attrs.href as string | null;
-    if (href) {
-      return ["a", { href, target: "_blank", rel: "noopener noreferrer" }, ["img", merged]];
-    }
-    return ["img", merged];
-  },
-  // The live editing DOM must stay a single plain <img> — image is a leaf/atom node, and wrapping
-  // its rendered DOM in an extra <a> (as renderHTML does for export) breaks ProseMirror's
-  // position mapping around it: the image becomes unselectable/unable to navigate past, typing
-  // and Enter stop working, and clicking away no longer deselects it. A dedicated NodeView keeps
-  // editing visuals (width/align, a dashed outline standing in for the link) independent of the
-  // exported markup.
-  addNodeView() {
-    return ({ node }) => {
-      const img = document.createElement("img");
-      const apply = (n: typeof node) => {
-        img.setAttribute("src", n.attrs.src);
-        if (n.attrs.alt) img.setAttribute("alt", n.attrs.alt);
-        else img.removeAttribute("alt");
-
-        let style = "";
-        if (n.attrs.width) style += `width:${n.attrs.width};`;
-        if (n.attrs.align && ALIGN_STYLES[n.attrs.align]) style += ALIGN_STYLES[n.attrs.align];
-        if (n.attrs.href) {
-          style += "outline:2px dashed #BE5A34;outline-offset:2px;";
-          img.setAttribute("title", `Enlaza a: ${n.attrs.href}`);
-        } else if (n.attrs.title) {
-          img.setAttribute("title", n.attrs.title);
-        } else {
-          img.removeAttribute("title");
-        }
-        img.setAttribute("style", style);
-      };
-      apply(node);
-      return {
-        dom: img,
-        update: (updatedNode) => {
-          if (updatedNode.type.name !== "image") return false;
-          apply(updatedNode as typeof node);
-          return true;
-        },
-      };
-    };
-  },
-});
-
-const IMAGE_SIZES: { label: string; value: string }[] = [
-  { label: "S", value: "30%" },
-  { label: "M", value: "50%" },
-  { label: "L", value: "75%" },
-  { label: "100%", value: "100%" },
-];
-
-const IMAGE_ALIGNS: { label: string; value: string }[] = [
-  { label: "⇤", value: "left" },
-  { label: "⇹", value: "center" },
-  { label: "⇥", value: "right" },
-];
-
 export default function NewsletterComposer({ counts }: { counts: Record<NewsletterLanguage, Record<NewsletterAudience, number>> }) {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [subject, setSubject] = useState("");
+  const [preheader, setPreheader] = useState("");
   const [audience, setAudience] = useState<NewsletterAudience>("all");
   const [language, setLanguage] = useState<NewsletterLanguage>("all");
   const [error, setError] = useState("");
   const [result, setResult] = useState<{ sent: number; total: number } | null>(null);
   const [sending, setSending] = useState(false);
-  const [uploading, setUploading] = useState(false);
   const [testEmail, setTestEmail] = useState("");
   const [testError, setTestError] = useState("");
   const [testSent, setTestSent] = useState(false);
@@ -137,59 +30,22 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
   const recipientCount = audienceCounts[audience];
 
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      ResizableImage,
-      Link.configure({ openOnClick: false }),
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-    ],
+    extensions: buildExtensions(),
     // Starts with an editable greeting rather than a fixed one the server used to prepend — move
     // or delete it like any other line; {{Nombre}} works the same way anywhere else in the body.
     content: "<p>Hola {{Nombre}},</p><p></p>",
     immediatelyRender: false,
   });
 
-  async function handleImageUpload(file: File) {
-    setUploading(true);
-    setError("");
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await fetch("/api/admin/upload-image", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "No se pudo subir la imagen.");
-      editor?.chain().focus().setImage({ src: data.url }).run();
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo subir la imagen.");
-    } finally {
-      setUploading(false);
-    }
-  }
-
   function handleInsertNameToken() {
     editor?.chain().focus().insertContent("{{Nombre}}").run();
   }
 
-  function handleAddLink() {
-    if (!editor) return;
-    const url = window.prompt("URL del enlace:");
-    if (!url) return;
-    editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
-  }
-
-  function handleImageLink() {
-    if (!editor) return;
-    const current = (editor.getAttributes("image").href as string | null) ?? "";
-    const url = window.prompt("URL del enlace para esta imagen (déjalo vacío para quitarlo):", current);
-    if (url === null) return;
-    editor.chain().focus().updateAttributes("image", { href: url.trim() || null }).run();
-  }
-
-  function getComposedContent(): { subject: string; html: string } | null {
+  function getComposedContent(): { subject: string; preheader: string; html: string } | null {
     const html = editor?.getHTML() ?? "";
     const isEmpty = !editor || editor.isEmpty;
     if (!subject.trim() || isEmpty) return null;
-    return { subject: subject.trim(), html };
+    return { subject: subject.trim(), preheader: preheader.trim(), html };
   }
 
   async function handleSendTest() {
@@ -251,6 +107,7 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
       if (!res.ok) throw new Error(data.error ?? "No se pudo enviar.");
       setResult(data);
       setSubject("");
+      setPreheader("");
       setTestSent(false);
       editor?.commands.setContent("<p>Hola {{Nombre}},</p><p></p>");
       router.refresh();
@@ -277,6 +134,22 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
             onChange={(e) => setSubject(e.target.value)}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
           />
+        </label>
+
+        <label className="flex flex-col gap-1.5 text-sm font-semibold">
+          <span>
+            Preheader <span className="font-normal opacity-60">(texto de vista previa, opcional)</span>
+          </span>
+          <input
+            value={preheader}
+            onChange={(e) => setPreheader(e.target.value)}
+            maxLength={140}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
+          />
+          <span className="text-xs font-normal opacity-60">
+            Es la línea gris que se ve junto al asunto en la bandeja de entrada. Funciona mejor entre 40 y 100 caracteres ·{" "}
+            {preheader.length}/140
+          </span>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
@@ -314,84 +187,14 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
           <span className="text-sm font-semibold block mb-1.5">Contenido</span>
           {editor && (
             <div className="border border-[rgba(20,25,43,0.15)] rounded-[3px] bg-white">
-              <div className="flex flex-wrap items-center gap-1 border-b border-[rgba(20,25,43,0.1)] p-2">
-                <ToolbarButton active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}>
-                  B
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}>
-                  I
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive("heading", { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}>
-                  H2
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}>
-                  • Lista
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}>
-                  Cita
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive("link")} onClick={handleAddLink}>
-                  Enlace
-                </ToolbarButton>
-                <ToolbarButton active={false} onClick={handleInsertNameToken}>
-                  + Nombre
-                </ToolbarButton>
-                <ToolbarButton active={false} onClick={() => fileInputRef.current?.click()}>
-                  {uploading ? "Subiendo..." : "Imagen"}
-                </ToolbarButton>
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/png,image/jpeg,image/webp,image/gif"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) handleImageUpload(file);
-                    e.target.value = "";
-                  }}
-                />
-
-                <span className="w-px h-5 bg-[rgba(20,25,43,0.15)] mx-1" />
-
-                <ToolbarButton active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}>
-                  ⇤
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive({ textAlign: "center" })} onClick={() => editor.chain().focus().setTextAlign("center").run()}>
-                  ⇹
-                </ToolbarButton>
-                <ToolbarButton active={editor.isActive({ textAlign: "right" })} onClick={() => editor.chain().focus().setTextAlign("right").run()}>
-                  ⇥
-                </ToolbarButton>
-
-                {editor.isActive("image") && (
-                  <>
-                    <span className="w-px h-5 bg-[rgba(20,25,43,0.15)] mx-1" />
-                    <span className="text-[10px] font-mono opacity-50 mr-0.5">Tamaño</span>
-                    {IMAGE_SIZES.map((size) => (
-                      <ToolbarButton
-                        key={size.value}
-                        active={editor.getAttributes("image").width === size.value}
-                        onClick={() => editor.chain().focus().updateAttributes("image", { width: size.value }).run()}
-                      >
-                        {size.label}
-                      </ToolbarButton>
-                    ))}
-                    <span className="text-[10px] font-mono opacity-50 mx-0.5">Alinear</span>
-                    {IMAGE_ALIGNS.map((align) => (
-                      <ToolbarButton
-                        key={align.value}
-                        active={editor.getAttributes("image").align === align.value}
-                        onClick={() => editor.chain().focus().updateAttributes("image", { align: align.value }).run()}
-                      >
-                        {align.label}
-                      </ToolbarButton>
-                    ))}
-                    <ToolbarButton active={!!editor.getAttributes("image").href} onClick={handleImageLink}>
-                      Enlace de imagen
-                    </ToolbarButton>
-                  </>
-                )}
-              </div>
+              <RichToolbar
+                editor={editor}
+                extra={
+                  <ToolbarButton active={false} onClick={handleInsertNameToken}>
+                    + Nombre
+                  </ToolbarButton>
+                }
+              />
               <EditorContent editor={editor} className="prose-post px-4 py-3 min-h-[220px] [&_.ProseMirror]:outline-none" />
             </div>
           )}
@@ -441,17 +244,5 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
         </button>
       </div>
     </div>
-  );
-}
-
-function ToolbarButton({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={`text-xs font-mono px-2.5 py-1.5 rounded-[3px] ${active ? "bg-ink text-paper" : "bg-paper-soft text-ink"}`}
-    >
-      {children}
-    </button>
   );
 }
