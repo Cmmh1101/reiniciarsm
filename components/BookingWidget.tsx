@@ -4,37 +4,61 @@ import { useState } from "react";
 import { ALT_PAYMENT_EMAIL } from "@/lib/pricing";
 import type { MentoriaSlot } from "@/lib/mentorias";
 import SlotPicker from "@/components/SlotPicker";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
-type Plan = "session" | "pack";
+export type Plan = "sos" | "session" | "pack";
 
-export default function BookingWidget({ slots }: { slots: MentoriaSlot[] }) {
-  const [plan, setPlan] = useState<Plan>("session");
+export default function BookingWidget({
+  slots,
+  locale,
+  copy,
+  plans,
+  initialPlan,
+  source,
+}: {
+  slots: MentoriaSlot[];
+  locale: Locale;
+  copy: Dictionary["booking"];
+  plans: Plan[];
+  initialPlan?: Plan;
+  // Which page the widget sits on — used to send people back there if they cancel at checkout.
+  source: "workWithMe" | "mentoring";
+}) {
+  const [plan, setPlan] = useState<Plan>(initialPlan && plans.includes(initialPlan) ? initialPlan : plans[0]);
   const [slotId, setSlotId] = useState<string>("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Each slot belongs to one kind of session (30-minute Tech SOS or 60-minute 1:1).
+  const planSlots = slots.filter((s) => s.session_type === (plan === "sos" ? "sos" : "session"));
+
+  function choosePlan(next: Plan) {
+    setPlan(next);
+    setSlotId("");
+    setError("");
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
     if (!name.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      setError("Por favor completa tu nombre y un correo válido.");
+      setError(copy.errorFields);
       return;
     }
-    if (plan === "session" && !slotId) {
-      setError("Elige un horario disponible.");
+    if (plan !== "pack" && !slotId) {
+      setError(copy.errorSlot);
       return;
     }
 
     setLoading(true);
     try {
-      const endpoint = plan === "session" ? "/api/booking-create" : "/api/mentoria-pack-checkout";
-      const body =
-        plan === "session"
-          ? { slot_id: slotId, name: name.trim(), email: email.trim() }
-          : { name: name.trim(), email: email.trim() };
+      const endpoint = plan === "pack" ? "/api/mentoria-pack-checkout" : "/api/booking-create";
+      const base = { name: name.trim(), email: email.trim(), locale, source };
+      const body = plan === "pack" ? base : { ...base, slot_id: slotId, session_type: plan };
 
       const res = await fetch(endpoint, {
         method: "POST",
@@ -42,90 +66,86 @@ export default function BookingWidget({ slots }: { slots: MentoriaSlot[] }) {
         body: JSON.stringify(body),
       });
       const data = await res.json();
-      if (!res.ok || !data.url) throw new Error(data.error ?? "No se pudo iniciar el pago.");
+      if (!res.ok || !data.url) throw new Error(data.error ?? copy.errorGeneric);
       window.location.href = data.url;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo iniciar el pago.");
+      setError(err instanceof Error ? err.message : copy.errorGeneric);
       setLoading(false);
     }
   }
 
   return (
-    <div className="bg-ink-soft border border-[rgba(237,230,216,0.14)] rounded-[2px] p-6">
-      <div className="flex gap-2 mb-5">
-        <button
-          type="button"
-          onClick={() => setPlan("session")}
-          className={`flex-1 text-left px-4 py-3 rounded-[3px] border text-sm ${
-            plan === "session" ? "border-clay bg-[rgba(190,90,52,0.12)]" : "border-[rgba(237,230,216,0.2)]"
-          }`}
-        >
-          <div className="font-semibold">Sesión individual</div>
-          <div className="opacity-70 text-xs mt-0.5">$100 · 60 minutos</div>
-        </button>
-        <button
-          type="button"
-          onClick={() => setPlan("pack")}
-          className={`flex-1 text-left px-4 py-3 rounded-[3px] border text-sm ${
-            plan === "pack" ? "border-clay bg-[rgba(190,90,52,0.12)]" : "border-[rgba(237,230,216,0.2)]"
-          }`}
-        >
-          <div className="font-semibold">Paquete de 4 sesiones</div>
-          <div className="opacity-70 text-xs mt-0.5">$340 · incluye 1 mes de Comunidad</div>
-        </button>
+    <div className="bg-ink-soft text-paper border border-[rgba(237,230,216,0.14)] rounded-[2px] p-6">
+      <div className={`grid gap-2 mb-5 ${plans.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"}`}>
+        {plans.map((p) => (
+          <button
+            key={p}
+            type="button"
+            onClick={() => choosePlan(p)}
+            aria-pressed={plan === p}
+            className={`text-left px-4 py-3 rounded-[3px] border text-sm ${
+              plan === p ? "border-clay bg-[rgba(190,90,52,0.12)]" : "border-[rgba(237,230,216,0.2)]"
+            }`}
+          >
+            <div className="font-semibold">{copy.plans[p].name}</div>
+            <div className="opacity-70 text-xs mt-0.5">{copy.plans[p].meta}</div>
+          </button>
+        ))}
       </div>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-3.5" noValidate>
-        {plan === "session" && (
+        {plan !== "pack" && (
           <div>
-            {slots.length === 0 ? (
+            {planSlots.length === 0 ? (
               <p className="text-sm opacity-60">
-                No hay horarios disponibles ahora mismo — escríbeme a{" "}
+                {copy.noSlotsBefore}{" "}
                 <a href={`mailto:${ALT_PAYMENT_EMAIL}`} className="text-clay-soft underline">
                   {ALT_PAYMENT_EMAIL}
                 </a>{" "}
-                y coordinamos.
+                {copy.noSlotsAfter}
               </p>
             ) : (
-              <SlotPicker slots={slots} slotId={slotId} onSelect={setSlotId} />
+              <SlotPicker key={plan} slots={planSlots} slotId={slotId} onSelect={setSlotId} locale={locale} copy={copy} />
             )}
           </div>
         )}
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Nombre</span>
+          <span>{copy.name}</span>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
+            autoComplete="name"
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(237,230,216,0.25)] bg-white text-ink"
           />
         </label>
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>Correo electrónico</span>
+          <span>{copy.email}</span>
           <input
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            autoComplete="email"
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(237,230,216,0.25)] bg-white text-ink"
           />
         </label>
 
-        {error && <p className="text-clay-soft text-sm">{error}</p>}
+        {error && <p role="alert" className="text-clay-soft text-sm">{error}</p>}
 
         <button
           type="submit"
           disabled={loading}
           className="font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform disabled:opacity-60"
         >
-          {loading ? "Redirigiendo a pago..." : plan === "session" ? "Pagar y reservar — $100" : "Comprar paquete — $340"}
+          {loading ? copy.redirecting : copy.pay[plan]}
         </button>
 
         <p className="text-xs opacity-55 pt-1">
-          ¿No puedes pagar con tarjeta? Escríbeme a{" "}
+          {copy.altPaymentBefore}{" "}
           <a href={`mailto:${ALT_PAYMENT_EMAIL}`} className="text-clay-soft underline">
             {ALT_PAYMENT_EMAIL}
           </a>{" "}
-          para coordinar por Zelle, PayPal o Pago Móvil (solo Venezuela).
+          {copy.altPaymentAfter}
         </p>
       </form>
     </div>

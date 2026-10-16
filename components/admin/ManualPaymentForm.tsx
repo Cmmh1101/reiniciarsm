@@ -2,7 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, MENTORIA_SESSION_PRICE_CENTS, MENTORIA_PACK_PRICE_CENTS } from "@/lib/pricing";
+import {
+  MENTORIA_SESSION_PRODUCT,
+  MENTORIA_PACK_PRODUCT,
+  TECH_SOS_PRODUCT,
+  MENTORIA_SESSION_PRICE_CENTS,
+  MENTORIA_PACK_PRICE_CENTS,
+  TECH_SOS_PRICE_CENTS,
+  isSlotProduct,
+  sessionTypeForProduct,
+} from "@/lib/pricing";
 import type { MentoriaSlot } from "@/lib/mentorias";
 
 const METHODS = [
@@ -12,6 +21,12 @@ const METHODS = [
   { value: "otro", label: "Otro" },
 ];
 
+const PRICE_BY_PRODUCT: Record<string, number> = {
+  [MENTORIA_SESSION_PRODUCT]: MENTORIA_SESSION_PRICE_CENTS,
+  [MENTORIA_PACK_PRODUCT]: MENTORIA_PACK_PRICE_CENTS,
+  [TECH_SOS_PRODUCT]: TECH_SOS_PRICE_CENTS,
+};
+
 export default function ManualPaymentForm({ availableSlots }: { availableSlots: MentoriaSlot[] }) {
   const router = useRouter();
   const [name, setName] = useState("");
@@ -19,6 +34,7 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
   const [product, setProduct] = useState(MENTORIA_SESSION_PRODUCT);
   const [amount, setAmount] = useState((MENTORIA_SESSION_PRICE_CENTS / 100).toString());
   const [paymentMethod, setPaymentMethod] = useState("zelle");
+  const [locale, setLocale] = useState("es");
   const [slotId, setSlotId] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -26,8 +42,8 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
 
   function handleProductChange(value: string) {
     setProduct(value);
-    setAmount(((value === MENTORIA_SESSION_PRODUCT ? MENTORIA_SESSION_PRICE_CENTS : MENTORIA_PACK_PRICE_CENTS) / 100).toString());
-    if (value !== MENTORIA_SESSION_PRODUCT) setSlotId("");
+    setAmount((PRICE_BY_PRODUCT[value] / 100).toString());
+    setSlotId("");
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -53,6 +69,7 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
           amount_cents: amountCents,
           payment_method: paymentMethod,
           slot_id: slotId || null,
+          locale,
         }),
       });
       const data = await res.json();
@@ -94,7 +111,7 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
           </label>
         </div>
 
-        <div className="grid grid-cols-3 gap-3.5">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
             <span>Producto</span>
             <select
@@ -102,7 +119,8 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
               onChange={(e) => handleProductChange(e.target.value)}
               className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
             >
-              <option value={MENTORIA_SESSION_PRODUCT}>Sesión individual</option>
+              <option value={MENTORIA_SESSION_PRODUCT}>Sesión 1:1 (60 min)</option>
+              <option value={TECH_SOS_PRODUCT}>Tech SOS (30 min)</option>
               <option value={MENTORIA_PACK_PRODUCT}>Paquete de 4</option>
             </select>
           </label>
@@ -131,9 +149,20 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
               ))}
             </select>
           </label>
+          <label className="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Idioma del correo</span>
+            <select
+              value={locale}
+              onChange={(e) => setLocale(e.target.value)}
+              className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
+            >
+              <option value="es">Español</option>
+              <option value="en">English</option>
+            </select>
+          </label>
         </div>
 
-        {product === MENTORIA_SESSION_PRODUCT && (
+        {isSlotProduct(product) && (
           <label className="flex flex-col gap-1.5 text-sm font-semibold">
             <span>Horario (opcional — deja en blanco si coordinas después)</span>
             <select
@@ -142,7 +171,9 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
               className="font-body text-sm px-3 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
             >
               <option value="">Sin asignar</option>
-              {availableSlots.map((slot) => (
+              {availableSlots
+                .filter((slot) => slot.session_type === sessionTypeForProduct(product))
+                .map((slot) => (
                 <option key={slot.id} value={slot.id}>
                   {new Date(slot.start_time).toLocaleString("es", {
                     timeZone: "America/Caracas",

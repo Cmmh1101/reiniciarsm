@@ -1,7 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { MentoriaSlot } from "@/lib/mentorias";
+import type { Locale } from "@/lib/i18n/config";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
 type View = "week" | "month";
 
@@ -32,17 +34,24 @@ function addMonths(d: Date, n: number) {
   return new Date(d.getFullYear(), d.getMonth() + n, 1);
 }
 
-const WEEKDAY_LABELS = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"];
-
 export default function SlotPicker({
   slots,
   slotId,
   onSelect,
+  locale,
+  copy,
 }: {
   slots: MentoriaSlot[];
   slotId: string;
   onSelect: (id: string) => void;
+  locale: Locale;
+  copy: Dictionary["booking"];
 }) {
+  const WEEKDAY_LABELS = copy.weekdays;
+  // Resolved after mount so server and client markup match.
+  const [timeZone, setTimeZone] = useState("");
+  useEffect(() => setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone), []);
+
   const [view, setView] = useState<View>("week");
   const today = useMemo(() => startOfDay(new Date()), []);
   const [weekStart, setWeekStart] = useState(() => startOfWeek(today));
@@ -77,14 +86,14 @@ export default function SlotPicker({
           onClick={() => setView("week")}
           className={`text-xs px-3 py-1.5 rounded-full border ${view === "week" ? "bg-clay text-white border-clay" : "border-[rgba(237,230,216,0.25)]"}`}
         >
-          Semana
+          {copy.week}
         </button>
         <button
           type="button"
           onClick={() => setView("month")}
           className={`text-xs px-3 py-1.5 rounded-full border ${view === "month" ? "bg-clay text-white border-clay" : "border-[rgba(237,230,216,0.25)]"}`}
         >
-          Mes
+          {copy.month}
         </button>
       </div>
 
@@ -100,8 +109,8 @@ export default function SlotPicker({
               ←
             </button>
             <span className="text-xs opacity-70">
-              {weekStart.toLocaleDateString("es", { day: "numeric", month: "short" })} –{" "}
-              {addDays(weekStart, 6).toLocaleDateString("es", { day: "numeric", month: "short" })}
+              {weekStart.toLocaleDateString(locale, { day: "numeric", month: "short" })} –{" "}
+              {addDays(weekStart, 6).toLocaleDateString(locale, { day: "numeric", month: "short" })}
             </span>
             <button
               type="button"
@@ -150,7 +159,7 @@ export default function SlotPicker({
               ←
             </button>
             <span className="text-xs opacity-70 capitalize">
-              {monthStart.toLocaleDateString("es", { month: "long", year: "numeric" })}
+              {monthStart.toLocaleDateString(locale, { month: "long", year: "numeric" })}
             </span>
             <button type="button" onClick={() => setMonthStart((m) => addMonths(m, 1))} className="text-sm px-2 py-1">
               →
@@ -199,10 +208,11 @@ export default function SlotPicker({
 
       {selectedDay && (
         <>
-          <span className="text-sm font-semibold block mb-2">Elige una hora</span>
+          <span className="text-sm font-semibold block mb-1">{copy.chooseTime}</span>
+          {timeZone && <span className="text-xs opacity-55 block mb-2">{copy.timezoneNote}: {timeZone}</span>}
           <div className="flex flex-wrap gap-2">
             {timesForSelectedDay.map((slot) => {
-              const label = new Date(slot.start_time).toLocaleTimeString("es", { hour: "numeric", minute: "2-digit" });
+              const label = new Date(slot.start_time).toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" });
               return (
                 <button
                   key={slot.id}

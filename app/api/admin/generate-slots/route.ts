@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { generateSlotTimes, WEEKDAYS } from "@/lib/availability";
+import { SESSION_DURATION_MINUTES, SOS_DURATION_MINUTES } from "@/lib/pricing";
 
 const VALID_DAYS = new Set<string>(WEEKDAYS.map((w) => w.value));
 const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -16,6 +17,8 @@ export async function POST(request: Request) {
   const windows: { start: string; end: string }[] = Array.isArray(body?.windows) ? body.windows : [];
   const rangeStart = body?.range_start;
   const rangeEnd = body?.range_end;
+  const sessionType = body?.session_type === "sos" ? "sos" : "session";
+  const durationMinutes = sessionType === "sos" ? SOS_DURATION_MINUTES : SESSION_DURATION_MINUTES;
 
   if (
     days.length === 0 ||
@@ -29,7 +32,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
   }
 
-  const slotTimes = generateSlotTimes({ days, windows, rangeStart, rangeEnd });
+  const slotTimes = generateSlotTimes({ days, windows, rangeStart, rangeEnd, durationMinutes });
   if (slotTimes.length === 0) {
     return NextResponse.json({ created: 0, skipped: 0 });
   }
@@ -38,7 +41,7 @@ export async function POST(request: Request) {
   const { data, error } = await supabase
     .from("mentoria_slots")
     .upsert(
-      slotTimes.map((start_time) => ({ start_time, duration_minutes: 60 })),
+      slotTimes.map((start_time) => ({ start_time, duration_minutes: durationMinutes, ...(sessionType === "sos" ? { session_type: sessionType } : {}) })),
       { onConflict: "start_time", ignoreDuplicates: true }
     )
     .select("id");

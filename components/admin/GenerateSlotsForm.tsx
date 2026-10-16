@@ -15,6 +15,7 @@ function weeksFromNowStr(weeks: number) {
 
 export default function GenerateSlotsForm() {
   const router = useRouter();
+  const [sessionType, setSessionType] = useState<"session" | "sos">("session");
   const [days, setDays] = useState<string[]>([]);
   const [windows, setWindows] = useState([{ start: "08:00", end: "10:00" }]);
   const [rangeStart, setRangeStart] = useState(todayStr());
@@ -50,7 +51,7 @@ export default function GenerateSlotsForm() {
       const res = await fetch("/api/admin/generate-slots", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ days, windows, range_start: rangeStart, range_end: rangeEnd }),
+        body: JSON.stringify({ days, windows, range_start: rangeStart, range_end: rangeEnd, session_type: sessionType }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "No se pudieron crear los horarios.");
@@ -69,6 +70,28 @@ export default function GenerateSlotsForm() {
       <p className="text-xs opacity-60 mb-4">Hora de Venezuela (UTC-4). Se omiten los horarios que ya existan.</p>
 
       <div className="flex flex-col gap-4">
+        <div>
+          <span className="text-sm font-semibold block mb-2">Tipo de horario</span>
+          <div className="flex flex-wrap gap-2">
+            {([
+              ["session", "Sesión 1:1 (60 min)"],
+              ["sos", "Tech SOS (30 min)"],
+            ] as const).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setSessionType(value)}
+                className={`text-xs px-3 py-1.5 rounded-full border ${
+                  sessionType === value ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+          <p className="text-xs opacity-60 mt-2">Usa ventanas horarias distintas para cada tipo: un mismo inicio de hora solo puede tener un tipo.</p>
+        </div>
+
         <div>
           <span className="text-sm font-semibold block mb-2">Días de la semana</span>
           <div className="flex flex-wrap gap-2">

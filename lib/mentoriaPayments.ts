@@ -1,7 +1,9 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
-import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT } from "@/lib/pricing";
+import { MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT, isSlotProduct } from "@/lib/pricing";
+import { formatSlotLabel, packConfirmationEmail, slotConfirmationEmail } from "@/lib/bookingCopy";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 import { buildGoogleCalendarLink } from "@/lib/googleCalendar";
 
 /** Notification to Carla herself, alongside the customer's own confirmation email. */
@@ -19,6 +21,7 @@ interface RecordPaymentInput {
   paymentMethod: string; // 'stripe' | 'zelle' | 'paypal' | 'pago_movil' | 'otro'
   stripePaymentId: string | null;
   slotId?: string | null;
+  locale?: Locale; // language of the customer-facing confirmation email
 }
 
 /**
@@ -33,6 +36,7 @@ export async function recordMentoriaPayment({
   paymentMethod,
   stripePaymentId,
   slotId,
+  locale = DEFAULT_LOCALE,
 }: RecordPaymentInput) {
   const supabase = createSupabaseAdminClient();
 
@@ -56,7 +60,10 @@ export async function recordMentoriaPayment({
     status: "completed",
   });
 
-  if (product === MENTORIA_SESSION_PRODUCT) {
+  if (isSlotProduct(product)) {
+    const sos = product === TECH_SOS_PRODUCT;
+    const serviceLabel = sos ? "Tech SOS (30 min)" : "Sesión 1:1 (60 min)";
+
     if (slotId) {
       // Atomic: only succeeds if the slot is still unbooked, guarding against
       // a race between checkout-session creation and the webhook (or, for a
@@ -66,9 +73,10 @@ export async function recordMentoriaPayment({
         .update({ is_booked: true })
         .eq("id", slotId)
         .eq("is_booked", false)
-        .select("id, start_time");
+        .select("id, start_time, duration_minutes");
 
       if (updatedSlots && updatedSlots.length > 0) {
+        const slot = updatedSlots[0];
         await supabase.from("mentoria_bookings").insert({
           slot_id: slotId,
           contact_id: contact.id,
@@ -76,32 +84,21 @@ export async function recordMentoriaPayment({
           status: "confirmed",
         });
 
-        const slotLabel = new Date(updatedSlots[0].start_time).toLocaleString("es", {
-          timeZone: "America/Caracas",
-          weekday: "long",
-          day: "numeric",
-          month: "long",
-          hour: "numeric",
-          minute: "2-digit",
-          timeZoneName: "short",
-        });
-        const subject = "Confirmación de tu sesión — Mentoría Next You";
-        const resendId = await sendConfirmationEmail(
-          email,
-          subject,
-          `Hola ${name},\n\nConfirmamos tu sesión el ${slotLabel} — te comparto el enlace de Google Meet antes de la sesión.\n\n¿Necesitas reagendar? Escríbeme a hello@carlamontano.io.\n\nNos vemos pronto,\nCarla`
-        );
-        await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
+        const customerEmail = slotConfirmationEmail(locale, product, name, formatSlotLabel(locale, slot.start_time));
+        const resendId = await sendConfirmationEmail(email, customerEmail.subject, customerEmail.text);
+        await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject: customerEmail.subject });
 
+        // Carla's own notification stays in Spanish.
+        const slotLabel = formatSlotLabel("es", slot.start_time);
         const calendarLink = buildGoogleCalendarLink({
-          title: `Mentoría Next You — ${name}`,
-          startISO: updatedSlots[0].start_time,
-          durationMinutes: 60,
-          details: `Sesión 1:1 con ${name} (${email}). Recuerda enviarle el enlace de Google Meet.`,
+          title: `${serviceLabel} — ${name}`,
+          startISO: slot.start_time,
+          durationMinutes: slot.duration_minutes ?? (sos ? 30 : 60),
+          details: `${serviceLabel} con ${name} (${email}). Recuerda enviarle el enlace de la videollamada.`,
         });
         await notifyAdmin(
-          `Nueva sesión reservada — ${name}`,
-          `${name} (${email}) reservó una sesión 1:1 para el ${slotLabel}.\n\nMétodo de pago: ${paymentMethod} · $${(amountCents / 100).toFixed(2)}\n\nAgregar a Google Calendar → ${calendarLink}`
+          `Nueva sesión reservada: ${serviceLabel} — ${name}`,
+          `${name} (${email}) reservó ${serviceLabel} para el ${slotLabel}.\n\nMétodo de pago: ${paymentMethod} · $${(amountCents / 100).toFixed(2)} · Idioma: ${locale}\n\nAgregar a Google Calendar → ${calendarLink}`
         );
       } else {
         console.error("recordMentoriaPayment: slot already booked at payment time", slotId);
@@ -120,17 +117,13 @@ export async function recordMentoriaPayment({
       metadata: { product, stripe_payment_id: stripePaymentId, payment_method: paymentMethod, includes: "1 mes de Comunidad Next You" },
     });
 
-    const subject = "Confirmación de tu paquete de 4 sesiones — Mentoría Next You";
-    const resendId = await sendConfirmationEmail(
-      email,
-      subject,
-      `Hola ${name},\n\n¡Gracias por tu compra! Confirmamos tu paquete de 4 sesiones de Mentoría Next You, que incluye 1 mes de membresía Comunidad Next You de regalo.\n\nTe escribo pronto para coordinar tus horarios.\n\nSaludos,\nCarla`
-    );
-    await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
+    const customerEmail = packConfirmationEmail(locale, name);
+    const resendId = await sendConfirmationEmail(email, customerEmail.subject, customerEmail.text);
+    await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject: customerEmail.subject });
 
     await notifyAdmin(
       `Nueva compra: Paquete de 4 sesiones — ${name}`,
-      `${name} (${email}) compró el paquete de 4 sesiones de Mentoría Next You por $${(amountCents / 100).toFixed(2)} (${paymentMethod}).\n\nEscríbele para coordinar horarios.`
+      `${name} (${email}) compró el paquete de 4 sesiones 1:1 por $${(amountCents / 100).toFixed(2)} (${paymentMethod}). Idioma: ${locale}.\n\nEscríbele para coordinar horarios.`
     );
   }
 }

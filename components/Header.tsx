@@ -8,6 +8,7 @@ import { localizedPath, type RouteKey } from "@/lib/i18n/routes";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 
 const DESKTOP_LINKS: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [
+  { route: "home", label: "home" },
   { route: "about", label: "about" },
   { route: "work", label: "work" },
   { route: "ventures", label: "ventures" },
@@ -16,7 +17,7 @@ const DESKTOP_LINKS: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [
   { route: "contact", label: "contact" },
 ];
 
-const MOBILE_LINKS: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [{ route: "home", label: "home" }, { route: "workWithMe", label: "workWithMe" }, ...DESKTOP_LINKS];
+const MOBILE_LINKS: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [...DESKTOP_LINKS.slice(0, 1), { route: "workWithMe", label: "workWithMe" }, ...DESKTOP_LINKS.slice(1)];
 
 export default function Header({ locale, nav, siteName }: { locale: Locale; nav: Dictionary["nav"]; siteName: string }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,7 +35,7 @@ export default function Header({ locale, nav, siteName }: { locale: Locale; nav:
           {siteName}
         </Link>
 
-        <div className="hidden lg:flex gap-6 font-mono text-[11.5px] tracking-wide uppercase">
+        <div className="hidden lg:flex gap-5 xl:gap-6 font-mono text-[11.5px] tracking-wide uppercase">
           {DESKTOP_LINKS.map((link) => (
             <Link key={link.route} href={localizedPath(locale, link.route)} className="opacity-65 hover:opacity-100 transition-opacity">
               {nav[link.label]}

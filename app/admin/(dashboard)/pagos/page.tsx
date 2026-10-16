@@ -1,5 +1,5 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT } from "@/lib/pricing";
+import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT } from "@/lib/pricing";
 import { getAvailableSlots } from "@/lib/mentorias";
 import ManualPaymentForm from "@/components/admin/ManualPaymentForm";
 
@@ -14,8 +14,9 @@ interface PaymentRow {
 }
 
 const PRODUCT_LABELS: Record<string, string> = {
-  [MENTORIA_SESSION_PRODUCT]: "Mentoría — Sesión individual",
-  [MENTORIA_PACK_PRODUCT]: "Mentoría — Paquete de 4",
+  [MENTORIA_SESSION_PRODUCT]: "Sesión 1:1 (60 min)",
+  [MENTORIA_PACK_PRODUCT]: "Paquete de 4 sesiones",
+  [TECH_SOS_PRODUCT]: "Tech SOS (30 min)",
 };
 
 const METHOD_LABELS: Record<string, string> = {

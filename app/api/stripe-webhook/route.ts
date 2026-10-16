@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { createStripeClient } from "@/lib/stripe";
 import { recordMentoriaPayment } from "@/lib/mentoriaPayments";
 import { recordProductPurchase } from "@/lib/productPurchases";
+import { isLocale } from "@/lib/i18n/config";
 
 export async function POST(request: Request) {
   const body = await request.text();
@@ -69,6 +70,8 @@ export async function POST(request: Request) {
       paymentMethod: "stripe",
       stripePaymentId: paymentId,
       slotId: metadata.slot_id ?? null,
+      // Checkouts created before language support existed carry no locale — those were all Spanish.
+      locale: isLocale(metadata.locale) ? metadata.locale : "es",
     });
   } catch (err) {
     console.error("stripe-webhook: recordMentoriaPayment failed", err);

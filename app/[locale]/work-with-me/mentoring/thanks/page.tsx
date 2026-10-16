@@ -1,17 +1,24 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { createStripeClient } from "@/lib/stripe";
 import { MENTORIA_PACK_PRODUCT } from "@/lib/pricing";
+import { isLocale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
 
 export const metadata: Metadata = {
-  title: "Gracias — Carla Montaño",
+  title: "Carla Montaño",
   robots: { index: false, follow: true },
 };
 
-export default async function MentoriasGraciasPage({
+export default async function BookingThanksPage({
+  params,
   searchParams,
 }: {
+  params: { locale: string };
   searchParams: { session_id?: string };
 }) {
+  if (!isLocale(params.locale)) notFound();
+  const { booking } = getDictionary(params.locale);
   let isPack = false;
 
   if (searchParams.session_id) {
@@ -28,18 +35,9 @@ export default async function MentoriasGraciasPage({
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-6 py-24">
       <div className="text-center max-w-lg">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">Pago confirmado</p>
-        <h1 className="font-display text-3xl md:text-4xl mb-4">¡Gracias!</h1>
-        {isPack ? (
-          <p className="opacity-70">
-            Tu paquete de 4 sesiones quedó confirmado, junto con tu mes de Comunidad Next You. Te escribo por correo
-            en los próximos días para coordinar tus horarios.
-          </p>
-        ) : (
-          <p className="opacity-70">
-            Tu sesión quedó reservada. Te llegará la confirmación con el enlace de la videollamada por correo.
-          </p>
-        )}
+        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{booking.thanksEyebrow}</p>
+        <h1 className="font-display text-3xl md:text-4xl mb-4">{booking.thanksTitle}</h1>
+        <p className="opacity-70">{isPack ? booking.thanksPack : booking.thanksSession}</p>
       </div>
     </main>
   );

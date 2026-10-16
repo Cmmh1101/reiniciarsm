@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/adminAuth";
 import { recordMentoriaPayment } from "@/lib/mentoriaPayments";
-import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT } from "@/lib/pricing";
+import { MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT } from "@/lib/pricing";
+import { isLocale } from "@/lib/i18n/config";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const VALID_PRODUCTS = [MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT];
+const VALID_PRODUCTS = [MENTORIA_SESSION_PRODUCT, MENTORIA_PACK_PRODUCT, TECH_SOS_PRODUCT];
 const VALID_METHODS = ["zelle", "paypal", "pago_movil", "otro"];
 
 export async function POST(request: Request) {
@@ -39,6 +40,7 @@ export async function POST(request: Request) {
       paymentMethod,
       stripePaymentId: null,
       slotId,
+      locale: isLocale(body?.locale) ? body.locale : undefined,
     });
   } catch (err) {
     console.error("manual-payment: recordMentoriaPayment failed", err);

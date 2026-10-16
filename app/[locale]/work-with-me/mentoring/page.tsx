@@ -69,9 +69,11 @@ const FAQ = [
   { q: "¿Qué hace diferente esta mentoría?", a: "No te doy una lista interminable de cursos. Identificamos juntas/os tu pilar prioritario, resolvemos tus dudas reales y sales con un plan de acción — con la misma metodología que yo usé para reiniciar muchas veces." },
 ];
 
-export default async function MentoriasPage({ params }: { params: { locale: string } }) {
+export default async function MentoriasPage({ params, searchParams }: { params: { locale: string }; searchParams: { canceled?: string } }) {
   if (!isLocale(params.locale)) notFound();
   const { common } = getDictionary(params.locale);
+  // The page copy is Spanish for now, so the booking widget stays Spanish as well.
+  const { booking } = getDictionary("es");
   const slots = await getAvailableSlots();
 
   return (
@@ -197,7 +199,10 @@ export default async function MentoriasPage({ params }: { params: { locale: stri
               )}
             </ul>
           </div>
-          <BookingWidget slots={slots} />
+          <div id="book" className="scroll-mt-24">
+            {searchParams.canceled && <p role="status" className="text-sm text-clay-soft mb-4">{booking.canceled}</p>}
+            <BookingWidget slots={slots} locale="es" copy={booking} plans={["session", "pack"]} source="mentoring" />
+          </div>
         </div>
       </section>
 

@@ -6,30 +6,38 @@ interface BookingRow {
   id: string;
   status: string;
   created_at: string;
-  mentoria_slots: { start_time: string; duration_minutes: number } | null;
+  mentoria_slots: { start_time: string; duration_minutes: number; session_type?: string } | null;
   contacts: { name: string | null; email: string } | null;
 }
 
 async function getBookings(): Promise<BookingRow[]> {
   const supabase = createSupabaseAdminClient();
-  const { data, error } = await supabase
+  // session_type exists once migration 0016 is applied; fall back to the original columns until then.
+  const withType = await supabase
+    .from("mentoria_bookings")
+    .select("id, status, created_at, mentoria_slots(start_time, duration_minutes, session_type), contacts(name, email)")
+    .order("created_at", { ascending: false });
+  if (!withType.error) return (withType.data ?? []) as unknown as BookingRow[];
+
+  const legacy = await supabase
     .from("mentoria_bookings")
     .select("id, status, created_at, mentoria_slots(start_time, duration_minutes), contacts(name, email)")
     .order("created_at", { ascending: false });
-
-  if (error) {
-    console.error("admin getBookings failed", error);
+  if (legacy.error) {
+    console.error("admin getBookings failed", legacy.error);
     return [];
   }
-  return (data ?? []) as unknown as BookingRow[];
+  return (legacy.data ?? []) as unknown as BookingRow[];
 }
+
+const TYPE_LABEL: Record<string, string> = { sos: "Tech SOS · 30 min", session: "Sesión 1:1 · 60 min" };
 
 export default async function AdminMentoriasPage() {
   const [bookings, availableSlots] = await Promise.all([getBookings(), getAvailableSlots()]);
 
   return (
     <main className="p-10">
-      <h1 className="font-display text-2xl mb-1">Mentorías</h1>
+      <h1 className="font-display text-2xl mb-1">Sesiones y mentorías</h1>
       <p className="text-xs opacity-60 mb-6">Horarios en hora de Venezuela (UTC-4).</p>
 
       <GenerateSlotsForm />
@@ -51,6 +59,7 @@ export default async function AdminMentoriasPage() {
                 hour: "numeric",
                 minute: "2-digit",
               })}
+              {slot.session_type === "sos" && <span className="ml-1.5 font-mono text-[10px] text-clay">SOS</span>}
             </span>
           ))}
         </div>
@@ -65,6 +74,7 @@ export default async function AdminMentoriasPage() {
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Contacto</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Horario</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Tipo</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">Estado</th>
             </tr>
           </thead>
@@ -87,6 +97,7 @@ export default async function AdminMentoriasPage() {
                       })
                     : "—"}
                 </td>
+                <td className="py-3 opacity-70">{TYPE_LABEL[b.mentoria_slots?.session_type ?? "session"]}</td>
                 <td className="py-3 opacity-70">{b.status}</td>
               </tr>
             ))}
