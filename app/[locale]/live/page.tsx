@@ -69,6 +69,9 @@ export default function LivePage({ params }: { params: { locale: string } }) {
             {live.business.ctaSecondary}
           </Link>
         </div>
+        <Link href={localizedPath(locale, "schools")} className="inline-block mt-6 underline font-mono text-xs uppercase tracking-wide opacity-85">
+          {live.business.schoolsLink}
+        </Link>
       </section>
 
       <section className="bg-paper-soft px-[8vw] py-14">

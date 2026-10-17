@@ -105,6 +105,9 @@ export default async function WorkWithMePage({
           <Link href={localizedPath(locale, "ventures")} className="underline font-mono text-xs uppercase tracking-wide">
             {w.agencyCta} →
           </Link>
+          <Link href={localizedPath(locale, "schools")} className="underline font-mono text-xs uppercase tracking-wide ml-5">
+            {getDictionary(locale).nav.schools} →
+          </Link>
         </div>
       </section>
     </main>

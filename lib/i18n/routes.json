@@ -82,5 +82,9 @@
   "live": {
     "en": "live",
     "es": "live"
+  },
+  "schools": {
+    "en": "schools",
+    "es": "escuelas"
   }
 }

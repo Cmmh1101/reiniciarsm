@@ -10,6 +10,7 @@ const EXPLORE: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [
   { route: "about", label: "about" },
   { route: "workWithMe", label: "workWithMe" },
   { route: "work", label: "work" },
+  { route: "schools", label: "schools" },
   { route: "shop", label: "shop" },
   { route: "resources", label: "resources" },
   { route: "contact", label: "contact" },
