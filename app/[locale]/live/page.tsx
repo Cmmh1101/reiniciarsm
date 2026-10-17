@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsletterForm from "@/components/NewsletterForm";
+import { MONTANO_SYSTEMS_URL } from "@/lib/constants";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
@@ -46,6 +47,28 @@ export default function LivePage({ params }: { params: { locale: string } }) {
             <span className="mt-auto pt-2 font-mono text-xs uppercase tracking-wide text-clay">{c.cta} →</span>
           </Link>
         ))}
+      </section>
+
+      <section className="bg-ink text-paper px-[8vw] py-16">
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{live.business.eyebrow}</p>
+        <h2 className="font-display text-[clamp(26px,3.4vw,40px)] leading-[1.1] mb-4 max-w-[22ch]">{live.business.title}</h2>
+        <p className="opacity-85 max-w-[58ch] mb-8">{live.business.body}</p>
+        <div className="flex flex-wrap gap-4">
+          <a
+            href={MONTANO_SYSTEMS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform"
+          >
+            {live.business.ctaPrimary} ↗
+          </a>
+          <Link
+            href={`${localizedPath(locale, "contact")}?intent=custom-build`}
+            className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] border border-current inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform"
+          >
+            {live.business.ctaSecondary}
+          </Link>
+        </div>
       </section>
 
       <section className="bg-paper-soft px-[8vw] py-14">

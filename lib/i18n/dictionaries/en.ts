@@ -569,6 +569,13 @@ export const en = {
       { key: "community", title: "Join the community", body: "A community and method for people navigating a career transition, with live sessions and accountability.", cta: "Explore the community" },
       { key: "shop", title: "Templates, guides and ebooks", body: "Practical resources you can use today, delivered to your inbox.", cta: "Browse the shop" },
     ],
+    business: {
+      eyebrow: "For businesses and schools",
+      title: "Need something built or audited?",
+      body: "Montano Systems builds software, AI-enabled systems, workflow automation and integrations — and audits the systems you already have. Schools can get website templates with implementation.",
+      ctaPrimary: "Visit Montano Systems",
+      ctaSecondary: "Tell me about your project",
+    },
     newsletterTitle: "Or just stay in touch",
   },
 

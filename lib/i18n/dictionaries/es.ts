@@ -561,6 +561,13 @@ export const es: Dictionary = {
       { key: "community", title: "Únete a la comunidad", body: "Una comunidad y un método para quienes están en transición de carrera, con sesiones en vivo y acompañamiento.", cta: "Explorar la comunidad" },
       { key: "shop", title: "Plantillas, guías y ebooks", body: "Recursos prácticos que puedes usar hoy, entregados a tu correo.", cta: "Ver la tienda" },
     ],
+    business: {
+      eyebrow: "Para negocios y escuelas",
+      title: "¿Necesitas que alguien lo construya o lo audite?",
+      body: "Montano Systems construye software, sistemas con IA, automatización de flujos e integraciones — y audita los sistemas que ya tienes. Las escuelas pueden obtener plantillas web con implementación.",
+      ctaPrimary: "Visitar Montano Systems",
+      ctaSecondary: "Cuéntame tu proyecto",
+    },
     newsletterTitle: "O simplemente mantente en contacto",
   },
 
