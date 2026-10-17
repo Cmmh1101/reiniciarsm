@@ -27,14 +27,14 @@ export default async function ResourcesPage({ params }: { params: { locale: stri
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-14">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-14">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{resources.eyebrow}</p>
         <h1 className="font-display text-[clamp(32px,4.4vw,52px)] leading-[1.08] mb-4 max-w-[20ch]">{resources.title}</h1>
         <p className="opacity-75 max-w-[56ch] text-base">{resources.lead}</p>
       </header>
 
       {posts.length > 0 ? (
-        <div className="grid md:grid-cols-3 gap-7 px-[8vw] py-16">
+        <div className="grid md:grid-cols-3 gap-7 px-page py-16">
           {posts.map((post) => (
             <Link key={post.id} href={localizedPath(locale, "resourcePost", { slug: post.slug })} className="flex flex-col gap-3.5">
               {post.featured_image_url ? (
@@ -57,10 +57,10 @@ export default async function ResourcesPage({ params }: { params: { locale: stri
           ))}
         </div>
       ) : (
-        <p className="opacity-60 px-[8vw] py-16">{resources.empty}</p>
+        <p className="opacity-60 px-page py-16">{resources.empty}</p>
       )}
 
-      <section className="bg-paper-soft px-[8vw] py-[70px]">
+      <section className="bg-paper-soft px-page py-[70px]">
         <div className="max-w-[560px]">
           <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3.5">{newsletter.title}</h2>
           <p className="opacity-70 mb-7">{newsletter.body}</p>

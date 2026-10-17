@@ -25,7 +25,7 @@ export default function Header({ locale, nav, siteName }: { locale: Locale; nav:
 
   return (
     <nav className="sticky top-0 z-50 bg-[rgba(237,230,216,0.92)] backdrop-blur-[10px] border-b border-[rgba(20,25,43,0.12)]">
-      <div className="flex justify-between items-center gap-4 px-[8vw] py-[16px]">
+      <div className="flex justify-between items-center gap-4 px-page py-[16px]">
         <Link href={localizedPath(locale, "home")} className="flex items-center gap-2.5 font-display font-semibold text-[18px] tracking-tight shrink-0" onClick={close}>
           <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" aria-hidden="true">
             <path d="M3 19 C 7 14, 6 8, 12 8 C 18 8, 15 15, 21 15" stroke="var(--clay)" strokeWidth="1.6" strokeLinecap="round" />
@@ -71,7 +71,7 @@ export default function Header({ locale, nav, siteName }: { locale: Locale; nav:
       </div>
 
       {menuOpen && (
-        <div className="lg:hidden border-t border-[rgba(20,25,43,0.12)] px-[8vw] py-5 flex flex-col gap-1">
+        <div className="lg:hidden border-t border-[rgba(20,25,43,0.12)] px-page py-5 flex flex-col gap-1">
           {MOBILE_LINKS.map((link) => (
             <Link
               key={link.route}

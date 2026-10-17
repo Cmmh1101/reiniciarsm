@@ -38,13 +38,13 @@ export default function VenturesPage({ params }: { params: { locale: string } })
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-20">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{ventures.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{ventures.title}</h1>
         <p className="text-lg opacity-85 max-w-[52ch]">{ventures.lead}</p>
       </header>
 
-      <section className="px-[8vw] py-20 grid lg:grid-cols-3 gap-8">
+      <section className="px-page py-20 grid lg:grid-cols-3 gap-8">
         {ventures.items.map((v) => (
           <article key={v.key} className="border border-[rgba(20,25,43,0.15)] rounded-[2px] p-8 flex flex-col gap-3">
             <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{common.status[v.status as keyof typeof common.status]}</span>
@@ -57,7 +57,7 @@ export default function VenturesPage({ params }: { params: { locale: string } })
         ))}
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-20">
+      <section className="bg-paper-soft px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-8">{ventures.routingTitle}</h2>
         <dl className="grid sm:grid-cols-2 gap-x-12 gap-y-5 max-w-[900px]">
           {ventures.routing.map((r) => (

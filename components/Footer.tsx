@@ -29,7 +29,7 @@ const headingClass = "font-mono text-[10.5px] tracking-widest uppercase opacity-
 export default function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const { nav, footer, site, newsletter } = dict;
   return (
-    <footer className="bg-ink text-paper px-[8vw] pt-14 pb-8">
+    <footer className="bg-ink text-paper px-page pt-14 pb-8">
       <div className="pb-10 mb-10 border-b border-[rgba(237,230,216,0.14)] grid md:grid-cols-[1fr_1.2fr] gap-6 md:gap-12 items-center">
         <div>
           <h2 className="font-display text-xl mb-1.5">{newsletter.title}</h2>

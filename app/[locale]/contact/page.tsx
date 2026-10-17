@@ -17,7 +17,7 @@ export default function ContactPage({ params, searchParams }: { params: { locale
   const { contact } = getDictionary(locale);
 
   return (
-    <main className="px-[8vw] py-24">
+    <main className="px-page py-24">
       <div className="grid md:grid-cols-[1fr_1fr] gap-16">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{contact.eyebrow}</p>

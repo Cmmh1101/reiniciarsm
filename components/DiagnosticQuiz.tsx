@@ -82,7 +82,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
   const progress = screen === "questions" ? (currentQuestion / PILLARS.length) * 100 : 0;
 
   return (
-    <div className="w-full bg-ink text-paper px-[8vw] py-24">
+    <div className="w-full bg-ink text-paper px-page py-24">
       <div className="max-w-[640px] mx-auto">
         {screen === "questions" && (
           <div className="h-1 rounded-full overflow-hidden mb-8 bg-[rgba(237,230,216,0.15)]">

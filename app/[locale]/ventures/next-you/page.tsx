@@ -27,13 +27,13 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-20">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{nextYou.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{nextYou.title}</h1>
         <p className="text-lg opacity-85 max-w-[56ch]">{nextYou.lead}</p>
       </header>
 
-      <section className="px-[8vw] py-20">
+      <section className="px-page py-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">{nextYou.methodEyebrow}</p>
         <h2 className="font-display text-[clamp(28px,3.6vw,44px)] mb-3">{nextYou.methodTitle}</h2>
         <p className="opacity-75 mb-10 max-w-[56ch]">{nextYou.methodLead}</p>
@@ -53,7 +53,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
         </p>
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-20">
+      <section className="bg-paper-soft px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{nextYou.actionsTitle}</h2>
         <div className="grid sm:grid-cols-2 gap-8">
           {nextYou.actions.map((a) => {

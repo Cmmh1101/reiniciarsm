@@ -20,13 +20,13 @@ export default function WorkPage({ params }: { params: { locale: string } }) {
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-20">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{work.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{work.title}</h1>
         <p className="text-lg opacity-85 max-w-[52ch]">{work.lead}</p>
       </header>
 
-      <section className="px-[8vw] py-20 grid md:grid-cols-2 gap-8">
+      <section className="px-page py-20 grid md:grid-cols-2 gap-8">
         {work.projects.map((p) => (
           <article key={p.name} className="border border-[rgba(20,25,43,0.15)] rounded-[2px] p-8 flex flex-col gap-3">
             <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{common.status[p.status as keyof typeof common.status]}</span>
@@ -49,7 +49,7 @@ export default function WorkPage({ params }: { params: { locale: string } }) {
         ))}
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-16 text-center">
+      <section className="bg-paper-soft px-page py-16 text-center">
         <h2 className="font-display text-[clamp(22px,2.6vw,30px)] mb-3">{work.ctaTitle}</h2>
         <p className="opacity-80 mb-6">{work.ctaBody}</p>
         <div className="flex gap-4 justify-center flex-wrap">

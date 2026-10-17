@@ -40,7 +40,7 @@ export default async function ProductPage({ params }: { params: { locale: string
   const showPurchaseCount = stats && stats.purchaseCount >= MIN_PURCHASES_TO_SHOW_COUNT;
 
   return (
-    <main className="px-[8vw] py-24">
+    <main className="px-page py-24">
       <Link
         href={localizedPath(locale, "shop")}
         className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity mb-10"

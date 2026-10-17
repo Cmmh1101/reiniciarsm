@@ -29,13 +29,13 @@ export default function LivePage({ params }: { params: { locale: string } }) {
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-14">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-14">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{live.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-4">{live.title}</h1>
         <p className="text-lg opacity-85 max-w-[52ch]">{live.lead}</p>
       </header>
 
-      <section className="px-[8vw] py-14 grid sm:grid-cols-2 gap-6 max-w-[1000px]">
+      <section className="px-page py-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {live.cards.map((c) => (
           <Link
             key={c.key}
@@ -49,7 +49,7 @@ export default function LivePage({ params }: { params: { locale: string } }) {
         ))}
       </section>
 
-      <section className="bg-ink text-paper px-[8vw] py-16">
+      <section className="bg-ink text-paper px-page py-16">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{live.business.eyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.4vw,40px)] leading-[1.1] mb-4 max-w-[22ch]">{live.business.title}</h2>
         <p className="opacity-85 max-w-[58ch] mb-8">{live.business.body}</p>
@@ -74,7 +74,7 @@ export default function LivePage({ params }: { params: { locale: string } }) {
         </Link>
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-14">
+      <section className="bg-paper-soft px-page py-14">
         <div className="max-w-[560px]">
           <h2 className="font-display text-[clamp(22px,2.8vw,30px)] mb-3">{live.newsletterTitle}</h2>
           <p className="opacity-70 mb-6">{newsletter.body}</p>

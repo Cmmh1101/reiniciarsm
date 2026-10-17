@@ -23,7 +23,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-20">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{s.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[20ch]">{s.title}</h1>
         <p className="text-lg opacity-85 max-w-[58ch] mb-9">{s.lead}</p>
@@ -37,7 +37,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </div>
       </header>
 
-      <section className="px-[8vw] py-20">
+      <section className="px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{s.ownershipTitle}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {s.ownership.map((o) => (
@@ -49,7 +49,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-20">
+      <section className="bg-paper-soft px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{s.levelsTitle}</h2>
         <div className="grid lg:grid-cols-2 gap-8">
           {s.levels.map((l) => (
@@ -81,7 +81,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
 
-      <section className="px-[8vw] py-20">
+      <section className="px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{s.addonsTitle}</h2>
         <p className="opacity-75 mb-10 max-w-[56ch]">{s.addonsLead}</p>
         <div className="grid md:grid-cols-2 gap-8">
@@ -95,7 +95,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
 
-      <section className="bg-ink text-paper px-[8vw] py-20">
+      <section className="bg-ink text-paper px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{s.howTitle}</h2>
         <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {s.how.map((h) => (
@@ -107,7 +107,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </ol>
       </section>
 
-      <section className="px-[8vw] py-20 grid md:grid-cols-[0.8fr_1.2fr] gap-12">
+      <section className="px-page py-20 grid md:grid-cols-[0.8fr_1.2fr] gap-12">
         <div>
           <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{s.careTitle}</h2>
           <p className="opacity-80 max-w-[44ch]">{s.careBody}</p>
@@ -125,7 +125,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
 
-      <section className="bg-clay text-paper text-center px-[8vw] py-20">
+      <section className="bg-clay text-paper text-center px-page py-20">
         <h2 className="font-display text-[clamp(26px,3.4vw,42px)] max-w-[22ch] mx-auto mb-4">{s.finalTitle}</h2>
         <p className="opacity-90 max-w-[48ch] mx-auto mb-8">{s.finalBody}</p>
         <Link href={request} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-ink text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">

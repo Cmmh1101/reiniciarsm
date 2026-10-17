@@ -13,7 +13,7 @@ export default function NotFound() {
   const { common, nav } = getDictionary(locale);
 
   return (
-    <main className="min-h-[70vh] flex items-center justify-center px-[8vw] text-center">
+    <main className="min-h-[70vh] flex items-center justify-center px-page text-center">
       <div>
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">404</p>
         <h1 className="font-display text-[clamp(30px,4.4vw,48px)] leading-[1.1] mb-5 max-w-[20ch] mx-auto">{common.notFoundTitle}</h1>

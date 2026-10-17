@@ -49,7 +49,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-[70px] pb-[50px]">
+      <header className="bg-ink text-paper px-page pt-[70px] pb-[50px]">
         <Link
           href={localizedPath(locale, "resources")}
           className="font-mono text-[11px] uppercase tracking-wide opacity-50 no-underline inline-flex items-center gap-1.5 mb-7"
@@ -88,9 +88,9 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
         <div className="aspect-[16/7] bg-gradient-to-br from-[#8a7458] to-[#3a4562]" />
       )}
 
-      <article lang={post.shown} className="max-w-[680px] mx-auto px-[8vw] py-[70px] prose-post" dangerouslySetInnerHTML={{ __html: post.content }} />
+      <article lang={post.shown} className="max-w-[680px] mx-auto px-page py-[70px] prose-post" dangerouslySetInnerHTML={{ __html: post.content }} />
 
-      <section className="bg-paper-soft px-[8vw] py-[60px]">
+      <section className="bg-paper-soft px-page py-[60px]">
         <div className="max-w-[560px] mx-auto">
           <h2 className="font-display text-[clamp(22px,2.8vw,30px)] mb-3">{newsletter.title}</h2>
           <p className="opacity-70 mb-6">{newsletter.body}</p>
@@ -98,7 +98,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
         </div>
       </section>
 
-      <section className="bg-clay text-paper text-center px-[8vw] py-[70px]">
+      <section className="bg-clay text-paper text-center px-page py-[70px]">
         <h2 className="font-display text-[clamp(24px,3.4vw,38px)] mb-5 max-w-[20ch] mx-auto">{home.contact.title}</h2>
         <p className="opacity-90 mb-7 max-w-[48ch] mx-auto">{home.contact.body}</p>
         <Link
@@ -110,7 +110,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
       </section>
 
       {related.length > 0 && (
-        <section className="bg-paper-soft px-[8vw] py-[70px]">
+        <section className="bg-paper-soft px-page py-[70px]">
           <h2 className="font-display text-2xl mb-8">{resources.moreTitle}</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {related.map((r) => (

@@ -118,3 +118,35 @@ body {
   color: var(--clay);
   text-decoration: underline;
 }
+
+/* Page gutters. Full-width sections keep their backgrounds edge to edge, while their content stays in a
+   centered column no wider than 1240px — so wide screens don't leave a blank band on the right. */
+.px-page {
+  padding-inline: max(8vw, calc((100vw - 1240px) / 2));
+}
+
+/* Dark page headers: the brand's looping arrow drawn large and faint on the right, so wide screens
+   don't read as a block of text with an empty band beside it. Decorative only. */
+.hero-dark {
+  position: relative;
+  overflow: hidden;
+}
+.hero-dark > * {
+  position: relative;
+  z-index: 1;
+}
+@media (min-width: 900px) {
+  .hero-dark::after {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    top: 50%;
+    right: max(4vw, calc((100vw - 1240px) / 2));
+    width: min(520px, 42vw);
+    aspect-ratio: 1;
+    transform: translateY(-50%);
+    opacity: 0.6;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M3 19 C 7 14, 6 8, 12 8 C 18 8, 15 15, 21 15' stroke='%23BE5A34' stroke-width='0.3' stroke-linecap='round'/%3E%3Ccircle cx='3' cy='19' r='0.6' fill='%23EDE6D8'/%3E%3Ccircle cx='21' cy='15' r='0.6' fill='%23BE5A34'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+}

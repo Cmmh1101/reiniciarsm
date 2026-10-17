@@ -24,7 +24,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-[90px] min-h-[76vh] flex flex-col justify-center">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-[90px] min-h-[76vh] flex flex-col justify-center">
         <div className="max-w-[780px]">
           <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{m.eyebrow}</p>
           <h1 className="font-display text-[clamp(32px,4.6vw,54px)] leading-[1.1] mb-4">
@@ -51,7 +51,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </header>
 
-      <section className="px-[8vw] py-24">
+      <section className="px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.signsEyebrow}</p>
           <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.signsTitle}</h2>
@@ -66,7 +66,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-24">
+      <section className="bg-paper-soft px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.areasEyebrow}</p>
           <h2 className="font-display text-[clamp(28px,3.2vw,40px)] mb-3.5">{m.areasTitle}</h2>
@@ -83,7 +83,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </section>
 
-      <section className="px-[8vw] py-24">
+      <section className="px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.howEyebrow}</p>
           <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.howTitle}</h2>
@@ -99,7 +99,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-24">
+      <section className="bg-paper-soft px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.idealEyebrow}</p>
           <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.idealTitle}</h2>
@@ -117,7 +117,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </section>
 
-      <section id="agenda" className="bg-ink text-paper px-[8vw] py-24">
+      <section id="agenda" className="bg-ink text-paper px-page py-24">
         <div className="grid md:grid-cols-[0.9fr_1.1fr] gap-12 items-start">
           <div>
             <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{m.agendaEyebrow}</p>
@@ -137,7 +137,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </section>
 
-      <section id="faq" className="px-[8vw] py-24">
+      <section id="faq" className="px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.faqEyebrow}</p>
           <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.faqTitle}</h2>
@@ -152,7 +152,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
         </div>
       </section>
 
-      <section className="bg-clay text-paper text-center px-[8vw] py-24">
+      <section className="bg-clay text-paper text-center px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-ink opacity-70 mb-4 flex justify-center">{m.finalEyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.4vw,42px)] max-w-[22ch] mx-auto mb-4">{m.finalTitle}</h2>
         <p className="opacity-85 max-w-[50ch] mx-auto mb-6">{m.finalNote}</p>

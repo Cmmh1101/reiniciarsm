@@ -25,7 +25,7 @@ export default async function ShopPage({ params }: { params: { locale: string } 
   const productsWithStats = withProductStats(products, stats);
 
   return (
-    <main className="px-[8vw] py-24">
+    <main className="px-page py-24">
       <header className="mb-16">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{shop.eyebrow}</p>
         <h1 className="font-display text-[clamp(30px,4vw,48px)] leading-[1.08] mb-4 max-w-[20ch]">{shop.title}</h1>

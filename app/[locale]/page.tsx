@@ -30,7 +30,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
   return (
     <main>
       {/* HERO */}
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-24 grid md:grid-cols-[1.2fr_0.8fr] gap-14 items-center">
+      <header className="bg-ink text-paper px-page pt-20 pb-24 grid md:grid-cols-[1.2fr_0.8fr] gap-14 items-center">
         <div>
           <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-5">{h.hero.eyebrow}</p>
           <h1 className="font-display text-[clamp(38px,6vw,76px)] leading-[1.02] mb-6 max-w-[14ch]">{h.hero.title}</h1>
@@ -52,14 +52,14 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </header>
 
       {/* INTRO */}
-      <section className="px-[8vw] py-24 max-w-[1100px]">
+      <section className="px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.intro.eyebrow}</p>
         <h2 className="font-display text-[clamp(28px,3.6vw,46px)] leading-[1.1] mb-5 max-w-[20ch]">{h.intro.title}</h2>
         <p className="text-base opacity-85 max-w-[58ch]">{h.intro.body}</p>
       </section>
 
       {/* QUIZ */}
-      <section className="bg-ink text-paper px-[8vw] py-14 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <section className="bg-ink text-paper px-page py-14 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
         <div className="max-w-[58ch]">
           <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">{h.quiz.eyebrow}</p>
           <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.1] mb-3">{h.quiz.title}</h2>
@@ -71,7 +71,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* HOW I CAN HELP */}
-      <section className="bg-paper-soft px-[8vw] py-24">
+      <section className="bg-paper-soft px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.help.eyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-10 max-w-[22ch]">{h.help.title}</h2>
         <div className="grid md:grid-cols-3 gap-8">
@@ -94,7 +94,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* LEARN AND CREATE */}
-      <section className="px-[8vw] py-24">
+      <section className="px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.learn.eyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-3 max-w-[22ch]">{h.learn.title}</h2>
         <p className="opacity-75 max-w-[56ch] mb-10">{h.learn.body}</p>
@@ -140,7 +140,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* VENTURES */}
-      <section className="bg-ink text-paper px-[8vw] py-24">
+      <section className="bg-ink text-paper px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{h.ventures.eyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-10 max-w-[22ch]">{h.ventures.title}</h2>
         <div className="grid md:grid-cols-3 gap-8 mb-10">
@@ -158,7 +158,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* STORY */}
-      <section className="px-[8vw] py-24 max-w-[1100px]">
+      <section className="px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.story.eyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-5 max-w-[24ch]">{h.story.title}</h2>
         <p className="text-base opacity-85 max-w-[58ch] mb-6">{h.story.body}</p>
@@ -168,7 +168,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* NEWSLETTER */}
-      <section className="px-[8vw] py-20 max-w-[1100px]">
+      <section className="px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{newsletter.title}</h2>
         <p className="opacity-75 mb-7 max-w-[52ch]">{newsletter.body}</p>
         <div className="max-w-[560px]">
@@ -177,7 +177,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* CONTACT */}
-      <section className="bg-paper-soft px-[8vw] py-20 text-center">
+      <section className="bg-paper-soft px-page py-20 text-center">
         <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-3">{h.contact.title}</h2>
         <p className="opacity-80 mb-8 max-w-[48ch] mx-auto">{h.contact.body}</p>
         <div className="flex gap-4 justify-center flex-wrap">

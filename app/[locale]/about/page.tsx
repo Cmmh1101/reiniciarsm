@@ -19,13 +19,13 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
 
   return (
     <main>
-      <header className="bg-ink text-paper px-[8vw] pt-20 pb-20">
+      <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{about.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{about.title}</h1>
         <p className="text-lg opacity-85 max-w-[52ch]">{about.lead}</p>
       </header>
 
-      <section className="px-[8vw] py-20 grid md:grid-cols-[1fr_320px] gap-14">
+      <section className="px-page py-20 grid md:grid-cols-[1fr_320px] gap-14">
         <div className="flex flex-col gap-5 max-w-[62ch] text-base leading-relaxed">
           {about.story.map((p) => (
             <p key={p}>{p}</p>
@@ -41,7 +41,7 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
         </aside>
       </section>
 
-      <section className="bg-paper-soft px-[8vw] py-20">
+      <section className="bg-paper-soft px-page py-20">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{about.valuesTitle}</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {about.values.map((v) => (
@@ -53,7 +53,7 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
         </div>
       </section>
 
-      <section className="px-[8vw] py-20 text-center">
+      <section className="px-page py-20 text-center">
         <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-6">{about.ctaTitle}</h2>
         <Link href={localizedPath(locale, "workWithMe")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
           {about.cta} →
