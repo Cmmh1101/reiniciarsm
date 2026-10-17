@@ -547,6 +547,23 @@ export const es: Dictionary = {
     thanksBody: "La vamos a revisar antes de publicarla.",
   },
 
+  live: {
+    meta: {
+      title: "Empieza aquí — Carla Montaño",
+      description: "Todo lo de mis lives en un solo lugar: un diagnóstico de 2 minutos, la comunidad, una llamada Tech SOS y la tienda.",
+    },
+    eyebrow: "Bienvenida desde el live",
+    title: "Empieza aquí",
+    lead: "Gracias por acompañarme. Elige lo que necesitas ahora mismo: cada opción toma un par de minutos.",
+    cards: [
+      { key: "quiz", title: "Descubre tu siguiente paso", body: "Ocho preguntas rápidas y una recomendación clara: una solución rápida, un plan, un cambio de carrera, aprender a tu ritmo o mejores sistemas.", cta: "Hacer el diagnóstico de 2 minutos" },
+      { key: "sos", title: "Resuelve algo ahora", body: "Una videollamada de 30 minutos para un problema concreto de tecnología: una cuenta, una línea telefónica, una app que no coopera.", cta: "Reservar un Tech SOS — $50" },
+      { key: "community", title: "Únete a la comunidad", body: "Una comunidad y un método para quienes están en transición de carrera, con sesiones en vivo y acompañamiento.", cta: "Explorar la comunidad" },
+      { key: "shop", title: "Plantillas, guías y ebooks", body: "Recursos prácticos que puedes usar hoy, entregados a tu correo.", cta: "Ver la tienda" },
+    ],
+    newsletterTitle: "O simplemente mantente en contacto",
+  },
+
   newsletter: {
     title: "Recibe nuevos recursos por correo",
     body: "Una breve serie de bienvenida y luego correos ocasionales y prácticos. Date de baja cuando quieras.",

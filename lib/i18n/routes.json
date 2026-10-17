@@ -78,5 +78,9 @@
   "nextStep": {
     "en": "find-your-next-step",
     "es": "tu-siguiente-paso"
+  },
+  "live": {
+    "en": "live",
+    "es": "live"
   }
 }
