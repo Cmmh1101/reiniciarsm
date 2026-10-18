@@ -107,21 +107,47 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </ol>
       </section>
 
-      <section className="px-page py-20 grid md:grid-cols-[0.8fr_1.2fr] gap-12">
-        <div>
-          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-3">{s.careTitle}</h2>
-          <p className="opacity-80 max-w-[44ch]">{s.careBody}</p>
+      <section className="bg-paper-soft px-page py-20">
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-4">{s.care.title}</h2>
+        <p className="opacity-80 max-w-[62ch] mb-10">{s.care.lead}</p>
+        <div className="grid md:grid-cols-2 gap-8 mb-8">
+          {s.care.plans.map((plan) => (
+            <article key={plan.name} className="bg-paper border border-[rgba(20,25,43,0.15)] rounded-[2px] p-8 flex flex-col gap-3">
+              <h3 className="font-display text-xl">{plan.name}</h3>
+              <p>
+                <span className="font-display text-3xl">{plan.price}</span>
+                <span className="ml-2 font-mono text-[11px] uppercase tracking-wide opacity-60">{plan.priceNote}</span>
+              </p>
+              <ul className="flex flex-col gap-2 text-sm mt-1">
+                {plan.includes.map((i) => (
+                  <li key={i} className="border-l-2 border-sage pl-3">
+                    {i}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))}
         </div>
-        <div>
-          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-6">{s.faqTitle}</h2>
-          <div className="border-t border-[rgba(20,25,43,0.12)]">
-            {s.faq.map((f) => (
-              <div key={f.title} className="py-5 border-b border-[rgba(20,25,43,0.12)]">
-                <h3 className="text-base font-semibold mb-1.5">{f.title}</h3>
-                <p className="text-[14.5px] opacity-75 max-w-[62ch]">{f.body}</p>
-              </div>
+        <div className="max-w-[760px]">
+          <h3 className="font-mono text-xs uppercase tracking-widest opacity-60 mb-3">{s.care.notIncludedTitle}</h3>
+          <ul className="flex flex-col gap-1.5 text-[14.5px] opacity-85 mb-5">
+            {s.care.notIncluded.map((n) => (
+              <li key={n}>— {n}</li>
             ))}
-          </div>
+          </ul>
+          <p className="font-mono text-[11px] opacity-60">{s.care.note}</p>
+        </div>
+      </section>
+
+      <section className="px-page py-20 grid md:grid-cols-[0.8fr_1.2fr] gap-12">
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12]">{s.faqTitle}</h2>
+        <div className="border-t border-[rgba(20,25,43,0.12)]">
+          {s.faq.map((f) => (
+            <div key={f.title} className="py-5 border-b border-[rgba(20,25,43,0.12)]">
+              <h3 className="text-base font-semibold mb-1.5">{f.title}</h3>
+              <p className="text-[14.5px] opacity-75 max-w-[62ch]">{f.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
