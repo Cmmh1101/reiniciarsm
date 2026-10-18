@@ -22,7 +22,7 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
 export default async function Home({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale;
-  const { home: h, site, common, nav, newsletter } = getDictionary(locale);
+  const { home: h, site, common, nav, newsletter, about } = getDictionary(locale);
 
   const [posts, products] = await Promise.all([getLocalizedPosts(locale, 3), getActiveProducts()]);
   const featuredProducts = products.slice(0, 3);
@@ -52,10 +52,22 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </header>
 
       {/* INTRO */}
-      <section className="px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.intro.eyebrow}</p>
-        <h2 className="font-display text-[clamp(28px,3.6vw,46px)] leading-[1.1] mb-5 max-w-[20ch]">{h.intro.title}</h2>
-        <p className="text-base opacity-85 max-w-[58ch]">{h.intro.body}</p>
+      <section className="px-page py-24 grid md:grid-cols-[1.15fr_0.85fr] gap-14 items-start">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.intro.eyebrow}</p>
+          <h2 className="font-display text-[clamp(28px,3.6vw,46px)] leading-[1.1] mb-5 max-w-[20ch]">{h.intro.title}</h2>
+          <p className="text-base opacity-85 max-w-[58ch]">{h.intro.body}</p>
+        </div>
+        <aside className="md:border-l md:border-[rgba(20,25,43,0.15)] md:pl-12">
+          <h3 className="font-mono text-xs uppercase tracking-widest opacity-60 mb-5">{about.todayTitle}</h3>
+          <ul className="flex flex-col gap-4 text-[15px]">
+            {about.today.map((item) => (
+              <li key={item} className="border-l-2 border-clay pl-4 md:border-l-0 md:pl-0 md:before:content-['—'] md:before:text-clay md:before:mr-3">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </aside>
       </section>
 
       {/* QUIZ */}
@@ -72,8 +84,18 @@ export default async function Home({ params }: { params: { locale: string } }) {
 
       {/* HOW I CAN HELP */}
       <section className="bg-paper-soft px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.help.eyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-10 max-w-[22ch]">{h.help.title}</h2>
+        <div className="grid md:grid-cols-2 gap-6 md:gap-14 items-end mb-10">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.help.eyebrow}</p>
+            <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] max-w-[22ch]">{h.help.title}</h2>
+          </div>
+          <p className="text-[15px] opacity-85 max-w-[52ch] md:justify-self-end">
+            {h.help.implementation}{" "}
+            <Link href={localizedPath(locale, "ventures")} className="underline">
+              {h.help.implementationCta}
+            </Link>
+          </p>
+        </div>
         <div className="grid md:grid-cols-3 gap-8">
           {h.help.cards.map((c) => (
             <div key={c.title} className="border-t-2 border-ink pt-4">
@@ -82,22 +104,30 @@ export default async function Home({ params }: { params: { locale: string } }) {
             </div>
           ))}
         </div>
-        <p className="mt-10 text-[15px] max-w-[60ch]">
-          {h.help.implementation}{" "}
-          <Link href={localizedPath(locale, "ventures")} className="underline">
-            {h.help.implementationCta}
-          </Link>
-        </p>
-        <Link href={localizedPath(locale, "workWithMe")} className="inline-block mt-6 underline font-mono text-xs uppercase tracking-wide">
+        <Link href={localizedPath(locale, "workWithMe")} className="inline-block mt-10 underline font-mono text-xs uppercase tracking-wide">
           {h.help.cta} →
         </Link>
       </section>
 
       {/* LEARN AND CREATE */}
       <section className="px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.learn.eyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-3 max-w-[22ch]">{h.learn.title}</h2>
-        <p className="opacity-75 max-w-[56ch] mb-10">{h.learn.body}</p>
+        <div className="grid md:grid-cols-2 gap-6 md:gap-14 items-end mb-12">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{h.learn.eyebrow}</p>
+            <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] max-w-[22ch]">{h.learn.title}</h2>
+          </div>
+          <div className="md:justify-self-end max-w-[52ch]">
+            <p className="opacity-75 mb-6">{h.learn.body}</p>
+            <div className="flex gap-4 flex-wrap">
+              <Link href={localizedPath(locale, "shop")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
+                {h.learn.ctaShop} →
+              </Link>
+              <Link href={localizedPath(locale, "resources")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] border border-current inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
+                {h.learn.ctaResources}
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {featuredProducts.length > 0 && (
           <>
@@ -128,21 +158,12 @@ export default async function Home({ params }: { params: { locale: string } }) {
             </div>
           </>
         )}
-
-        <div className="flex gap-4 flex-wrap">
-          <Link href={localizedPath(locale, "shop")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
-            {h.learn.ctaShop} →
-          </Link>
-          <Link href={localizedPath(locale, "resources")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] border border-current inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
-            {h.learn.ctaResources}
-          </Link>
-        </div>
       </section>
 
       {/* VENTURES */}
       <section className="bg-ink text-paper px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{h.ventures.eyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-10 max-w-[22ch]">{h.ventures.title}</h2>
+        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] mb-10 max-w-[22ch]">{h.ventures.title}</h2>
         <div className="grid md:grid-cols-3 gap-8 mb-10">
           {getDictionary(locale).ventures.items.map((v) => (
             <div key={v.key} className="border-t border-[rgba(237,230,216,0.3)] pt-4">
@@ -158,27 +179,33 @@ export default async function Home({ params }: { params: { locale: string } }) {
       </section>
 
       {/* STORY */}
-      <section className="px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.story.eyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-5 max-w-[24ch]">{h.story.title}</h2>
-        <p className="text-base opacity-85 max-w-[58ch] mb-6">{h.story.body}</p>
-        <Link href={localizedPath(locale, "about")} className="underline font-mono text-xs uppercase tracking-wide">
-          {h.story.cta} →
-        </Link>
+      <section className="px-page py-24 grid md:grid-cols-[0.8fr_1.2fr] gap-14 items-center">
+        <div className="aspect-[4/5] rounded-[2px] overflow-hidden max-w-[400px] w-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/carla/hero-mi-historia.jpg" alt={h.hero.portraitAlt} className="w-full h-full object-cover" />
+        </div>
+        <div>
+          <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{h.story.eyebrow}</p>
+          <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] mb-5 max-w-[24ch]">{h.story.title}</h2>
+          <p className="text-base opacity-85 max-w-[58ch] mb-6">{h.story.body}</p>
+          <Link href={localizedPath(locale, "about")} className="underline font-mono text-xs uppercase tracking-wide">
+            {h.story.cta} →
+          </Link>
+        </div>
       </section>
 
       {/* NEWSLETTER */}
-      <section className="px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{newsletter.title}</h2>
-        <p className="opacity-75 mb-7 max-w-[52ch]">{newsletter.body}</p>
-        <div className="max-w-[560px]">
-          <NewsletterForm locale={locale} copy={newsletter} />
+      <section className="px-page py-20 grid md:grid-cols-2 gap-8 md:gap-14 items-center border-t border-[rgba(20,25,43,0.1)]">
+        <div>
+          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-3">{newsletter.title}</h2>
+          <p className="opacity-75 max-w-[48ch]">{newsletter.body}</p>
         </div>
+        <NewsletterForm locale={locale} copy={newsletter} />
       </section>
 
       {/* CONTACT */}
       <section className="bg-paper-soft px-page py-20 text-center">
-        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] mb-3">{h.contact.title}</h2>
+        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] mb-3">{h.contact.title}</h2>
         <p className="opacity-80 mb-8 max-w-[48ch] mx-auto">{h.contact.body}</p>
         <div className="flex gap-4 justify-center flex-wrap">
           <Link href={localizedPath(locale, "contact")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">

@@ -92,14 +92,14 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
 
       <section className="bg-paper-soft px-page py-[60px]">
         <div className="max-w-[560px] mx-auto">
-          <h2 className="font-display text-[clamp(22px,2.8vw,30px)] mb-3">{newsletter.title}</h2>
+          <h2 className="font-display text-[clamp(22px,2.8vw,30px)] leading-[1.12] mb-3">{newsletter.title}</h2>
           <p className="opacity-70 mb-6">{newsletter.body}</p>
           <NewsletterForm locale={locale} copy={newsletter} withName={false} />
         </div>
       </section>
 
       <section className="bg-clay text-paper text-center px-page py-[70px]">
-        <h2 className="font-display text-[clamp(24px,3.4vw,38px)] mb-5 max-w-[20ch] mx-auto">{home.contact.title}</h2>
+        <h2 className="font-display text-[clamp(24px,3.4vw,38px)] leading-[1.12] mb-5 max-w-[20ch] mx-auto">{home.contact.title}</h2>
         <p className="opacity-90 mb-7 max-w-[48ch] mx-auto">{home.contact.body}</p>
         <Link
           href={localizedPath(locale, "workWithMe")}

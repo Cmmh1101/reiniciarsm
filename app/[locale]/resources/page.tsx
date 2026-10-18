@@ -62,7 +62,7 @@ export default async function ResourcesPage({ params }: { params: { locale: stri
 
       <section className="bg-paper-soft px-page py-[70px]">
         <div className="max-w-[560px]">
-          <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3.5">{newsletter.title}</h2>
+          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-3.5">{newsletter.title}</h2>
           <p className="opacity-70 mb-7">{newsletter.body}</p>
           <NewsletterForm locale={locale} copy={newsletter} withName={false} />
         </div>

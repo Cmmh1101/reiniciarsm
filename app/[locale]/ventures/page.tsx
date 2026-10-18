@@ -58,7 +58,7 @@ export default function VenturesPage({ params }: { params: { locale: string } })
       </section>
 
       <section className="bg-paper-soft px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-8">{ventures.routingTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-8">{ventures.routingTitle}</h2>
         <dl className="grid sm:grid-cols-2 gap-x-12 gap-y-5 max-w-[900px]">
           {ventures.routing.map((r) => (
             <div key={r.need} className="border-t border-[rgba(20,25,43,0.2)] pt-3">

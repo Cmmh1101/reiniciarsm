@@ -42,7 +42,7 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
       </section>
 
       <section className="bg-paper-soft px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{about.valuesTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{about.valuesTitle}</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {about.values.map((v) => (
             <div key={v.title}>
@@ -54,7 +54,7 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
       </section>
 
       <section className="px-page py-20 text-center">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-6">{about.ctaTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-6">{about.ctaTitle}</h2>
         <Link href={localizedPath(locale, "workWithMe")} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
           {about.cta} →
         </Link>

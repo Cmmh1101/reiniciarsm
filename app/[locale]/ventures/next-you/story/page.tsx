@@ -40,7 +40,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
 
       <section className="px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{c.beforeEyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] mb-8 max-w-[22ch]">{c.beforeTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-8 max-w-[22ch]">{c.beforeTitle}</h2>
         <div className="max-w-[68ch] flex flex-col gap-5 text-base leading-relaxed opacity-90">
           {c.story.map((p, i) => (
             <p key={i}>{p}</p>
@@ -54,7 +54,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
 
       <section className="bg-ink text-paper px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{c.routeEyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] mb-2">{c.routeTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-2">{c.routeTitle}</h2>
         <p className="opacity-70 text-base mb-14">{c.routeLead}</p>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-[rgba(237,230,216,0.14)]">
           {c.timeline.map((item) => (
@@ -69,7 +69,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
 
       <section className="bg-paper-soft px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{c.lessonsEyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] mb-14 max-w-[24ch]">{c.lessonsTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-14 max-w-[24ch]">{c.lessonsTitle}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {c.lessons.map((lesson, i) => (
             <div key={lesson.title}>
@@ -84,7 +84,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
       <section className="px-page py-24">
         <div className="max-w-[640px] mb-10">
           <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{c.purposeEyebrow}</p>
-          <h2 className="font-display text-[clamp(26px,3.2vw,38px)] mb-5 max-w-[20ch]">{c.purposeTitle}</h2>
+          <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-5 max-w-[20ch]">{c.purposeTitle}</h2>
           <p className="text-base opacity-90 mb-4">{c.purposeBody}</p>
           <p className="italic text-base opacity-70 mb-6">{c.purposeQuote}</p>
           <a
@@ -102,7 +102,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
 
       <section className="bg-paper-soft px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{c.nextEyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] mb-2">{c.nextTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-2">{c.nextTitle}</h2>
         <p className="opacity-70 text-base mb-14 max-w-[56ch]">{c.nextLead}</p>
         <div className="grid md:grid-cols-3 gap-6">
           {c.nextSteps.map((step) => (
@@ -130,7 +130,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
 
       <section className="bg-clay text-paper text-center px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-ink opacity-70 mb-4 flex justify-center">{c.finalEyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.4vw,42px)] max-w-[26ch] mx-auto mb-8">{c.finalTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.4vw,42px)] leading-[1.12] max-w-[26ch] mx-auto mb-8">{c.finalTitle}</h2>
         <Link
           href={localizedPath(locale, "diagnostic")}
           className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-ink text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform"

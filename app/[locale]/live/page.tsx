@@ -76,7 +76,7 @@ export default function LivePage({ params }: { params: { locale: string } }) {
 
       <section className="bg-paper-soft px-page py-14">
         <div className="max-w-[560px]">
-          <h2 className="font-display text-[clamp(22px,2.8vw,30px)] mb-3">{live.newsletterTitle}</h2>
+          <h2 className="font-display text-[clamp(22px,2.8vw,30px)] leading-[1.12] mb-3">{live.newsletterTitle}</h2>
           <p className="opacity-70 mb-6">{newsletter.body}</p>
           <NewsletterForm locale={locale} copy={newsletter} withName={false} />
         </div>

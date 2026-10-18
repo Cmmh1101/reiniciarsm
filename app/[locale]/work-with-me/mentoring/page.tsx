@@ -54,7 +54,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
       <section className="px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.signsEyebrow}</p>
-          <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.signsTitle}</h2>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] leading-[1.12]">{m.signsTitle}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-px bg-[rgba(20,25,43,0.12)]">
           {m.signs.map((s) => (
@@ -69,7 +69,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
       <section className="bg-paper-soft px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.areasEyebrow}</p>
-          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] mb-3.5">{m.areasTitle}</h2>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] leading-[1.12] mb-3.5">{m.areasTitle}</h2>
           <p className="opacity-70">{m.areasLead}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
@@ -86,7 +86,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
       <section className="px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.howEyebrow}</p>
-          <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.howTitle}</h2>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] leading-[1.12]">{m.howTitle}</h2>
         </div>
         <div className="grid md:grid-cols-3 gap-px bg-[rgba(20,25,43,0.12)]">
           {m.how.map((h, i) => (
@@ -102,7 +102,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
       <section className="bg-paper-soft px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.idealEyebrow}</p>
-          <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.idealTitle}</h2>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] leading-[1.12]">{m.idealTitle}</h2>
         </div>
         <div className="border-t border-[rgba(20,25,43,0.12)]">
           {m.ideal.map((item) => (
@@ -140,7 +140,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
       <section id="faq" className="px-page py-24">
         <div className="max-w-[640px] mb-14">
           <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{m.faqEyebrow}</p>
-          <h2 className="font-display text-[clamp(28px,3.2vw,40px)]">{m.faqTitle}</h2>
+          <h2 className="font-display text-[clamp(28px,3.2vw,40px)] leading-[1.12]">{m.faqTitle}</h2>
         </div>
         <div className="border-t border-[rgba(20,25,43,0.12)]">
           {m.faq.map((item) => (
@@ -154,7 +154,7 @@ export default async function MentoringPage({ params, searchParams }: { params: 
 
       <section className="bg-clay text-paper text-center px-page py-24">
         <p className="font-mono text-xs uppercase tracking-widest text-ink opacity-70 mb-4 flex justify-center">{m.finalEyebrow}</p>
-        <h2 className="font-display text-[clamp(26px,3.4vw,42px)] max-w-[22ch] mx-auto mb-4">{m.finalTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.4vw,42px)] leading-[1.12] max-w-[22ch] mx-auto mb-4">{m.finalTitle}</h2>
         <p className="opacity-85 max-w-[50ch] mx-auto mb-6">{m.finalNote}</p>
         <a href="#agenda" className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-ink text-paper inline-flex items-center gap-2.5">
           {m.finalCta}

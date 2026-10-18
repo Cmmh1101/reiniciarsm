@@ -50,7 +50,7 @@ export default function WorkPage({ params }: { params: { locale: string } }) {
       </section>
 
       <section className="bg-paper-soft px-page py-16 text-center">
-        <h2 className="font-display text-[clamp(22px,2.6vw,30px)] mb-3">{work.ctaTitle}</h2>
+        <h2 className="font-display text-[clamp(22px,2.6vw,30px)] leading-[1.12] mb-3">{work.ctaTitle}</h2>
         <p className="opacity-80 mb-6">{work.ctaBody}</p>
         <div className="flex gap-4 justify-center flex-wrap">
           <a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer" className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">

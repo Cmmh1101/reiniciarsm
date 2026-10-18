@@ -38,7 +38,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
       </header>
 
       <section className="px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{s.ownershipTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{s.ownershipTitle}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {s.ownership.map((o) => (
             <div key={o.title} className="border-t-2 border-clay pt-4">
@@ -50,7 +50,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
       </section>
 
       <section className="bg-paper-soft px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{s.levelsTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{s.levelsTitle}</h2>
         <div className="grid lg:grid-cols-2 gap-8">
           {s.levels.map((l) => (
             <article key={l.name} className="bg-paper border border-[rgba(20,25,43,0.15)] rounded-[2px] p-8 flex flex-col gap-4">
@@ -82,7 +82,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
       </section>
 
       <section className="px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{s.addonsTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-3">{s.addonsTitle}</h2>
         <p className="opacity-75 mb-10 max-w-[56ch]">{s.addonsLead}</p>
         <div className="grid md:grid-cols-2 gap-8">
           {s.addons.map((a) => (
@@ -96,7 +96,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
       </section>
 
       <section className="bg-ink text-paper px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{s.howTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{s.howTitle}</h2>
         <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {s.how.map((h) => (
             <li key={h.title}>
@@ -109,11 +109,11 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
 
       <section className="px-page py-20 grid md:grid-cols-[0.8fr_1.2fr] gap-12">
         <div>
-          <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-3">{s.careTitle}</h2>
+          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-3">{s.careTitle}</h2>
           <p className="opacity-80 max-w-[44ch]">{s.careBody}</p>
         </div>
         <div>
-          <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-6">{s.faqTitle}</h2>
+          <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-6">{s.faqTitle}</h2>
           <div className="border-t border-[rgba(20,25,43,0.12)]">
             {s.faq.map((f) => (
               <div key={f.title} className="py-5 border-b border-[rgba(20,25,43,0.12)]">
@@ -126,7 +126,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
       </section>
 
       <section className="bg-clay text-paper text-center px-page py-20">
-        <h2 className="font-display text-[clamp(26px,3.4vw,42px)] max-w-[22ch] mx-auto mb-4">{s.finalTitle}</h2>
+        <h2 className="font-display text-[clamp(26px,3.4vw,42px)] leading-[1.12] max-w-[22ch] mx-auto mb-4">{s.finalTitle}</h2>
         <p className="opacity-90 max-w-[48ch] mx-auto mb-8">{s.finalBody}</p>
         <Link href={request} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-ink text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
           {s.finalCta} →

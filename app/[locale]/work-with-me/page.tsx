@@ -79,7 +79,7 @@ export default async function WorkWithMePage({
       </section>
 
       <section className="bg-paper-soft px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{w.howTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{w.howTitle}</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {w.how.map((s) => (
             <div key={s.title}>

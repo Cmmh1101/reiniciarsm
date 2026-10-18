@@ -35,7 +35,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
 
       <section className="px-page py-20">
         <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">{nextYou.methodEyebrow}</p>
-        <h2 className="font-display text-[clamp(28px,3.6vw,44px)] mb-3">{nextYou.methodTitle}</h2>
+        <h2 className="font-display text-[clamp(28px,3.6vw,44px)] leading-[1.12] mb-3">{nextYou.methodTitle}</h2>
         <p className="opacity-75 mb-10 max-w-[56ch]">{nextYou.methodLead}</p>
         <ol className="grid md:grid-cols-3 gap-8">
           {nextYou.phases.map((p, i) => (
@@ -54,7 +54,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
       </section>
 
       <section className="bg-paper-soft px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] mb-10">{nextYou.actionsTitle}</h2>
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{nextYou.actionsTitle}</h2>
         <div className="grid sm:grid-cols-2 gap-8">
           {nextYou.actions.map((a) => {
             const t = actionHref[a.key];
