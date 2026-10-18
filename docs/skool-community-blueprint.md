@@ -1,167 +1,164 @@
-# Skool — plano de la comunidad / Community blueprint
+# Skool — versión simple / Simple version
 
-> Borrador para ajustar. Los puntos marcados con **[DECIDIR]** son valores por defecto que propuse; cámbialos
-> si prefieres otra cosa. Lo que depende de funciones de Skool está marcado **[VERIFICAR]**: confírmalo en los
-> ajustes de tu grupo antes de configurarlo, porque Skool cambia sus funciones y no tengo su documentación oficial.
+> Borrador para ajustar. **[DECIDIR]** = valor por defecto que propuse. **[VERIFICAR]** = depende de funciones de
+> Skool que debes confirmar en los ajustes de tu grupo (no tengo su documentación oficial y cambia).
 
----
+## La regla que manda sobre todo lo demás
 
-## 1. La promesa (una frase)
+Quien llega está **perdido**. Entonces, en cada pantalla debe estar claro **cuál es el siguiente paso**, y debe
+haber **uno solo**. Todo lo que no ayude a eso, se quita.
 
-**ES:** Acompañamiento en vivo y clases guiadas para dar tu cambio de carrera, con método y en comunidad.
-**EN:** Live coaching and guided lessons to make your career change, with a method and a community.
+Cuatro reglas para decidir qué entra:
+1. **Un paso a la vez.** Nunca una lista de opciones.
+2. **Palabras sencillas.** Sin jerga. Los nombres del método van siempre con su significado al lado.
+3. **Poca estructura.** Pocas categorías, un solo curso, un solo ritmo semanal.
+4. **Una persona real.** Tú respondes, saludas y haces visible a cada miembro.
 
-Para quién es: personas en transición de carrera y personas que quieren usar mejor la tecnología y la IA.
-Para quién no es: quien busca un curso para ver solo, sin interacción.
+## 1. La promesa
 
-## 2. Qué reciben los miembros
+**ES:** Si no sabes por dónde empezar, empieza aquí. Un paso a la vez, con alguien que te acompaña.
+**EN:** If you don't know where to start, start here. One step at a time, with someone beside you.
 
-- Coaching grupal en vivo **2 veces por semana** (preguntas y respuestas, casos reales del grupo).
-- Clases pregrabadas del método: **Giro, Ruta y Ritmo**.
-- Muro de comunidad: avances, preguntas, compañía.
-- **Descuento en plantillas y ebooks:** crea un cupón en Stripe (por ejemplo `MIEMBRO20`) y compártelo dentro de
-  Skool. El pago de la tienda ya acepta códigos promocionales, no hace falta programar nada.
-- Acceso directo a ti por Skool.
+## 2. Qué incluye (lo mismo para todos, una sola membresía)
 
-## 3. Precio y estructura de membresía
+- **Una ruta clara** de clases cortas, en orden: Paso 1, Paso 2, Paso 3…
+- **Coaching en vivo 2 veces por semana** para traer tu pregunta.
+- **Un lugar para preguntar y contar tus avances.**
+- Descuento en plantillas y ebooks (cupón de Stripe, por ejemplo `MIEMBRO20`).
 
-- **Precio fundador: $19 al mes** para los primeros **50 miembros**, asegurado mientras sigan en la comunidad.
-  Después sube a **$29 al mes**. **[DECIDIR]**
-- Opción anual con 2 meses gratis (**$190 / año** al precio fundador). **[DECIDIR]**
-- Una sola comunidad de pago. **[VERIFICAR]** si Skool permite un nivel gratuito con contenido limitado como
-  puerta de entrada; si lo permite, úsalo para "Empieza aquí" y una clase de muestra.
-- **[VERIFICAR]** si Skool ofrece días de prueba gratis en el pago. Mi consejo: sin prueba al principio, porque
-  el precio ya es bajo; el primer coaching en vivo hace de "prueba".
+**Precio [DECIDIR]:** $19 al mes los primeros 50 miembros (asegurado mientras sigan), luego $29.
+**Solo plan mensual al lanzar.** Agregar el plan anual después, cuando ya haya miembros; menos opciones al
+principio hacen más fácil decidir entrar.
 
-## 4. Grupo actual o grupo nuevo **[DECIDIR]**
+## 3. El ritmo: cuatro verbos, siempre los mismos
 
-**Recomendación: conservar el grupo actual.** Conserva a los miembros que ya hay, el enlace que ya está en el
-sitio y en los correos, y el historial. Cambia solo:
-- el **nombre visible** (ya no "solo tu historia", sino el método y el acompañamiento),
-- la **portada**, la **descripción** y la página **Acerca de** (texto abajo).
+> **Mira · Haz · Cuenta · Pregunta**
 
-Un grupo nuevo solo conviene si el actual tiene contenido o miembros que no encajan con la nueva visión.
-**[VERIFICAR]** si Skool te deja cambiar el nombre sin cambiar la dirección del grupo.
+Cada semana, la persona solo tiene que:
+1. **Mirar** la clase del paso en el que va (5 a 10 minutos).
+2. **Hacer** la tarea (una sola, pequeña).
+3. **Contar** cómo le fue, en *Avances*.
+4. **Preguntar** lo que le trabó, en el coaching en vivo o en *Preguntas*.
 
-## 5. Idioma **[DECIDIR]**
+Esto se repite en la bienvenida, en el Classroom y en el calendario. Es lo único que hay que aprender.
 
-Como no está confirmado que Skool permita ocultar contenido por nivel, el plano **no depende de eso**:
+## 4. Estructura mínima
 
-- **Un solo muro**, con la convención de poner **[ES]** o **[EN]** al inicio del título de cada publicación tuya.
-  Cada miembro escribe en su idioma y tú respondes en el mismo.
-- **Categorías con nombre bilingüe** (abajo).
-- **Clases (Classroom):** empieza en **español**, que es donde ya tienes contenido. Cuando haya miembros que
-  hablan inglés, crea cursos paralelos "… (EN)". No las dupliques antes: un curso vacío en inglés resta confianza.
-- **Coachings en vivo:** **martes en español y jueves en inglés.** Si después de 4 semanas el de inglés tiene
-  menos de 3 asistentes, pásalo a bilingüe (se responde en el idioma de cada pregunta).
+### Muro: solo 3 categorías
 
-## 6. Categorías del muro
-
-| Categoría (ES · EN) | Para qué |
+| Categoría | Para qué |
 |---|---|
-| **Empieza aquí · Start here** | Bienvenida fijada, reglas y cómo usar la comunidad (solo publicas tú) |
-| **Preguntas · Questions** | Dudas de tecnología, IA y carrera; las respuestas se vuelven contenido |
-| **Avances · Wins** | Hilo semanal de logros, grandes o pequeños |
-| **Presentaciones · Introductions** | Cada miembro nuevo se presenta |
-| **Caja de herramientas · Toolbox** | Mini-tutoriales de tecnología e IA (los mismos temas de tus Lives) |
-| **Replays** | Grabaciones de los coachings, con título y tema |
+| **Empieza aquí · Start here** | Lo primero que ve cualquiera. Mensaje fijado con los 3 pasos de la primera semana. Solo publicas tú. |
+| **Preguntas · Questions** | "Estoy trabado en esto". Tú o la comunidad responden. |
+| **Avances · Progress** | Presentarse, contar lo que hizo cada semana y celebrar. |
 
-## 7. Classroom (clases)
+Las demás ideas (caja de herramientas, replays, presentaciones aparte) **no son categorías**: los replays viven
+dentro del Classroom, y las presentaciones van en Avances.
 
-Empieza **pequeño**: no lances los tres cursos completos.
+### Classroom: un solo curso, **"Tu camino"**
 
-**Lanzamiento mínimo (antes del primer coaching):**
-1. **Empieza aquí** — 1 video de bienvenida (3 min) y cómo aprovechar la comunidad.
-2. **Giro** — 3 lecciones iniciales.
+Un solo curso, con lecciones numeradas de principio a fin. Así no hay que elegir por dónde empezar.
 
-**Estructura completa (se construye mientras hay miembros):**
+- **Empieza aquí** *(10 minutos)*: bienvenida, cómo funciona y tu primer paso.
+- **Giro — Decide tu rumbo** *(Pasos 1 a 4)*: dejas de sentirte atascado/a y eliges una dirección.
+- **Ruta — Construye lo que necesitas** *(Pasos 5 a 8)*: tecnología e IA, tu perfil profesional, inglés si aplica.
+- **Ritmo — Sostenlo sin quemarte** *(Pasos 9 a 12)*: organizar tu tiempo, tu energía y no abandonar.
+- **Replays**: grabaciones de los coachings, con título claro.
 
-- **Giro** — Rompes la creencia de que es imposible y eliges un rumbo.
-  1. Por qué te sientes atascado/a (y qué no es falta de capacidad)
-  2. La creencia que te frena: cómo nombrarla
-  3. Una prueba pequeña y real esta semana
-  4. Elegir una dirección (aunque no sea perfecta)
-  5. Tu próximo paso en una página
-  6. Cierre del Giro: tu compromiso de 4 semanas
-- **Ruta** — Construyes lo que el mercado necesita ver de ti.
-  Tecnología e IA aplicada · Empleabilidad (CV, LinkedIn, portafolio) · Inglés profesional (cuando aplique)
-- **Ritmo** — Lo sostienes sin quemarte.
-  Productividad · Bienestar · Cómo mantener el cambio cuando la vida se complica
+Cada lección: **de 5 a 10 minutos y una sola tarea.** Al final de cada una: "Cuéntalo en Avances".
+Título de cada lección con el número ("Paso 3 de 12 — …") para que se vea el avance.
 
-Cada lección: **5 a 12 minutos**, un solo objetivo y una tarea que se pueda hacer esa semana.
-Reutiliza lo que ya tienes en Notion (lecciones con la estructura Giro / Ruta / Ritmo).
+**Lanzamiento mínimo:** Empieza aquí + Pasos 1, 2 y 3. El resto se graba mientras hay miembros.
 
-## 8. Ritmo semanal (sostenible)
+### Calendario: solo los coachings
 
 | Día | Qué |
 |---|---|
-| Lunes | Publicación de la intención de la semana + micro-reto ligado a un pilar |
-| Martes | **Coaching en vivo en español** (60 min) |
-| Miércoles | Hilo de check-in: "¿qué avanzaste, qué te frena?" |
-| Jueves | **Coaching en vivo en inglés** (60 min) |
-| Viernes | Hilo de avances |
-| Mensual | Una sesión de profundización en un pilar |
+| **Martes** | Coaching en vivo en **español** (60 min) |
+| **Jueves** | Coaching en vivo en **inglés** (60 min) **[DECIDIR]** |
 
-**Formato del coaching (60 min):** 10 min de avances e intención · 40 min de preguntas y casos del grupo ·
-10 min para que cada persona diga su próximo paso. Se graba y se sube a **Replays**.
+Formato siempre igual: 10 min para saludar y ver avances · 40 min para preguntas de los asistentes ·
+10 min para que cada quien diga su próximo paso. Si en 4 semanas el de inglés tiene menos de 3 personas,
+se vuelve bilingüe. Se graba y se sube a *Replays*.
 
-## 9. Al entrar un miembro nuevo
+**Tú publicas una sola cosa fija a la semana** (los lunes): *"Tu paso de esta semana"*, con el enlace a la
+lección y la tarea. Nada más. Los avances se cuentan en esa misma publicación.
 
-- **[VERIFICAR]** las preguntas de ingreso de Skool. Sugeridas (máximo 3): ¿en qué idioma prefieres participar?
-  · ¿cuál es tu meta principal ahora mismo? · ¿qué es lo que más te frena?
-- **Mensaje de bienvenida** (por Skool), en el idioma que elija:
-  - ES: "Hola {nombre}, me alegra que estés aquí. Preséntate en *Presentaciones* y cuéntame tu meta. El próximo
-    coaching en vivo es el martes: ahí puedes traer tu primera pregunta."
-  - EN: "Hi {name}, I'm glad you're here. Introduce yourself in *Introductions* and tell me your goal. The next
-    live coaching is on Thursday — bring your first question."
+## 5. Idioma, sin complicar
 
-## 10. Texto de la página "Acerca de"
+- Cada persona elige **su idioma al entrar** (pregunta de ingreso) y tú le **respondes en ese idioma**.
+- Los nombres de las categorías son bilingües, y eso es todo; **sin etiquetas** [ES]/[EN] en los títulos.
+- Las clases empiezan en **español**, donde ya está tu contenido. El curso en inglés se crea cuando haya
+  miembros que lo pidan, no antes.
+- **[VERIFICAR]** si Skool permite ocultar un curso por nivel; si no, los cursos en inglés llevan "(EN)" al
+  final del nombre.
+
+## 6. Bienvenida: los primeros 10 minutos y la primera semana
+
+Lo primero que ve cualquier miembro nuevo es **un solo mensaje fijado en *Empieza aquí***:
+
+> **Bienvenido/a. Empieza por aquí — tres pasos, 10 minutos.**
+> 1. Mira el video de bienvenida (3 min).
+> 2. Preséntate en *Avances*: cuéntame en una frase dónde estás y qué quieres cambiar.
+> 3. Entra al **Paso 1** del curso *Tu camino*.
+> Y si te trabas: pregunta en *Preguntas* o ven al coaching del martes o del jueves.
+
+**Preguntas de ingreso [VERIFICAR]** (máximo 3, cortas): ¿en qué idioma prefieres participar? · ¿qué quieres
+cambiar? · ¿qué es lo que más te frena?
+
+**Mensaje directo de bienvenida**, tuyo, en el idioma que eligió:
+- ES: "Hola {nombre}, qué bueno que estés aquí. Ya vi que quieres {su meta}. Empieza por el Paso 1 y cuéntame
+  cómo te fue en Avances. Estoy aquí."
+- EN: "Hi {name}, so glad you're here. I saw you want to {their goal}. Start with Step 1 and tell me how it
+  went in Progress. I'm here."
+
+## 7. Página "Acerca de"
 
 **ES**
-> **Reinventarte con método, en comunidad.**
-> Una comunidad para quienes quieren cambiar de carrera y usar mejor la tecnología y la IA — sin hacerlo solos.
+> **Si no sabes por dónde empezar, empieza aquí.**
+> Una comunidad para quienes quieren cambiar su carrera o su vida profesional y se sienten perdidos con tanta
+> información. Un paso a la vez, con alguien que te acompaña.
 >
-> **Qué recibes**
-> - Coaching grupal en vivo 2 veces por semana
-> - Clases guiadas para tu cambio de carrera (Giro, Ruta, Ritmo)
-> - Una comunidad que te acompaña y te hace avanzar
-> - Descuentos en plantillas y ebooks
+> **Así funciona**
+> 1. **Mira** una clase corta cada semana.
+> 2. **Haz** una tarea pequeña.
+> 3. **Cuenta** cómo te fue.
+> 4. **Pregunta** lo que te trabó, en el coaching en vivo (2 veces por semana).
 >
-> **Para quién es:** para quien está en transición de carrera o quiere usar la tecnología a su favor.
-> **Precio fundador:** $19 al mes para los primeros 50 miembros.
+> Precio fundador: $19 al mes para los primeros 50 miembros.
 
 **EN**
-> **Reinvent yourself with a method, in community.**
-> A community for people who want to change careers and use technology and AI better — without doing it alone.
+> **If you don't know where to start, start here.**
+> A community for people who want to change careers or their working life and feel lost in all the information
+> out there. One step at a time, with someone beside you.
 >
-> **What you get**
-> - Live group coaching twice a week
-> - Guided lessons for your career change (Giro, Ruta, Ritmo)
-> - A community that supports you and keeps you moving
-> - Discounts on templates and ebooks
+> **How it works**
+> 1. **Watch** one short lesson each week.
+> 2. **Do** one small task.
+> 3. **Share** how it went.
+> 4. **Ask** what got you stuck, in the live coaching (twice a week).
 >
-> **Who it's for:** people in a career transition, or anyone who wants technology working in their favor.
-> **Founding price:** $19 a month for the first 50 members.
+> Founding price: $19 a month for the first 50 members.
 
-## 11. Lanzamiento en 14 días
+## 8. Lanzamiento en 14 días
 
 | Días | Qué |
 |---|---|
-| 1–3 | Cambiar nombre, portada, descripción y "Acerca de". Crear categorías. Publicar el mensaje fijo de **Empieza aquí**. |
-| 3–5 | Grabar el video de bienvenida y las 3 primeras lecciones de Giro. Crear el cupón de miembros en Stripe. |
-| 5–7 | Programar los dos coachings semanales en el calendario de Skool. |
-| 7 | **Anuncio:** Live de TikTok con el enlace `carlamontano.io/live`, correo a tu lista, LinkedIn y mensajes directos a 20 personas que ya te conocen. |
-| 8–14 | Primer coaching en vivo como evento de lanzamiento. Cerrar la oferta fundadora cuando lleguen a 50 miembros (o con fecha límite clara). |
+| 1–3 | Cambiar nombre, portada y "Acerca de". Crear solo las 3 categorías. Publicar el mensaje fijado de *Empieza aquí*. |
+| 3–6 | Grabar la bienvenida y los Pasos 1 a 3. Crear el cupón de miembros en Stripe. |
+| 6–7 | Programar el coaching del martes y el del jueves. |
+| 7 | **Anuncio:** Live de TikTok con `carlamontano.io/live`, correo a tu lista, LinkedIn y mensajes a 20 personas que ya te conocen. |
+| 8–14 | Primer coaching en vivo como lanzamiento. Cerrar la oferta fundadora al llegar a 50 miembros o con fecha límite clara. |
 
-## 12. Qué medir
+## 9. Qué medir (solo tres cosas)
 
-- Miembros nuevos por semana y de dónde vienen (visitas a `/live`, correo, LinkedIn).
-- Miembros **activos** cada semana (publican, comentan o asisten al coaching).
-- Cuántos siguen a los 30 días.
-- Asistencia por idioma a los coachings (para decidir si el de inglés se mantiene).
+1. Miembros nuevos por semana y de dónde vienen.
+2. Cuántos **cuentan un avance** esa semana (es la señal de que están avanzando, no solo mirando).
+3. Cuántos siguen a los 30 días.
 
-## 13. Lo que cambia en el sitio web (pendiente de construir)
+## 10. En el sitio web (pendiente de construir)
 
-- Página de NEXT YOU con la nueva promesa, el precio fundador y un solo botón a Skool.
-- Franja "Miembro fundador: quedan X de 50 lugares" **solo si** llevas la cuenta real de miembros.
-- El enlace de Skool con parámetros de seguimiento para saber qué canal trae a quién.
+- La página de NEXT YOU en **un solo camino**: la promesa, "Mira · Haz · Cuenta · Pregunta", el precio
+  fundador y **un solo botón** a Skool. Hoy tiene cuatro acciones; para alguien perdido, una sola.
+- Franja "Quedan X de 50 lugares" solo si llevas la cuenta real.
+- El enlace a Skool con parámetros de seguimiento para saber qué canal trae a cada miembro.
