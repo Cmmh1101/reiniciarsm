@@ -5,6 +5,7 @@ import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
 import { localizedPath } from "@/lib/i18n/routes";
+import { ABOUT_VIDEO_EMBED_URL } from "@/lib/constants";
 
 export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
   if (!isLocale(params.locale)) return {};
@@ -25,6 +26,21 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
         <p className="text-lg opacity-85 max-w-[52ch]">{about.lead}</p>
       </header>
 
+      {ABOUT_VIDEO_EMBED_URL[locale] && (
+        <section className="px-page pt-16">
+          <div className="aspect-video w-full max-w-[860px] rounded-[2px] overflow-hidden border border-[rgba(20,25,43,0.12)] bg-ink">
+            <iframe
+              src={ABOUT_VIDEO_EMBED_URL[locale]}
+              title={about.videoTitle}
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="w-full h-full"
+            />
+          </div>
+        </section>
+      )}
+
       <section className="px-page py-20 grid md:grid-cols-[1fr_320px] gap-14">
         <div className="flex flex-col gap-5 max-w-[62ch] text-base leading-relaxed">
           {about.story.map((p) => (
@@ -39,6 +55,11 @@ export default function AboutPage({ params }: { params: { locale: string } }) {
             ))}
           </ul>
         </aside>
+      </section>
+
+      <section className="bg-ink text-paper px-page py-16">
+        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-3">{about.approachTitle}</h2>
+        <p className="opacity-85 max-w-[60ch] text-lg">{about.approachBody}</p>
       </section>
 
       <section className="bg-paper-soft px-page py-20">

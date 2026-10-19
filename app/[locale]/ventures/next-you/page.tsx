@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
 import { localizedPath } from "@/lib/i18n/routes";
-import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 
 export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
   if (!isLocale(params.locale)) return {};
@@ -13,68 +13,92 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
   return pageMetadata({ locale: params.locale, route: "nextYou", title: nextYou.meta.title, description: nextYou.meta.description });
 }
 
+// One path, one button: this page is for people who feel lost, so it offers a single next step.
 export default function NextYouPage({ params }: { params: { locale: string } }) {
   if (!isLocale(params.locale)) notFound();
   const locale = params.locale;
-  const { nextYou } = getDictionary(locale);
+  const { nextYou: n } = getDictionary(locale);
 
-  const actionHref: Record<string, { href: string; external?: boolean }> = {
-    diagnostic: { href: localizedPath(locale, "diagnostic") },
-    community: { href: SKOOL_COMMUNITY_URL, external: true },
-    story: { href: localizedPath(locale, "nextYouStory") },
-    mentoring: { href: localizedPath(locale, "mentoring") },
-  };
+  // Tag the link so we can tell which page and language sent each new member.
+  const joinUrl = new URL(SKOOL_COMMUNITY_URL);
+  joinUrl.searchParams.set("utm_source", "carlamontano.io");
+  joinUrl.searchParams.set("utm_medium", "nextyou-page");
+  joinUrl.searchParams.set("utm_campaign", locale);
+
+  const joinButton =
+    "font-mono text-xs tracking-wide uppercase px-[30px] py-[18px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform";
 
   return (
     <main>
       <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{nextYou.eyebrow}</p>
-        <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{nextYou.title}</h1>
-        <p className="text-lg opacity-85 max-w-[56ch]">{nextYou.lead}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{n.eyebrow}</p>
+        <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{n.title}</h1>
+        <p className="text-lg opacity-85 max-w-[52ch] mb-9">{n.lead}</p>
+        <a href={joinUrl.toString()} target="_blank" rel="noopener noreferrer" className={joinButton}>
+          {n.cta} ↗
+        </a>
       </header>
 
       <section className="px-page py-20">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">{nextYou.methodEyebrow}</p>
-        <h2 className="font-display text-[clamp(28px,3.6vw,44px)] leading-[1.12] mb-3">{nextYou.methodTitle}</h2>
-        <p className="opacity-75 mb-10 max-w-[56ch]">{nextYou.methodLead}</p>
-        <ol className="grid md:grid-cols-3 gap-8">
-          {nextYou.phases.map((p, i) => (
-            <li key={p.name} className="border-t-2 border-clay pt-4">
-              <p className="font-mono text-[11px] opacity-60 mb-1">{i + 1} / 3</p>
-              <h3 className="font-display text-2xl mb-2">{p.name}</h3>
-              <p className="text-[15px] mb-3">{p.promise}</p>
-              <p className="font-mono text-[11px] uppercase tracking-wide opacity-60">{p.pillars}</p>
+        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] mb-10">{n.howTitle}</h2>
+        <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {n.verbs.map((v, i) => (
+            <li key={v.verb} className="border-t-2 border-clay pt-4">
+              <p className="font-mono text-[11px] opacity-50 mb-1">{i + 1} / 4</p>
+              <h3 className="font-display text-3xl mb-2">{v.verb}</h3>
+              <p className="text-[15px] opacity-80">{v.body}</p>
             </li>
           ))}
         </ol>
-        <p className="mt-10 border-l-2 border-sage pl-4 max-w-[60ch] text-[15px]">
-          <span className="font-mono text-[11px] uppercase tracking-wide block opacity-60 mb-1">{nextYou.communityLabel}</span>
-          {nextYou.communityNote}
-        </p>
       </section>
 
       <section className="bg-paper-soft px-page py-20">
-        <h2 className="font-display text-[clamp(24px,3vw,34px)] leading-[1.12] mb-10">{nextYou.actionsTitle}</h2>
-        <div className="grid sm:grid-cols-2 gap-8">
-          {nextYou.actions.map((a) => {
-            const t = actionHref[a.key];
-            const content = (
-              <>
-                <h3 className="font-display text-xl mb-2">{a.title} {t.external ? "↗" : "→"}</h3>
-                <p className="text-sm opacity-75">{a.body}</p>
-              </>
-            );
-            const cls = "block border border-[rgba(20,25,43,0.18)] rounded-[2px] p-6 bg-paper hover:-translate-y-px transition-transform";
-            return t.external ? (
-              <a key={a.key} href={t.href} target="_blank" rel="noopener noreferrer" className={cls}>
-                {content}
-              </a>
-            ) : (
-              <Link key={a.key} href={t.href} className={cls}>
-                {content}
-              </Link>
-            );
-          })}
+        <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] mb-3">{n.pathTitle}</h2>
+        <p className="opacity-75 mb-10 max-w-[56ch]">{n.pathLead}</p>
+        <ol className="grid md:grid-cols-3 gap-8">
+          {n.phases.map((p) => (
+            <li key={p.name} className="bg-paper border border-[rgba(20,25,43,0.12)] rounded-[2px] p-7">
+              <p className="font-mono text-[11px] uppercase tracking-wide text-clay mb-2">{p.steps}</p>
+              <h3 className="font-display text-2xl mb-1">{p.plain}</h3>
+              <p className="font-mono text-[11px] opacity-50 mb-3">{p.name}</p>
+              <p className="text-[15px] opacity-80">{p.promise}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="px-page py-20 grid md:grid-cols-2 gap-12 items-start">
+        <div>
+          <h2 className="font-display text-[clamp(26px,3.2vw,40px)] leading-[1.12] mb-6">{n.includesTitle}</h2>
+          <ul className="flex flex-col gap-3 text-[16px]">
+            {n.includes.map((i) => (
+              <li key={i} className="border-l-2 border-sage pl-4">
+                {i}
+              </li>
+            ))}
+          </ul>
+          <p className="text-sm opacity-65 mt-6 max-w-[44ch]">{n.coachingNote}</p>
+        </div>
+        <div className="bg-ink text-paper rounded-[2px] p-9">
+          <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">{n.priceEyebrow}</p>
+          <p className="font-display text-6xl mb-2">{n.price}</p>
+          <p className="opacity-80 mb-8 max-w-[34ch]">{n.priceNote}</p>
+          <a href={joinUrl.toString()} target="_blank" rel="noopener noreferrer" className={joinButton}>
+            {n.cta} ↗
+          </a>
+          <p className="text-xs opacity-60 mt-4">{n.ctaNote}</p>
+        </div>
+      </section>
+
+      <section className="px-page pb-20">
+        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-3">{n.moreTitle}</p>
+        <div className="flex flex-col gap-2 text-[15px]">
+          <Link href={localizedPath(locale, "nextStep")} className="underline w-fit">
+            {n.quizLink} →
+          </Link>
+          <Link href={localizedPath(locale, "nextYouStory")} className="underline w-fit">
+            {n.storyLink} →
+          </Link>
         </div>
       </section>
     </main>
