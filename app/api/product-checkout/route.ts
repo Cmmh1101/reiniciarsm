@@ -14,12 +14,12 @@ export async function POST(request: Request) {
   const locale = body?.locale === "es" ? "es" : "en";
 
   if (!name || !EMAIL_RE.test(email)) {
-    return NextResponse.json({ error: "Datos inválidos." }, { status: 400 });
+    return NextResponse.json({ error: locale === "en" ? "Invalid details." : "Datos inválidos." }, { status: 400 });
   }
 
   const product = await getProductById(productId);
   if (!product || !product.active) {
-    return NextResponse.json({ error: "Producto no disponible." }, { status: 404 });
+    return NextResponse.json({ error: locale === "en" ? "That product isn't available." : "Producto no disponible." }, { status: 404 });
   }
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

@@ -15,6 +15,22 @@ const nextConfig = {
     return { beforeFiles: rewrites };
   },
 
+  // Baseline security headers for every page. (A Content-Security-Policy is deliberately not set here:
+  // it needs to be tuned for analytics and payments before it can be enforced without breaking them.)
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "X-Frame-Options", value: "SAMEORIGIN" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+    ];
+  },
+
   async redirects() {
     // Old WordPress and pre-bilingual URLs. The same list is applied in middleware.ts, because on Netlify
     // the middleware runs before these config redirects (and would otherwise send /blog to /es/blog, a 404).
