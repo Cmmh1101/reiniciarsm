@@ -2,6 +2,8 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { LOCALE_COOKIE, isLocale } from "@/lib/i18n/config";
 import { detectLocale } from "@/lib/i18n/detect";
+import { legacyRedirectFor } from "@/lib/i18n/legacy";
+import { localizedPath, matchRoute } from "@/lib/i18n/routes";
 
 async function adminGate(request: NextRequest) {
   let response = NextResponse.next({ request: { headers: request.headers } });
@@ -41,12 +43,19 @@ async function adminGate(request: NextRequest) {
   return response;
 }
 
-// Any public path without a /en or /es prefix is sent to the visitor's language: their saved
-// choice, else browser language, else country, else English.
+// Public paths without a /en or /es prefix:
+//  1. Old WordPress / pre-bilingual URLs go to their permanent new location (kept here, not only in
+//     next.config.js, because on Netlify middleware runs first).
+//  2. A path that is a known Spanish slug (/sobre-mi) goes to /es.
+//  3. Anything else goes to the visitor's language: their saved choice, else browser language, else
+//     country, else English.
 function localeRedirect(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const firstSegment = pathname.split("/")[1];
   if (isLocale(firstSegment)) return NextResponse.next();
+
+  const legacy = legacyRedirectFor(pathname);
+  if (legacy) return NextResponse.redirect(new URL(`${legacy}${search}`, request.url), 308);
 
   const locale = detectLocale({
     cookie: request.cookies.get(LOCALE_COOKIE)?.value,
@@ -54,8 +63,15 @@ function localeRedirect(request: NextRequest) {
     country: request.geo?.country,
   });
 
-  const target = new URL(`/${locale}${pathname === "/" ? "" : pathname}${search}`, request.url);
-  const response = NextResponse.redirect(target, 307);
+  const rest = pathname === "/" ? "" : pathname.replace(/^\//, "");
+  const esMatch = matchRoute("es", rest);
+  const enMatch = matchRoute("en", rest);
+  let path: string;
+  if (esMatch && !enMatch) path = localizedPath("es", esMatch.key, esMatch.params);
+  else if (enMatch) path = localizedPath(locale, enMatch.key, enMatch.params);
+  else path = `/${locale}${pathname === "/" ? "" : pathname}`;
+
+  const response = NextResponse.redirect(new URL(`${path}${search}`, request.url), 307);
   // The destination depends on who is asking — keep caches from serving one visitor's redirect to another.
   response.headers.set("Cache-Control", "private, no-store");
   response.headers.set("Vary", "Accept-Language, Cookie");

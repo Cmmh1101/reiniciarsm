@@ -1,0 +1,114 @@
+[
+  {
+    "source": "/como-elegir-tu-primer-rol-en-tecnologia-desde-diseno-hasta-automatizacion",
+    "destination": "/es/recursos/como-elegir-tu-primer-rol-en-tecnologia-desde-diseno-hasta-automatizacion"
+  },
+  {
+    "source": "/de-mesera-a-software-engineer-mi-historia-completa-con-fechas-reales",
+    "destination": "/es/recursos/de-mesera-a-software-engineer"
+  },
+  {
+    "source": "/historiasguias",
+    "destination": "/es/recursos"
+  },
+  {
+    "source": "/1-1-sessions",
+    "destination": "/es/trabaja-conmigo/mentoria"
+  },
+  {
+    "source": "/checkout",
+    "destination": "/es/trabaja-conmigo/mentoria"
+  },
+  {
+    "source": "/links",
+    "destination": "/es"
+  },
+  {
+    "source": "/checklist-thankyou",
+    "destination": "/es"
+  },
+  {
+    "source": "/empieza-aqui",
+    "destination": "/es"
+  },
+  {
+    "source": "/customer-dashboard",
+    "destination": "/es"
+  },
+  {
+    "source": "/card-link/comunidad",
+    "destination": "/es/proyectos/next-you"
+  },
+  {
+    "source": "/card-link/:slug*",
+    "destination": "/es"
+  },
+  {
+    "source": "/form/comunidad",
+    "destination": "/es/proyectos/next-you"
+  },
+  {
+    "source": "/form/:slug*",
+    "destination": "/es"
+  },
+  {
+    "source": "/herramientas",
+    "destination": "/es"
+  },
+  {
+    "source": "/products/empieza-en-tecnologia-con-claridad",
+    "destination": "/es/tienda/el-mapa-de-tu-reinicio-workbook"
+  },
+  {
+    "source": "/blog",
+    "destination": "/es/recursos"
+  },
+  {
+    "source": "/blog/:slug",
+    "destination": "/es/recursos/:slug"
+  },
+  {
+    "source": "/mi-historia",
+    "destination": "/es/sobre-mi"
+  },
+  {
+    "source": "/productos",
+    "destination": "/es/tienda"
+  },
+  {
+    "source": "/productos/gracias",
+    "destination": "/es/tienda/gracias"
+  },
+  {
+    "source": "/productos/:slug",
+    "destination": "/es/tienda/:slug"
+  },
+  {
+    "source": "/mentorias",
+    "destination": "/es/trabaja-conmigo/mentoria"
+  },
+  {
+    "source": "/mentorias/gracias",
+    "destination": "/es/trabaja-conmigo/mentoria/gracias"
+  },
+  {
+    "source": "/comunidad",
+    "destination": "/es/proyectos/next-you"
+  },
+  {
+    "source": "/diagnostico-next-you",
+    "destination": "/es/proyectos/next-you/diagnostico"
+  },
+  {
+    "source": "/contacto",
+    "destination": "/es/contacto"
+  },
+  {
+    "source": "/privacidad",
+    "destination": "/es/privacidad"
+  },
+  {
+    "source": "/terminos",
+    "destination": "/es/terminos"
+  }
+]
