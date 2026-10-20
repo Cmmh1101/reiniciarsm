@@ -9,9 +9,11 @@ export async function POST(request: Request) {
   if (denied) return denied;
 
   const body = await request.json().catch(() => null);
-  const { name, slug, description, category, priceCents, filePath, fileName, imageUrl } = body ?? {};
+  const { name, nameEn, slug, description, descriptionEn, category, priceCents, filePath, fileName, imageUrl } = body ?? {};
+  const nameEs = typeof name === "string" ? name.trim() : "";
+  const nameEnglish = typeof nameEn === "string" ? nameEn.trim() : "";
 
-  if (!name || !slug || !priceCents || !filePath || !fileName) {
+  if ((!nameEs && !nameEnglish) || !slug || !priceCents || !filePath || !fileName) {
     return adminError(400, "Required fields are missing.", "Faltan campos requeridos.");
   }
   if (typeof priceCents !== "number" || priceCents <= 0) {
@@ -25,9 +27,12 @@ export async function POST(request: Request) {
   const { data, error } = await supabase
     .from("products")
     .insert({
-      name,
+      // The original columns hold Spanish. An English-only product uses its English name there too, so it shows in both languages.
+      name: nameEs || nameEnglish,
+      // English columns exist after migration 0021 — only sent when there is English text.
+      ...(nameEnglish ? { name_en: nameEnglish, description_en: typeof descriptionEn === "string" && descriptionEn.trim() ? descriptionEn.trim() : null } : {}),
       slug,
-      description: description || null,
+      description: (typeof description === "string" && description.trim()) || (typeof descriptionEn === "string" && !nameEs && descriptionEn.trim()) || null,
       category,
       price_cents: priceCents,
       file_path: filePath,

@@ -6,6 +6,7 @@ import { MIN_PURCHASES_TO_SHOW_COUNT, MIN_REVIEWS_TO_SHOW_RATING, type ProductWi
 import StarRating from "@/components/StarRating";
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/i18n/routes";
+import { productCategoryLabel } from "@/lib/taxonomy";
 
 export default function ProductsGrid({ products, locale, copy }: { products: ProductWithStats[]; locale: Locale; copy: { allCategories: string; free: string; purchases: string } }) {
   const categories = useMemo(() => {
@@ -40,7 +41,7 @@ export default function ProductsGrid({ products, locale, copy }: { products: Pro
                 activeCategory === c ? "bg-ink text-paper border-ink" : "border-[rgba(20,25,43,0.2)] opacity-70"
               }`}
             >
-              {c}
+              {productCategoryLabel(c, locale)}
             </button>
           ))}
         </div>
@@ -56,7 +57,7 @@ export default function ProductsGrid({ products, locale, copy }: { products: Pro
               <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
             )}
             <div className="p-6 flex flex-col gap-3 flex-1">
-              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{p.category}</span>
+              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{productCategoryLabel(p.category, locale)}</span>
               <h3 className="text-lg font-display">{p.name}</h3>
               {p.description && <p className="text-sm opacity-70">{p.description}</p>}
               {p.reviewCount >= MIN_REVIEWS_TO_SHOW_RATING && p.avgRating !== null && (

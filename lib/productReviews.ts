@@ -134,18 +134,32 @@ interface PurchaseForReview {
   alreadyReviewed: boolean;
 }
 
-/** For the public /resenar/[purchaseId] page — confirms the purchase is real and completed, and
- * whether it was already reviewed, before showing the form. */
-export async function getPurchaseForReview(purchaseId: string): Promise<PurchaseForReview | null> {
+/** For the public review pages — confirms the purchase is real and completed, and whether it was
+ * already reviewed, before showing the form. The product name is shown in the visitor's language. */
+export async function getPurchaseForReview(purchaseId: string, locale: "en" | "es" = "es"): Promise<PurchaseForReview | null> {
   const supabase = createSupabaseAdminClient();
-  const [{ data: purchase }, { data: existingReview }] = await Promise.all([
-    supabase.from("product_purchases").select("id, status, products(name)").eq("id", purchaseId).eq("status", "completed").single(),
+  // name_en comes from migration 0021; fall back to the original name until it exists.
+  const loadPurchase = async () => {
+    const withEn = await supabase.from("product_purchases").select("id, status, products(name, name_en)").eq("id", purchaseId).eq("status", "completed").single();
+    if (!withEn.error) return withEn.data as unknown as PurchaseRow | null;
+    const plain = await supabase.from("product_purchases").select("id, status, products(name)").eq("id", purchaseId).eq("status", "completed").single();
+    return plain.data as unknown as PurchaseRow | null;
+  };
+  const [purchase, { data: existingReview }] = await Promise.all([
+    loadPurchase(),
     supabase.from("product_reviews").select("id").eq("purchase_id", purchaseId).maybeSingle(),
   ]);
 
   if (!purchase) return null;
   const product = Array.isArray(purchase.products) ? purchase.products[0] : purchase.products;
-  return { productName: product?.name ?? "tu compra", alreadyReviewed: !!existingReview };
+  const name = locale === "en" ? product?.name_en?.trim() || product?.name : product?.name;
+  return { productName: name ?? (locale === "en" ? "your purchase" : "tu compra"), alreadyReviewed: !!existingReview };
+}
+
+interface PurchaseRow {
+  id: string;
+  status: string;
+  products: { name: string; name_en?: string | null } | { name: string; name_en?: string | null }[] | null;
 }
 
 export async function setReviewStatus(reviewId: string, status: "approved" | "rejected"): Promise<boolean> {

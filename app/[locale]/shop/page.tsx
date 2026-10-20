@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getActiveProducts } from "@/lib/products";
+import { getActiveProducts, localizeProduct } from "@/lib/products";
 import { getProductStats, withProductStats } from "@/lib/productReviews";
 import ProductsGrid from "@/components/ProductsGrid";
 import { isLocale } from "@/lib/i18n/config";
@@ -22,7 +22,7 @@ export default async function ShopPage({ params }: { params: { locale: string } 
   const { shop, common } = getDictionary(locale);
 
   const [products, stats] = await Promise.all([getActiveProducts(), getProductStats()]);
-  const productsWithStats = withProductStats(products, stats);
+  const productsWithStats = withProductStats(products.map((p) => localizeProduct(p, locale)), stats);
 
   return (
     <main className="px-page py-24">

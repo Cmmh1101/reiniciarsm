@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createStripeClient } from "@/lib/stripe";
-import { getProductById } from "@/lib/products";
+import { getProductById, localizeProduct } from "@/lib/products";
 import { recordProductPurchase } from "@/lib/productPurchases";
 import { localizedPath } from "@/lib/i18n/routes";
 
@@ -17,11 +17,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: locale === "en" ? "Invalid details." : "Datos inválidos." }, { status: 400 });
   }
 
-  const product = await getProductById(productId);
-  if (!product || !product.active) {
+  const found = await getProductById(productId);
+  if (!found || !found.active) {
     return NextResponse.json({ error: locale === "en" ? "That product isn't available." : "Producto no disponible." }, { status: 404 });
   }
 
+  const product = localizeProduct(found, locale);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
   // Stripe Checkout rejects a $0 line item — free products skip Stripe entirely.

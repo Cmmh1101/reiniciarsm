@@ -15,10 +15,14 @@ export default function ProductForm({ product }: { product?: Product }) {
   const t = all.products.form;
   const isEdit = !!product;
 
-  const [name, setName] = useState(product?.name ?? "");
+  type Lang = "en" | "es";
+  const LANG_LABEL: Record<Lang, string> = { en: all.common.english, es: all.common.spanish };
+  // The original columns hold Spanish; the English text lives in name_en / description_en.
+  const [names, setNames] = useState<Record<Lang, string>>({ es: product?.name ?? "", en: product?.name_en ?? "" });
+  const [descriptions, setDescriptions] = useState<Record<Lang, string>>({ es: product?.description ?? "", en: product?.description_en ?? "" });
+  const [lang, setLang] = useState<Lang>(product && !product.name_en ? "es" : "en");
   const [slug, setSlug] = useState(product?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(isEdit);
-  const [description, setDescription] = useState(product?.description ?? "");
   const [category, setCategory] = useState(product?.category ?? PRODUCT_CATEGORIES[0]);
   const [price, setPrice] = useState(product ? (product.price_cents / 100).toFixed(2) : "");
   const [file, setFile] = useState<File | null>(null);
@@ -47,8 +51,9 @@ export default function ProductForm({ product }: { product?: Product }) {
   }
 
   function handleNameChange(value: string) {
-    setName(value);
-    if (!slugTouched) setSlug(slugify(value));
+    setNames((prev) => ({ ...prev, [lang]: value }));
+    // The URL follows the first name typed (English preferred), until the slug is edited by hand.
+    if (!slugTouched && (lang === "en" || !names.en)) setSlug(slugify(value));
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -56,7 +61,7 @@ export default function ProductForm({ product }: { product?: Product }) {
     setError("");
 
     const priceCents = Math.round(parseFloat(price) * 100);
-    if (!name.trim() || !slug.trim() || !priceCents || priceCents <= 0) {
+    if ((!names.es.trim() && !names.en.trim()) || !slug.trim() || !priceCents || priceCents <= 0) {
       setError(t.errorFields);
       return;
     }
@@ -84,9 +89,11 @@ export default function ProductForm({ product }: { product?: Product }) {
     setSaving(true);
     try {
       const payload = {
-        name: name.trim(),
+        name: names.es.trim(),
+        nameEn: names.en.trim(),
         slug: slug.trim(),
-        description: description.trim(),
+        description: descriptions.es.trim(),
+        descriptionEn: descriptions.en.trim(),
         category,
         priceCents,
         filePath,
@@ -113,10 +120,28 @@ export default function ProductForm({ product }: { product?: Product }) {
     <main className="p-10 max-w-xl">
       <h1 className="font-display text-2xl mb-6">{isEdit ? t.editTitle : t.newTitle}</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div role="tablist" aria-label={t.languageTabs} className="flex gap-2">
+          {(["en", "es"] as Lang[]).map((l) => (
+            <button
+              key={l}
+              type="button"
+              role="tab"
+              aria-selected={lang === l}
+              onClick={() => setLang(l)}
+              className={`font-mono text-xs px-4 py-2.5 rounded-[3px] border ${
+                lang === l ? "bg-ink text-paper border-ink" : "bg-paper-soft border-[rgba(20,25,43,0.15)]"
+              }`}
+            >
+              {LANG_LABEL[l]}
+              {l !== lang && !names[l].trim() && <span className="opacity-60"> {fmt(t.emptyUse, { other: l === "es" ? LANG_LABEL.en : LANG_LABEL.es })}</span>}
+            </button>
+          ))}
+        </div>
+
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>{t.name}</span>
+          <span>{fmt(t.name, { lang: LANG_LABEL[lang] })}</span>
           <input
-            value={name}
+            value={names[lang]}
             onChange={(e) => handleNameChange(e.target.value)}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
           />
@@ -135,11 +160,11 @@ export default function ProductForm({ product }: { product?: Product }) {
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
-          <span>{t.description}</span>
+          <span>{fmt(t.description, { lang: LANG_LABEL[lang] })}</span>
           <textarea
             rows={4}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={descriptions[lang]}
+            onChange={(e) => setDescriptions((prev) => ({ ...prev, [lang]: e.target.value }))}
             className="font-body text-sm px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] resize-none"
           />
         </label>

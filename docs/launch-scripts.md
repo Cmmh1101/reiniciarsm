@@ -99,7 +99,7 @@
 >
 > No tienes que hacerlo solo/a. Aquí estoy. Nos vemos en el primer coaching.
 
-**Versión corta en inglés (≈ 1:30, para publicar cuando haya miembros en inglés):**
+**Versión corta en inglés (≈ 1:30). La versión completa en inglés está en la sección 6b:**
 
 > Hi, welcome. I'm glad you're here. If you feel lost, you're not doing anything wrong. There's so much
 > information out there that it's normal not to know where to start. The problem is almost never that you lack
@@ -257,6 +257,173 @@
 > **Tu tarea (10 minutos):** escribe "Esta semana voy a… el día…".
 >
 > **Cuéntalo en Avances:** tu prueba elegida. Y cuando la hagas, vuelve y cuenta qué pasó.
+
+---
+
+## 6b. English versions — welcome video and Steps 1–3
+
+> Same structure as the Spanish scripts, written to be spoken. Record them for the Thursday (English) audience
+> and for English-speaking members. Titles keep the number so the path is easy to follow.
+
+### Welcome to the community (≈ 3 minutes, full)
+
+> Hi, welcome. I'm so glad you're here.
+>
+> Before anything else, I want to tell you something: if you feel lost, you're not doing anything wrong. There is
+> so much information online that it's normal not to know where to start. The problem is almost never that you
+> lack ability. It's that nobody told you what the next step is.
+>
+> That's what we do here. **One step at a time.**
+>
+> This community works with four verbs. They're always the same. **Watch, do, share and ask.**
+>
+> **Watch:** each week there's one short lesson, five to ten minutes. It's in the *Classroom* tab, in the course
+> *Your path*. The lessons are numbered: Step 1, Step 2, Step 3. You just follow the number.
+>
+> **Do:** every lesson ends with one small task. Just one. It doesn't have to be perfect. It just has to be done.
+>
+> **Share:** when you've done it, you come to the *Progress* category and tell us how it went. Even if it was
+> little. Even if it didn't work out. Sharing it is already progress, and everyone here is in the same place.
+>
+> **Ask:** if something got you stuck, ask in *Questions*, or bring it to the live coaching. There are two each
+> week: Tuesdays in Spanish and Thursdays in English. That's where we work through your question together.
+>
+> So, where do you start today? Three things, ten minutes. First, introduce yourself in *Progress*: tell me in one
+> sentence where you are and what you want to change. Second, open Step 1. And third, if you get stuck, ask.
+>
+> You don't have to do this alone. I'm here. See you at the first coaching.
+
+### Step 1 — "Why you feel stuck" (≈ 6 min)
+
+> Step 1. Why you feel stuck.
+>
+> If you're here, you've probably been thinking about changing something — your job, your career, your direction —
+> for a while, and you still haven't done it. And maybe you're asking yourself: what's wrong with me? Why can
+> other people do it and I can't?
+>
+> Let me tell you what I believe, and what I lived. It's almost never a lack of ability. It's three things.
+>
+> **First: too much information.** There are a thousand courses, a thousand videos, a thousand different pieces of
+> advice. Each one says something different. And when you have that many options, the easiest thing is to choose
+> none.
+>
+> **Second: no clear next step.** You think about the whole change — "I want to change careers" — and that's
+> huge. A huge goal paralyzes you. What moves a person is a small, concrete step.
+>
+> **Third: the voice inside.** The one that says "it's not for me," "it's too late," "other people can." We'll
+> look at that in the next step.
+>
+> Here's my case. Between 2019 and 2021 I spent two years in a cycle: I'd learn a little technology, doubt
+> myself, stop, and come back months later. I didn't lack ability. What I lacked was a small, real step that
+> showed me it was possible.
+>
+> So today we're not going to solve your career. Today we're just going to name what's happening. Because what
+> isn't named stays like a fog.
+>
+> Today's task is just one. Take a sheet of paper and write two sentences. First: **"What I want to change
+> is…"** Second: **"What has held me back the most so far is…"** One sentence each. No more.
+>
+> Then come to *Progress* and tell me how it went. You don't have to share the sentences if you don't want to:
+> you can just say "done." But if you share them, we can help.
+>
+> See you in Step 2.
+
+**Reading (lesson description):**
+
+> **Step 1 summary.** Feeling stuck is almost never a lack of ability. It's usually too much information, no clear
+> next step, and an inner voice holding you back. Today we just name what's happening.
+>
+> **Your task (10 minutes):** write two sentences.
+> 1. "What I want to change is…"
+> 2. "What has held me back the most so far is…"
+>
+> **Share it in Progress:** write "Step 1 done" and, if you like, one of your sentences.
+
+### Step 2 — "The belief that holds you back" (≈ 6 min)
+
+> Step 2. The belief that holds you back.
+>
+> In the last step we talked about that voice inside. Today we give it a name.
+>
+> I had a sentence I repeated every time I tried to learn technology: "educator, Latina, woman, mom…
+> impossible." Every time I thought it, I stopped. And for years I didn't notice something: that wasn't a fact.
+> It was a belief.
+>
+> What's the difference? A fact can be checked. "It rained today" is a fact. A belief is a sentence we repeat so
+> much that it sounds like the truth. "I'm not good at this" isn't a fact. It's a belief.
+>
+> And a belief can be reviewed. Here's how, in three steps.
+>
+> **One: write it exactly as you think it.** In your words, without softening it. "I'm too old to change." "I
+> don't have the degree." "I'm not a tech person." Write the whole sentence.
+>
+> **Two: ask yourself whether it's a fact or a belief.** Can I check it? Or is it a sentence I keep repeating?
+>
+> **Three: find evidence against it, in your own history.** Not in other people's: in yours. One thing you've
+> done, learned or overcome that contradicts that sentence. There's always one. For me it was passing a technical
+> exam in a language I barely spoke. If I could do that, what else was possible?
+>
+> Notice I'm not asking you to stop feeling doubt. Doubt doesn't leave all at once. What changes is that it stops
+> being the one in charge.
+>
+> Today's task: write your belief, and under it, one piece of evidence against it from your own life. Just one of
+> each.
+>
+> Tell me in *Progress* how it went. See you in Step 3.
+
+**Reading:**
+
+> **Step 2 summary.** A belief is a sentence we repeat so much that it sounds true, but it isn't a fact. It can be
+> reviewed: write it down, ask whether it can be checked, and find evidence against it in your own history.
+>
+> **Your task (10 minutes):**
+> 1. Write your belief exactly as you think it.
+> 2. Under it, write **one** thing from your life that contradicts it.
+>
+> **Share it in Progress:** "Step 2 done" and, if you like, your piece of evidence.
+
+### Step 3 — "A small, real proof" (≈ 6 min)
+
+> Step 3. A small, real proof.
+>
+> You've named what's happening, and you've reviewed that belief that holds you back. Now we do the most
+> important thing: move a little. Because doubt isn't broken by thinking. It's broken by evidence.
+>
+> Here's how it happened to me. After two years of trying and stopping, what changed things wasn't feeling less
+> afraid. It was a weekend as a volunteer, building a website for a nonprofit. I ended up leading that team. It
+> wasn't a course. It was a real result, something I could see finished. And that was the first proof that it
+> was possible.
+>
+> That's what I call a **small, real proof.** It has four characteristics.
+>
+> **It's small:** you can finish it in a few hours, not months.
+> **It's real:** it produces something that exists — a document, a page, a conversation, something you can see.
+> **It moves toward what you want:** it's related to the change you wrote in Step 1.
+> **It has a date:** you put it on your calendar.
+>
+> Examples. If you want to get into tech: finish a mini project, even a simple one. If you want to change
+> careers: have a twenty-minute conversation with someone who already works in that field. If you want to use AI
+> better: solve a real problem from your work with a tool and write down what happened.
+>
+> Notice what your task is not: it's not choosing your career for life. It's just a proof.
+>
+> Today's task: choose **one** small, real proof, and put a date on it this week. Write it in one sentence:
+> "This week I'm going to… on…"
+>
+> Tell me in *Progress* which one you chose. And the day you do it, come back and tell me what happened. In Step 4
+> we'll use that proof to choose your direction. See you there.
+
+**Reading:**
+
+> **Step 3 summary.** Doubt isn't broken by thinking: it's broken by evidence. A small, real proof is something you
+> can finish in a few hours, that produces something visible, that moves toward what you want, and that has a date.
+>
+> **Examples:** finish a mini project · have a 20-minute conversation with someone who already does what you want
+> · solve a real problem from your work with an AI tool and write down what happened.
+>
+> **Your task (10 minutes):** write "This week I'm going to… on…"
+>
+> **Share it in Progress:** the proof you chose. And when you do it, come back and tell us what happened.
 
 ---
 

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProductBySlug } from "@/lib/products";
+import { getProductBySlug, localizeProduct } from "@/lib/products";
+import { productCategoryLabel } from "@/lib/taxonomy";
 import { getApprovedReviewsForProduct, getProductStats, MIN_PURCHASES_TO_SHOW_COUNT, MIN_REVIEWS_TO_SHOW_RATING } from "@/lib/productReviews";
 import ProductBuyForm from "@/components/ProductBuyForm";
 import StarRating from "@/components/StarRating";
@@ -15,8 +16,9 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
   if (!isLocale(params.locale)) return {};
-  const product = await getProductBySlug(params.slug);
-  if (!product) return {};
+  const found = await getProductBySlug(params.slug);
+  if (!found) return {};
+  const product = localizeProduct(found, params.locale);
   return pageMetadata({
     locale: params.locale,
     route: "shopProduct",
@@ -31,8 +33,9 @@ export default async function ProductPage({ params }: { params: { locale: string
   const locale = params.locale;
   const { shop, common } = getDictionary(locale);
 
-  const product = await getProductBySlug(params.slug);
-  if (!product) notFound();
+  const found = await getProductBySlug(params.slug);
+  if (!found) notFound();
+  const product = localizeProduct(found, locale);
 
   const [statsMap, reviews] = await Promise.all([getProductStats(), getApprovedReviewsForProduct(product.id)]);
   const stats = statsMap.get(product.id);
@@ -49,7 +52,7 @@ export default async function ProductPage({ params }: { params: { locale: string
       </Link>
       <div className={`grid gap-16 ${product.image_url ? "md:grid-cols-[1fr_1fr] max-w-[1000px]" : "max-w-[560px]"}`}>
         <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{product.category}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{productCategoryLabel(product.category, locale)}</p>
           <h1 className="font-display text-[clamp(28px,3.6vw,40px)] leading-[1.1] mb-5">{product.name}</h1>
           {product.description && <p className="text-base opacity-90 mb-6 max-w-[48ch]">{product.description}</p>}
           {(showRating || showPurchaseCount) && (

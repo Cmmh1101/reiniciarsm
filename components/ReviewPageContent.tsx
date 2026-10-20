@@ -6,7 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
 /** The review page body, shared by the legacy Spanish /resenar/[id] link (already in sent emails) and /[locale]/review/[id]. */
 export default async function ReviewPageContent({ locale, purchaseId }: { locale: Locale; purchaseId: string }) {
   const { review } = getDictionary(locale);
-  const purchase = await getPurchaseForReview(purchaseId);
+  const purchase = await getPurchaseForReview(purchaseId, locale);
 
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-6 py-24">

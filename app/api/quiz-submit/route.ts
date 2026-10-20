@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { computeWinner, isValidScores, type QuizScores } from "@/lib/diagnostic";
 import { enrollInSequence } from "@/lib/sequenceEngine";
-import { sendEnglishQuizResult } from "@/lib/quizEmailEn";
 import { upsertContact } from "@/lib/contactUpsert";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,15 +54,11 @@ export async function POST(request: Request) {
   // async call risks never actually completing. Errors are swallowed rather
   // than failing the request — the lead should still see their result even
   // if the confirmation email couldn't be sent.
-  // English takers get the English result email only: the follow-up drip exists in Spanish alone for now.
+  // The result email goes out now and the follow-ups later, in the language they took the diagnostic in.
   try {
-    if (locale === "en") {
-      await sendEnglishQuizResult(contact.id, email, name, winner.key);
-    } else {
-      await enrollInSequence(contact.id, email, name, `quiz_${winner.key}`, "es");
-    }
+    await enrollInSequence(contact.id, email, name, `quiz_${winner.key}`, locale);
   } catch (err) {
-    console.error("quiz-submit: sending the result email failed", err);
+    console.error("quiz-submit: enrollInSequence failed", err);
   }
 
   return NextResponse.json({ pillar: winner.key, archetype: winner.archetype });

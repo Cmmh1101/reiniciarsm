@@ -3,8 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsletterForm from "@/components/NewsletterForm";
 import { getLocalizedPosts } from "@/lib/posts";
-import { pillarLabel } from "@/lib/taxonomy";
-import { getActiveProducts } from "@/lib/products";
+import { pillarLabel, productCategoryLabel } from "@/lib/taxonomy";
+import { getActiveProducts, localizeProduct } from "@/lib/products";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
@@ -25,7 +25,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
   const { home: h, site, common, nav, newsletter, about } = getDictionary(locale);
 
   const [posts, products] = await Promise.all([getLocalizedPosts(locale, 3), getActiveProducts()]);
-  const featuredProducts = products.slice(0, 3);
+  const featuredProducts = products.slice(0, 3).map((p) => localizeProduct(p, locale));
 
   return (
     <main>
@@ -135,7 +135,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
             <div className="grid md:grid-cols-3 gap-7 mb-12">
               {featuredProducts.map((p) => (
                 <Link key={p.id} href={localizedPath(locale, "shopProduct", { slug: p.slug })} className="flex flex-col gap-2 border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-                  <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{p.category}</span>
+                  <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{productCategoryLabel(p.category, locale)}</span>
                   <span className="font-display text-lg">{p.name}</span>
                   <span className="font-mono text-sm mt-auto">{p.price_cents === 0 ? common.free : `$${(p.price_cents / 100).toFixed(2)}`}</span>
                 </Link>

@@ -1,7 +1,7 @@
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
 import { recordEmailSend } from "@/lib/emailTracking";
-import { getProductById } from "@/lib/products";
+import { getProductById, localizeProduct } from "@/lib/products";
 import { upsertContact } from "@/lib/contactUpsert";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n/config";
 
@@ -59,11 +59,13 @@ export async function recordProductPurchase({ email, name, productId, amountCent
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const downloadUrl = `${siteUrl}/api/download/${purchase.download_token}`;
-  const subject = locale === "en" ? `Your purchase: ${product.name}` : `Tu compra: ${product.name}`;
+  // The customer's email names the product in their language; Carla's own notification keeps the original name.
+  const displayName = localizeProduct(product, locale).name;
+  const subject = locale === "en" ? `Your purchase: ${displayName}` : `Tu compra: ${displayName}`;
   const text =
     locale === "en"
-      ? `Hi ${name || ""},\n\nThank you for your purchase! Here's your download link for "${product.name}":\n\n${downloadUrl}\n\nIf you have any trouble downloading it, write to me at hello@carlamontano.io.\n\nBest,\nCarla`
-      : `Hola ${name || ""},\n\n¡Gracias por tu compra! Aquí está tu enlace de descarga para "${product.name}":\n\n${downloadUrl}\n\nSi tienes cualquier problema para descargarlo, escríbeme a hello@carlamontano.io.\n\nSaludos,\nCarla`;
+      ? `Hi ${name || ""},\n\nThank you for your purchase! Here's your download link for "${displayName}":\n\n${downloadUrl}\n\nIf you have any trouble downloading it, write to me at hello@carlamontano.io.\n\nBest,\nCarla`
+      : `Hola ${name || ""},\n\n¡Gracias por tu compra! Aquí está tu enlace de descarga para "${displayName}":\n\n${downloadUrl}\n\nSi tienes cualquier problema para descargarlo, escríbeme a hello@carlamontano.io.\n\nSaludos,\nCarla`;
   const resendId = await sendConfirmationEmail(email, subject, text);
   await recordEmailSend({ resendId, contactId: contact.id, emailType: "transactional", subject });
 

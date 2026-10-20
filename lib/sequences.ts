@@ -2,6 +2,7 @@ import { PILLARS, type PillarKey } from "@/lib/diagnostic";
 import type { Locale } from "@/lib/i18n/config";
 import { PROFILES, type ProfileKey } from "@/lib/nextStep";
 import { getNextStepSequence } from "@/lib/nextStepSequences";
+import { getQuizSequenceEn } from "@/lib/quizSequenceEn";
 
 export interface SequenceStep {
   delayDays: number; // days after the PREVIOUS step (0 for the immediate one)
@@ -303,10 +304,9 @@ export function getSequenceSteps(sequence: string, language: Locale = "es"): Seq
     return PROFILES.includes(profile) ? getNextStepSequence(profile, language) : null;
   }
   if (sequence === "newsletter") return language === "en" ? NEWSLETTER_SEQUENCE_EN : NEWSLETTER_SEQUENCE;
-  // The quiz drip exists in Spanish only for now; English takers get a single result email instead.
-  if (sequence.startsWith("quiz_") && language === "es") {
+  if (sequence.startsWith("quiz_")) {
     const pillarKey = sequence.slice("quiz_".length) as PillarKey;
-    if (PILLARS.some((p) => p.key === pillarKey)) return getQuizSequence(pillarKey);
+    if (PILLARS.some((p) => p.key === pillarKey)) return language === "en" ? getQuizSequenceEn(pillarKey) : getQuizSequence(pillarKey);
   }
   return null;
 }

@@ -47,3 +47,16 @@ export const PILLAR_LABEL_EN: Record<string, string> = {
 export function pillarLabel(pillar: string, locale: "en" | "es"): string {
   return locale === "en" ? PILLAR_LABEL_EN[pillar] ?? pillar : pillar;
 }
+
+// English display labels for the (Spanish-valued) product categories — products always store the Spanish value.
+export const PRODUCT_CATEGORY_LABEL_EN: Record<string, string> = {
+  Ebook: "Ebook",
+  Plantilla: "Template",
+  "Guía": "Guide",
+  Curso: "Course",
+  Otro: "Other",
+};
+
+export function productCategoryLabel(category: string, locale: "en" | "es"): string {
+  return locale === "en" ? PRODUCT_CATEGORY_LABEL_EN[category] ?? category : category;
+}

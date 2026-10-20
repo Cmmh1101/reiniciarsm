@@ -30,8 +30,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   }
 
   // Full edit path (from the edit form).
-  const { name, slug, description, category, priceCents, filePath, fileName, imageUrl } = body;
-  if (!name || !slug || !priceCents || priceCents <= 0) {
+  const { name, nameEn, slug, description, descriptionEn, category, priceCents, filePath, fileName, imageUrl } = body;
+  const nameEs = typeof name === "string" ? name.trim() : "";
+  const nameEnglish = typeof nameEn === "string" ? nameEn.trim() : "";
+  if ((!nameEs && !nameEnglish) || !slug || !priceCents || priceCents <= 0) {
     return adminError(400, "Fill in the name, slug and a valid price.", "Completa nombre, slug y un precio válido.");
   }
   if (!PRODUCT_CATEGORIES.includes(category)) {
@@ -40,17 +42,25 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 
   const { data: existing, error: existingError } = await supabase
     .from("products")
-    .select("file_path")
+    .select("*")
     .eq("id", params.id)
     .single();
   if (existingError || !existing) {
     return adminError(404, "Product not found.", "Producto no encontrado.");
   }
 
+  // English columns exist after migration 0021.
+  const hasEnglishColumns = "name_en" in existing;
+  if ((nameEnglish || (typeof descriptionEn === "string" && descriptionEn.trim())) && !hasEnglishColumns) {
+    return adminError(400, "Run migration 0021 in Supabase to save English product text.", "Falta correr la migración 0021 en Supabase para guardar el texto del producto en inglés.");
+  }
+
   const update: Record<string, unknown> = {
-    name,
+    // The original columns hold Spanish; an English-only product uses its English name there too.
+    name: nameEs || nameEnglish,
+    ...(hasEnglishColumns ? { name_en: nameEnglish || null, description_en: (typeof descriptionEn === "string" && descriptionEn.trim()) || null } : {}),
     slug,
-    description: description || null,
+    description: (typeof description === "string" && description.trim()) || (!nameEs && typeof descriptionEn === "string" && descriptionEn.trim()) || null,
     category,
     price_cents: priceCents,
     image_url: imageUrl || null,
