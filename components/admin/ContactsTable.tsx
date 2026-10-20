@@ -66,21 +66,21 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
         )}
       </div>
 
-      <p className="text-xs opacity-50 mb-3">
+      <p className="text-xs opacity-70 mb-3">
         {fmt(t.count, { shown: filtered.length, total: contacts.length })}
       </p>
 
       {filtered.length === 0 ? (
-        <p className="opacity-60">{t.noMatch}</p>
+        <p className="opacity-70">{t.noMatch}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.contact}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.language}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.source}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.status}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.since}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.contact}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.language}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.source}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.status}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.since}</th>
             </tr>
           </thead>
           <tbody>
@@ -90,7 +90,7 @@ export default function ContactsTable({ contacts }: { contacts: ContactWithSourc
                   <Link href={`/admin/contactos/${c.id}`} className="hover:underline">
                     {c.name || c.email}
                   </Link>
-                  <div className="text-xs opacity-60">{c.email}</div>
+                  <div className="text-xs opacity-70">{c.email}</div>
                 </td>
                 <td className="py-3 font-mono text-xs opacity-70">{(c.preferred_language ?? "es").toUpperCase()}</td>
                 <td className="py-3 opacity-70">{c.sources.map((s) => t.sources[s] ?? s).join(", ") || "—"}</td>

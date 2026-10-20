@@ -36,12 +36,12 @@ export default function GA4SyncButton() {
         type="button"
         onClick={handleSync}
         disabled={syncing}
-        className="font-body font-semibold text-sm px-4 py-2.5 rounded-[3px] border border-ink self-start disabled:opacity-60"
+        className="font-body font-semibold text-sm px-4 py-2.5 rounded-[3px] border border-ink self-start disabled:opacity-70"
       >
         {syncing ? t.syncing : t.sync}
       </button>
-      {error && <p className="text-clay text-sm">{error}</p>}
-      {lastResult && <p className="text-sage text-sm">{lastResult}</p>}
+      {error && <p className="text-clay-deep text-sm">{error}</p>}
+      {lastResult && <p className="text-sage-deep text-sm">{lastResult}</p>}
     </div>
   );
 }

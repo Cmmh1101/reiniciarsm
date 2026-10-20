@@ -30,12 +30,12 @@ function eventCaption(event: ContactEvent, t: AdminDictionary["contacts"]): stri
 }
 
 function emailStatus(send: EmailSend, t: AdminDictionary["contacts"]): { label: string; color: string } {
-  if (send.bounced_at) return { label: t.emailStatus.bounced, color: "text-clay" };
-  if (send.complained_at) return { label: t.emailStatus.complained, color: "text-clay" };
-  if (send.clicked_at) return { label: t.emailStatus.clicked, color: "text-sage" };
-  if (send.opened_at) return { label: t.emailStatus.opened, color: "text-sage" };
+  if (send.bounced_at) return { label: t.emailStatus.bounced, color: "text-clay-deep" };
+  if (send.complained_at) return { label: t.emailStatus.complained, color: "text-clay-deep" };
+  if (send.clicked_at) return { label: t.emailStatus.clicked, color: "text-sage-deep" };
+  if (send.opened_at) return { label: t.emailStatus.opened, color: "text-sage-deep" };
   if (send.delivered_at) return { label: t.emailStatus.delivered, color: "opacity-70" };
-  return { label: t.emailStatus.sent, color: "opacity-50" };
+  return { label: t.emailStatus.sent, color: "opacity-70" };
 }
 
 const dateFmt: Intl.DateTimeFormatOptions = {
@@ -58,7 +58,7 @@ export default async function AdminContactDetailPage({ params }: { params: { id:
   return (
     <main className="p-10 max-w-2xl">
       <h1 className="font-display text-2xl mb-1">{contact.name || contact.email}</h1>
-      <p className="opacity-60 mb-6">{contact.email}</p>
+      <p className="opacity-70 mb-6">{contact.email}</p>
 
       <div className="flex items-center gap-6 mb-8">
         <ContactStatusEditor contactId={contact.id} status={contact.status} />
@@ -76,7 +76,7 @@ export default async function AdminContactDetailPage({ params }: { params: { id:
 
       <h2 className="font-semibold mb-3">{t.history}</h2>
       {events.length === 0 ? (
-        <p className="opacity-60 mb-8">{t.noEvents}</p>
+        <p className="opacity-70 mb-8">{t.noEvents}</p>
       ) : (
         <ul className="flex flex-col gap-4 mb-8">
           {events.map((e) => {
@@ -85,7 +85,7 @@ export default async function AdminContactDetailPage({ params }: { params: { id:
               <li key={e.id} className="border-l-2 border-[rgba(20,25,43,0.12)] pl-4">
                 <p className="text-sm font-semibold">{t.eventTypes[e.event_type] ?? e.event_type}</p>
                 {caption && <p className="text-sm opacity-70">{caption}</p>}
-                <p className="text-xs opacity-50 mt-0.5">{new Date(e.created_at).toLocaleString(locale, dateFmt)}</p>
+                <p className="text-xs opacity-70 mt-0.5">{new Date(e.created_at).toLocaleString(locale, dateFmt)}</p>
               </li>
             );
           })}
@@ -94,14 +94,14 @@ export default async function AdminContactDetailPage({ params }: { params: { id:
 
       <h2 className="font-semibold mb-3">{t.emails}</h2>
       {emailSends.length === 0 ? (
-        <p className="opacity-60">{t.noEmails}</p>
+        <p className="opacity-70">{t.noEmails}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.emailColumns.subject}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.emailColumns.status}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.emailColumns.date}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.emailColumns.subject}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.emailColumns.status}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.emailColumns.date}</th>
             </tr>
           </thead>
           <tbody>

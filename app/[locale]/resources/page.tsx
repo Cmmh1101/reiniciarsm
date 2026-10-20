@@ -43,13 +43,13 @@ export default async function ResourcesPage({ params }: { params: { locale: stri
               ) : (
                 <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#8a7458] to-[#3a4562]" />
               )}
-              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">
+              <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">
                 {pillarLabel(post.pillar, locale)}
                 {post.shown !== locale && <span className="opacity-70"> · {post.shown.toUpperCase()}</span>}
               </span>
               <h3 className="text-[19px] leading-snug font-display" lang={post.shown}>{post.title}</h3>
-              {post.excerpt && <p className="text-[13.5px] opacity-65" lang={post.shown}>{post.excerpt}</p>}
-              <span className="font-mono text-[10.5px] opacity-45 mt-auto">
+              {post.excerpt && <p className="text-[13.5px] opacity-70" lang={post.shown}>{post.excerpt}</p>}
+              <span className="font-mono text-[10.5px] opacity-70 mt-auto">
                 {post.published_at && new Date(post.published_at).toLocaleDateString(locale, { day: "numeric", month: "short", year: "numeric" })}
                 {post.reading_time_minutes ? ` · ${post.reading_time_minutes} ${resources.readingTime}` : ""}
               </span>
@@ -57,7 +57,7 @@ export default async function ResourcesPage({ params }: { params: { locale: stri
           ))}
         </div>
       ) : (
-        <p className="opacity-60 px-page py-16">{resources.empty}</p>
+        <p className="opacity-70 px-page py-16">{resources.empty}</p>
       )}
 
       <section className="bg-paper-soft px-page py-[70px]">

@@ -82,24 +82,24 @@ export default async function AdminAnalyticsPage() {
         <h1 className="font-display text-2xl">{t.title}</h1>
         <GA4SyncButton />
       </div>
-      <p className="text-xs opacity-50 mb-8">{fmt(t.lastDays, { n: rows.length })}</p>
+      <p className="text-xs opacity-70 mb-8">{fmt(t.lastDays, { n: rows.length })}</p>
 
       {rows.length === 0 ? (
-        <p className="opacity-60">{t.noData}</p>
+        <p className="opacity-70">{t.noData}</p>
       ) : (
         <>
           <div className="grid grid-cols-3 gap-4 mb-12">
             <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
               <p className="font-display text-3xl mb-1">{totalActiveUsers}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">{t.activeUsers}</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-70">{t.activeUsers}</p>
             </div>
             <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
               <p className="font-display text-3xl mb-1">{totalSessions}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">{t.sessions}</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-70">{t.sessions}</p>
             </div>
             <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
               <p className="font-display text-3xl mb-1">{totalPageViews}</p>
-              <p className="font-mono text-[10px] uppercase tracking-wide opacity-50">{t.pageViews}</p>
+              <p className="font-mono text-[10px] uppercase tracking-wide opacity-70">{t.pageViews}</p>
             </div>
           </div>
 
@@ -112,13 +112,13 @@ export default async function AdminAnalyticsPage() {
             <div>
               <h2 className="font-body font-semibold text-sm mb-4">{t.topPages}</h2>
               {topPages.length === 0 ? (
-                <p className="opacity-50 text-sm">{t.noPages}</p>
+                <p className="opacity-70 text-sm">{t.noPages}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[rgba(20,25,43,0.12)]">
-                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.page}</th>
-                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.views}</th>
+                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-70">{t.page}</th>
+                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-70">{t.views}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -136,13 +136,13 @@ export default async function AdminAnalyticsPage() {
             <div>
               <h2 className="font-body font-semibold text-sm mb-4">{t.sources}</h2>
               {trafficSources.length === 0 ? (
-                <p className="opacity-50 text-sm">{t.noSources}</p>
+                <p className="opacity-70 text-sm">{t.noSources}</p>
               ) : (
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-[rgba(20,25,43,0.12)]">
-                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.channel}</th>
-                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-50">{t.sessions}</th>
+                      <th className="text-left py-2 font-mono text-[10px] uppercase tracking-wide opacity-70">{t.channel}</th>
+                      <th className="text-right py-2 font-mono text-[10px] uppercase tracking-wide opacity-70">{t.sessions}</th>
                     </tr>
                   </thead>
                   <tbody>

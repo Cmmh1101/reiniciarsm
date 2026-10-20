@@ -29,7 +29,7 @@ export default function ReviewModerationActions({ reviewId }: { reviewId: string
         type="button"
         onClick={() => setStatus("approved")}
         disabled={saving !== null}
-        className="font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-sage text-sage disabled:opacity-50"
+        className="font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-sage text-sage-deep disabled:opacity-70"
       >
         {saving === "approved" ? "..." : t.reviews.approve}
       </button>
@@ -37,7 +37,7 @@ export default function ReviewModerationActions({ reviewId }: { reviewId: string
         type="button"
         onClick={() => setStatus("rejected")}
         disabled={saving !== null}
-        className="font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-clay text-clay disabled:opacity-50"
+        className="font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border border-clay text-clay-deep disabled:opacity-70"
       >
         {saving === "rejected" ? "..." : t.reviews.reject}
       </button>

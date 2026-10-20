@@ -27,14 +27,14 @@ export default async function ShopPage({ params }: { params: { locale: string } 
   return (
     <main className="px-page py-24">
       <header className="mb-16">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{shop.eyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{shop.eyebrow}</p>
         <h1 className="font-display text-[clamp(30px,4vw,48px)] leading-[1.08] mb-4 max-w-[20ch]">{shop.title}</h1>
         <p className="opacity-75 max-w-[56ch] text-base">{shop.lead}</p>
-        {shop.languageNote && <p className="font-mono text-[11px] opacity-50 mt-4 max-w-[60ch]">{shop.languageNote}</p>}
+        {shop.languageNote && <p className="font-mono text-[11px] opacity-70 mt-4 max-w-[60ch]">{shop.languageNote}</p>}
       </header>
 
       {productsWithStats.length === 0 ? (
-        <p className="opacity-60">{shop.empty}</p>
+        <p className="opacity-70">{shop.empty}</p>
       ) : (
         <ProductsGrid products={productsWithStats} locale={locale} copy={{ allCategories: common.allCategories, free: common.free, purchases: common.purchases }} />
       )}

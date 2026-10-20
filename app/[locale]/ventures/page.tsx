@@ -39,7 +39,7 @@ export default function VenturesPage({ params }: { params: { locale: string } })
   return (
     <main>
       <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{ventures.eyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{ventures.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{ventures.title}</h1>
         <p className="text-lg opacity-85 max-w-[52ch]">{ventures.lead}</p>
       </header>
@@ -47,9 +47,9 @@ export default function VenturesPage({ params }: { params: { locale: string } })
       <section className="px-page py-20 grid lg:grid-cols-3 gap-8">
         {ventures.items.map((v) => (
           <article key={v.key} className="border border-[rgba(20,25,43,0.15)] rounded-[2px] p-8 flex flex-col gap-3">
-            <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{common.status[v.status as keyof typeof common.status]}</span>
+            <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">{common.status[v.status as keyof typeof common.status]}</span>
             <h2 className="font-display text-2xl">{v.name}</h2>
-            {v.note && <p className="font-mono text-[11px] opacity-60">{v.note}</p>}
+            {v.note && <p className="font-mono text-[11px] opacity-70">{v.note}</p>}
             <p className="text-[15px] opacity-85">{v.body}</p>
             <p className="text-sm font-semibold">{v.for}</p>
             {cta(v.key, v.cta)}
@@ -63,7 +63,7 @@ export default function VenturesPage({ params }: { params: { locale: string } })
           {ventures.routing.map((r) => (
             <div key={r.need} className="border-t border-[rgba(20,25,43,0.2)] pt-3">
               <dt className="text-[15px]">{r.need}</dt>
-              <dd className="font-mono text-xs uppercase tracking-wide text-clay mt-1">{r.where}</dd>
+              <dd className="font-mono text-xs uppercase tracking-wide text-clay-deep mt-1">{r.where}</dd>
             </div>
           ))}
         </dl>

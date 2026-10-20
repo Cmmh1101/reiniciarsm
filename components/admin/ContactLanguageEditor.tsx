@@ -32,7 +32,7 @@ export default function ContactLanguageEditor({ contactId, language }: { contact
 
   return (
     <label className="flex items-center gap-2 text-sm">
-      <span className="opacity-60">{t.contacts.languageLabel}</span>
+      <span className="opacity-70">{t.contacts.languageLabel}</span>
       <select
         defaultValue={language}
         onChange={(e) => handleChange(e.target.value)}
@@ -42,7 +42,7 @@ export default function ContactLanguageEditor({ contactId, language }: { contact
         <option value="es">{t.common.spanish}</option>
         <option value="en">{t.common.english}</option>
       </select>
-      {saved && <span className="text-sage text-xs">{t.common.saved}</span>}
+      {saved && <span className="text-sage-deep text-xs">{t.common.saved}</span>}
     </label>
   );
 }

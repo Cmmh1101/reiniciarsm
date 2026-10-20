@@ -33,13 +33,13 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
         <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{c.eyebrow}</p>
         <h1 className="font-display text-[clamp(30px,4.6vw,50px)] leading-[1.12] mb-5 max-w-[20ch]">{c.title}</h1>
         <p className="text-lg max-w-[62ch] opacity-80 mb-6">{c.description}</p>
-        <p className="font-mono text-xs uppercase tracking-wide opacity-60 mb-10">{c.tagline}</p>
+        <p className="font-mono text-xs uppercase tracking-wide opacity-70 mb-10">{c.tagline}</p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={HERO_IMAGE_URL} alt={c.heroAlt} className="w-full max-w-[520px] aspect-[3/4] object-cover rounded-[2px]" />
       </header>
 
       <section className="px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{c.beforeEyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-4">{c.beforeEyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-8 max-w-[22ch]">{c.beforeTitle}</h2>
         <div className="max-w-[68ch] flex flex-col gap-5 text-base leading-relaxed opacity-90">
           {c.story.map((p, i) => (
@@ -68,12 +68,12 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
       </section>
 
       <section className="bg-paper-soft px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{c.lessonsEyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-4">{c.lessonsEyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-14 max-w-[24ch]">{c.lessonsTitle}</h2>
         <div className="grid md:grid-cols-3 gap-8">
           {c.lessons.map((lesson, i) => (
             <div key={lesson.title}>
-              <p className="font-mono text-xs text-clay mb-3">{String(i + 1).padStart(2, "0")}</p>
+              <p className="font-mono text-xs text-clay-deep mb-3">{String(i + 1).padStart(2, "0")}</p>
               <h3 className="font-display text-lg mb-3">{lesson.title}</h3>
               <p className="text-sm opacity-75">{lesson.body}</p>
             </div>
@@ -83,7 +83,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
 
       <section className="px-page py-24">
         <div className="max-w-[640px] mb-10">
-          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{c.purposeEyebrow}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{c.purposeEyebrow}</p>
           <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-5 max-w-[20ch]">{c.purposeTitle}</h2>
           <p className="text-base opacity-90 mb-4">{c.purposeBody}</p>
           <p className="italic text-base opacity-70 mb-6">{c.purposeQuote}</p>
@@ -101,7 +101,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
       </section>
 
       <section className="bg-paper-soft px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-4">{c.nextEyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-4">{c.nextEyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.2vw,38px)] leading-[1.12] mb-2">{c.nextTitle}</h2>
         <p className="opacity-70 text-base mb-14 max-w-[56ch]">{c.nextLead}</p>
         <div className="grid md:grid-cols-3 gap-6">
@@ -112,14 +112,14 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
               <ul className="flex flex-col gap-1.5 mb-7 text-sm opacity-80">
                 {step.bullets.map((b) => (
                   <li key={b} className="flex items-start gap-2">
-                    <span className="text-sage">✓</span>
+                    <span className="text-sage-deep" aria-hidden="true">✓</span>
                     {b}
                   </li>
                 ))}
               </ul>
               <Link
                 href={stepHref[step.key]}
-                className="font-mono text-xs tracking-wide uppercase px-[22px] py-[13px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 justify-center mt-auto hover:-translate-y-px transition-transform"
+                className="font-mono text-xs tracking-wide uppercase px-[22px] py-[13px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5 justify-center mt-auto hover:-translate-y-px transition-transform"
               >
                 {step.cta}
               </Link>
@@ -128,8 +128,8 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
         </div>
       </section>
 
-      <section className="bg-clay text-paper text-center px-page py-24">
-        <p className="font-mono text-xs uppercase tracking-widest text-ink opacity-70 mb-4 flex justify-center">{c.finalEyebrow}</p>
+      <section className="bg-clay-deep text-paper text-center px-page py-24">
+        <p className="font-mono text-xs uppercase tracking-widest text-paper mb-4 flex justify-center">{c.finalEyebrow}</p>
         <h2 className="font-display text-[clamp(26px,3.4vw,42px)] leading-[1.12] max-w-[26ch] mx-auto mb-8">{c.finalTitle}</h2>
         <Link
           href={localizedPath(locale, "diagnostic")}

@@ -137,7 +137,7 @@ export default function PostEditor({ post }: Props) {
     <div className="p-10 max-w-3xl">
       <h1 className="font-display text-2xl mb-6">{isEditing ? t.editTitle : t.newTitle}</h1>
 
-      {error && <p className="text-clay text-sm mb-4">{error}</p>}
+      {error && <p className="text-clay-deep text-sm mb-4">{error}</p>}
 
       <div className="flex flex-col gap-4 mb-6">
         <div role="tablist" aria-label={t.languageTabs} className="flex gap-2">
@@ -153,7 +153,7 @@ export default function PostEditor({ post }: Props) {
               }`}
             >
               {LANG_LABEL[l]}
-              {l !== lang && isEmpty(l) && <span className="opacity-60"> {fmt(t.emptyUse, { other: l === "es" ? LANG_LABEL.en : LANG_LABEL.es })}</span>}
+              {l !== lang && isEmpty(l) && <span className="opacity-70"> {fmt(t.emptyUse, { other: l === "es" ? LANG_LABEL.en : LANG_LABEL.es })}</span>}
             </button>
           ))}
         </div>
@@ -177,7 +177,7 @@ export default function PostEditor({ post }: Props) {
             }}
             className="font-mono text-sm px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
           />
-          <span className="font-mono text-[11px] font-normal opacity-60">/resources/{slug || "…"} · /recursos/{slug || "…"}</span>
+          <span className="font-mono text-[11px] font-normal opacity-70">/resources/{slug || "…"} · /recursos/{slug || "…"}</span>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
@@ -257,7 +257,7 @@ export default function PostEditor({ post }: Props) {
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="font-body font-semibold text-[15px] px-6 py-3 rounded-[3px] bg-clay text-white disabled:opacity-60"
+          className="font-body font-semibold text-[15px] px-6 py-3 rounded-[3px] bg-clay-deep text-white disabled:opacity-70"
         >
           {saving ? t.saving : t.save}
         </button>
@@ -265,7 +265,7 @@ export default function PostEditor({ post }: Props) {
           <button
             type="button"
             onClick={handleDelete}
-            className="font-body font-semibold text-[15px] px-6 py-3 rounded-[3px] border border-clay text-clay"
+            className="font-body font-semibold text-[15px] px-6 py-3 rounded-[3px] border border-clay text-clay-deep"
           >
             {t.delete}
           </button>

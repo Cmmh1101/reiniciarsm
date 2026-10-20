@@ -86,8 +86,8 @@ export async function POST(request: Request) {
     const signatureHtml = `<p style="margin:24px 0 0;">—<br>Carla</p>`;
     const unsubscribeHtml = `<p style="margin:16px 0 0;font-size:12px;opacity:0.6;">${
       contactLang === "en"
-        ? `Don't want more emails? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Unsubscribe here</a>.`
-        : `¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#BE5A34;">Date de baja aquí</a>.`
+        ? `Don't want more emails? <a href="${unsubscribeUrl}" style="color:#984222;">Unsubscribe here</a>.`
+        : `¿No quieres recibir más correos? <a href="${unsubscribeUrl}" style="color:#984222;">Date de baja aquí</a>.`
     }</p>`;
     const fullHtml = wrapEmailShell(personalizedContentHtml + signatureHtml + unsubscribeHtml, { preheader, lang: contactLang });
     const textFallback = htmlToPlainTextFallback(personalizedContentHtml + signatureHtml) + `\n\n${contactLang === "en" ? "Unsubscribe" : "Date de baja"}: ${unsubscribeUrl}`;

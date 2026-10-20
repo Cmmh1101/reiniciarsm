@@ -6,10 +6,10 @@ export default function StarRating({ avgRating, reviewCount, size = "sm" }: { av
 
   return (
     <div className={`flex items-center gap-1.5 ${textSize}`}>
-      <span className="text-clay tracking-tight" aria-hidden>
+      <span className="text-clay-deep tracking-tight" aria-hidden>
         {[1, 2, 3, 4, 5].map((n) => (n <= Math.round(rounded) ? "★" : "☆")).join("")}
       </span>
-      <span className="opacity-60 font-mono">
+      <span className="opacity-70 font-mono">
         {avgRating.toFixed(1)} ({reviewCount})
       </span>
     </div>

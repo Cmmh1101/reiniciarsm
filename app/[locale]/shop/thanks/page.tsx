@@ -38,14 +38,14 @@ export default async function ShopThanksPage({
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-6 py-24">
       <div className="text-center max-w-lg">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{shop.thanksEyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{shop.thanksEyebrow}</p>
         <h1 className="font-display text-3xl md:text-4xl mb-4">{shop.thanksTitle}</h1>
         {downloadToken ? (
           <>
             <p className="opacity-70 mb-8">{shop.thanksBody}</p>
             <a
               href={`/api/download/${downloadToken}`}
-              className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5"
+              className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5"
             >
               {shop.download}
             </a>

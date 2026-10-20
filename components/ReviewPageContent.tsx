@@ -13,7 +13,7 @@ export default async function ReviewPageContent({ locale, purchaseId }: { locale
       <div className="text-center max-w-lg w-full">
         {!purchase ? (
           <>
-            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{review.notFoundEyebrow}</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{review.notFoundEyebrow}</p>
             <p className="opacity-70">{review.notFoundBody}</p>
           </>
         ) : purchase.alreadyReviewed ? (
@@ -23,7 +23,7 @@ export default async function ReviewPageContent({ locale, purchaseId }: { locale
           </>
         ) : (
           <>
-            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{purchase.productName}</p>
+            <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{purchase.productName}</p>
             <h1 className="font-display text-3xl md:text-4xl mb-8">{review.title}</h1>
             <ReviewForm purchaseId={purchaseId} locale={locale} copy={review} />
           </>

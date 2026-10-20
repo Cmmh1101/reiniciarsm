@@ -47,6 +47,7 @@ export const en = {
     legal: "Legal",
     privacy: "Privacy",
     terms: "Terms",
+    accessibility: "Accessibility",
     rights: "© 2026 Carla Montaño",
     montanoSystems: "Montano Systems",
     acadetech: "Acadetech",
@@ -785,6 +786,46 @@ export const en = {
         { title: "Changes to this policy", paragraphs: ["We may update this policy from time to time. The “last updated” date above shows the latest version."] },
         { title: "Contact", paragraphs: ["Questions about this policy? Write to hello@carlamontano.io."] },
       ] as LegalSection[],
+    },
+    accessibility: {
+      title: "Accessibility Statement",
+      description: "How this website works for people who use screen readers, keyboards and other assistive technology, and how to report a problem.",
+      intro:
+        "I want everyone to be able to use this website, including people who use screen readers, keyboards, voice control or magnification, and people with low vision or color-vision differences. My goal is to meet the Web Content Accessibility Guidelines (WCAG) 2.1, level AA. I keep working on it, and I don't claim the site is perfect.",
+      sections: [
+        {
+          title: "What has been done",
+          bullets: [
+            "Text and buttons are checked for at least 4.5:1 color contrast, including the lighter text on dark backgrounds.",
+            "Every interactive element shows a visible focus ring when you move with the keyboard, and there is a “skip to content” link.",
+            "Every page declares its language, and you can switch between English and Spanish from any page.",
+            "Forms have labels and error messages that say what went wrong.",
+            "Headings follow a logical order, and images that carry meaning have a text description.",
+            "Animations and hover effects are turned off if your device is set to reduce motion.",
+          ],
+        },
+        {
+          title: "Known limitations",
+          bullets: [
+            "Some older blog posts may have images without a description. I'm fixing them as I edit each post.",
+            "Downloadable products (templates, ebooks and workbooks) have not been checked for accessibility, and several are in Spanish only.",
+            "I'm adding captions to videos as they are published; older videos may not have them yet.",
+            "Third-party services, such as the payment page, the Skool community and embedded videos, have their own accessibility, which I don't control.",
+          ],
+        },
+        {
+          title: "Tell me about a problem",
+          paragraphs: [
+            "If something on this site doesn't work for you, write to hello@carlamontano.io or use the contact form. Tell me the page and what happened. I aim to reply within five business days and to fix the problem as soon as I can.",
+          ],
+        },
+        {
+          title: "How this was reviewed",
+          paragraphs: [
+            "This statement was last reviewed on October 20, 2026. The review used automated checks of color contrast, labels, headings and page structure on the main pages in both languages. Automated checks don't catch everything, so feedback from real users is welcome.",
+          ],
+        },
+      ],
     },
     terms: {
       title: "Terms & Conditions",

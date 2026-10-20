@@ -84,14 +84,14 @@ export default function SlotPicker({
         <button
           type="button"
           onClick={() => setView("week")}
-          className={`text-xs px-3 py-1.5 rounded-full border ${view === "week" ? "bg-clay text-white border-clay" : "border-[rgba(237,230,216,0.25)]"}`}
+          className={`text-xs px-3 py-1.5 rounded-full border ${view === "week" ? "bg-clay-deep text-white border-clay" : "border-[rgba(237,230,216,0.25)]"}`}
         >
           {copy.week}
         </button>
         <button
           type="button"
           onClick={() => setView("month")}
-          className={`text-xs px-3 py-1.5 rounded-full border ${view === "month" ? "bg-clay text-white border-clay" : "border-[rgba(237,230,216,0.25)]"}`}
+          className={`text-xs px-3 py-1.5 rounded-full border ${view === "month" ? "bg-clay-deep text-white border-clay" : "border-[rgba(237,230,216,0.25)]"}`}
         >
           {copy.month}
         </button>
@@ -140,7 +140,7 @@ export default function SlotPicker({
                         : "border-[rgba(237,230,216,0.08)] opacity-30"
                   }`}
                 >
-                  <span className="opacity-60 uppercase">{WEEKDAY_LABELS[i]}</span>
+                  <span className="opacity-70 uppercase">{WEEKDAY_LABELS[i]}</span>
                   <span className="font-semibold text-sm">{d.getDate()}</span>
                 </button>
               );
@@ -167,7 +167,7 @@ export default function SlotPicker({
           </div>
           <div className="grid grid-cols-7 gap-1 text-center mb-1">
             {WEEKDAY_LABELS.map((label) => (
-              <span key={label} className="text-[10px] opacity-50 uppercase">
+              <span key={label} className="text-[10px] opacity-70 uppercase">
                 {label}
               </span>
             ))}
@@ -209,7 +209,7 @@ export default function SlotPicker({
       {selectedDay && (
         <>
           <span className="text-sm font-semibold block mb-1">{copy.chooseTime}</span>
-          {timeZone && <span className="text-xs opacity-55 block mb-2">{copy.timezoneNote}: {timeZone}</span>}
+          {timeZone && <span className="text-xs opacity-70 block mb-2">{copy.timezoneNote}: {timeZone}</span>}
           <div className="flex flex-wrap gap-2">
             {timesForSelectedDay.map((slot) => {
               const label = new Date(slot.start_time).toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" });

@@ -44,7 +44,7 @@ export default function LivePage({ params }: { params: { locale: string } }) {
           >
             <h2 className="font-display text-xl">{c.title}</h2>
             <p className="text-[15px] opacity-75">{c.body}</p>
-            <span className="mt-auto pt-2 font-mono text-xs uppercase tracking-wide text-clay">{c.cta} →</span>
+            <span className="mt-auto pt-2 font-mono text-xs uppercase tracking-wide text-clay-deep">{c.cta} →</span>
           </Link>
         ))}
       </section>
@@ -58,7 +58,7 @@ export default function LivePage({ params }: { params: { locale: string } }) {
             href={MONTANO_SYSTEMS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform"
+            className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform"
           >
             {live.business.ctaPrimary} ↗
           </a>

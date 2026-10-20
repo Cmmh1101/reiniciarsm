@@ -73,11 +73,11 @@ export default function ContactForm({ locale, copy, initialIntent }: { locale: L
       <button
         type="submit"
         disabled={status === "loading"}
-        className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper self-start disabled:opacity-60"
+        className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper self-start disabled:opacity-70"
       >
         {status === "loading" ? copy.sending : `${copy.send} →`}
       </button>
-      {error && <p role="alert" className="text-clay text-sm">{error}</p>}
+      {error && <p role="alert" className="text-clay-deep text-sm">{error}</p>}
     </form>
   );
 }

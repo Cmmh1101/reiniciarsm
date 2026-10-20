@@ -24,7 +24,7 @@ const SOCIAL = [
 ];
 
 const linkClass = "no-underline opacity-75 text-[13.5px] hover:opacity-100 transition-opacity";
-const headingClass = "font-mono text-[10.5px] tracking-widest uppercase opacity-50 mb-3.5";
+const headingClass = "font-mono text-[10.5px] tracking-widest uppercase opacity-70 mb-3.5";
 
 export default function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const { nav, footer, site, newsletter } = dict;
@@ -35,18 +35,18 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Diction
           <h2 className="font-display text-xl mb-1.5">{newsletter.title}</h2>
           <p className="text-[13.5px] opacity-70 max-w-[44ch]">{newsletter.body}</p>
         </div>
-        <NewsletterForm locale={locale} copy={newsletter} withName={false} />
+        <NewsletterForm locale={locale} copy={newsletter} withName={false} dark />
       </div>
       <div className="flex justify-between gap-10 flex-wrap pb-9 border-b border-[rgba(237,230,216,0.14)]">
         <div className="font-display text-xl max-w-[28ch]">
           {site.name}
           <br />
-          <span className="font-mono text-[11px] opacity-50 leading-relaxed block mt-1">{site.descriptor}</span>
-          <span className="font-body text-[13px] opacity-60 block mt-3">{site.tagline}</span>
+          <span className="font-mono text-[11px] opacity-70 leading-relaxed block mt-1">{site.descriptor}</span>
+          <span className="font-body text-[13px] opacity-70 block mt-3">{site.tagline}</span>
         </div>
         <div className="flex gap-14 flex-wrap">
           <div>
-            <h5 className={headingClass}>{footer.explore}</h5>
+            <h2 className={headingClass}>{footer.explore}</h2>
             <ul className="flex flex-col gap-2">
               {EXPLORE.map((item) => (
                 <li key={item.route}>
@@ -58,7 +58,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Diction
             </ul>
           </div>
           <div>
-            <h5 className={headingClass}>{footer.ventures}</h5>
+            <h2 className={headingClass}>{footer.ventures}</h2>
             <ul className="flex flex-col gap-2">
               <li>
                 <a href={MONTANO_SYSTEMS_URL} target="_blank" rel="noopener noreferrer" className={linkClass}>
@@ -78,7 +78,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Diction
             </ul>
           </div>
           <div>
-            <h5 className={headingClass}>{footer.connect}</h5>
+            <h2 className={headingClass}>{footer.connect}</h2>
             <ul className="flex flex-col gap-2">
               {SOCIAL.map((s) => (
                 <li key={s.label}>
@@ -91,7 +91,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Diction
           </div>
         </div>
       </div>
-      <div className="pt-6 flex justify-between font-mono text-[11px] opacity-50 flex-wrap gap-2.5">
+      <div className="pt-6 flex justify-between font-mono text-[11px] opacity-70 flex-wrap gap-2.5">
         <span>{footer.rights}</span>
         <div className="flex gap-5">
           <Link href={localizedPath(locale, "privacy")} className="no-underline hover:opacity-100 transition-opacity">
@@ -99,6 +99,9 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Diction
           </Link>
           <Link href={localizedPath(locale, "terms")} className="no-underline hover:opacity-100 transition-opacity">
             {footer.terms}
+          </Link>
+          <Link href={localizedPath(locale, "accessibility")} className="no-underline hover:opacity-100 transition-opacity">
+            {footer.accessibility}
           </Link>
           <span>carlamontano.io</span>
         </div>

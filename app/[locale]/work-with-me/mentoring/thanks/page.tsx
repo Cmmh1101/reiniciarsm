@@ -35,7 +35,7 @@ export default async function BookingThanksPage({
   return (
     <main className="min-h-[60vh] flex items-center justify-center px-6 py-24">
       <div className="text-center max-w-lg">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{booking.thanksEyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{booking.thanksEyebrow}</p>
         <h1 className="font-display text-3xl md:text-4xl mb-4">{booking.thanksTitle}</h1>
         <p className="opacity-70">{isPack ? booking.thanksPack : booking.thanksSession}</p>
       </div>

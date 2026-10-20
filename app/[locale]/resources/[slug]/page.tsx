@@ -52,7 +52,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
       <header className="bg-ink text-paper px-page pt-[70px] pb-[50px]">
         <Link
           href={localizedPath(locale, "resources")}
-          className="font-mono text-[11px] uppercase tracking-wide opacity-50 no-underline inline-flex items-center gap-1.5 mb-7"
+          className="font-mono text-[11px] uppercase tracking-wide opacity-70 no-underline inline-flex items-center gap-1.5 mb-7"
         >
           {common.backToResources}
         </Link>
@@ -61,7 +61,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
         </div>
         <h1 className="font-display text-[clamp(28px,4.4vw,46px)] max-w-[22ch] mb-4 leading-[1.1]">{post.title}</h1>
         {post.excerpt && <p className="opacity-70 text-[17px] max-w-[60ch]">{post.excerpt}</p>}
-        <div className="flex gap-4 items-center mt-7 font-mono text-xs opacity-55 flex-wrap">
+        <div className="flex gap-4 items-center mt-7 font-mono text-xs opacity-70 flex-wrap">
           <span>{resources.byline}</span>
           {post.published_at && (
             <>
@@ -78,7 +78,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
             </>
           )}
         </div>
-        {inOtherLanguage && <p className="font-mono text-[11px] opacity-55 mt-5">{resources.postOtherLanguage}</p>}
+        {inOtherLanguage && <p className="font-mono text-[11px] opacity-70 mt-5">{resources.postOtherLanguage}</p>}
       </header>
 
       {post.featured_image_url ? (
@@ -98,7 +98,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
         </div>
       </section>
 
-      <section className="bg-clay text-paper text-center px-page py-[70px]">
+      <section className="bg-clay-deep text-paper text-center px-page py-[70px]">
         <h2 className="font-display text-[clamp(24px,3.4vw,38px)] leading-[1.12] mb-5 max-w-[20ch] mx-auto">{home.contact.title}</h2>
         <p className="opacity-90 mb-7 max-w-[48ch] mx-auto">{home.contact.body}</p>
         <Link
@@ -121,8 +121,8 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
                 ) : (
                   <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#6E7F5C] to-[#2f3a26]" />
                 )}
-                <span className="font-mono text-[10px] uppercase text-clay">{pillarLabel(r.pillar, locale)}</span>
-                <h4 className="text-base leading-snug" lang={r.shown}>{r.title}</h4>
+                <span className="font-mono text-[10px] uppercase text-clay-deep">{pillarLabel(r.pillar, locale)}</span>
+                <h3 className="text-base leading-snug" lang={r.shown}>{r.title}</h3>
               </Link>
             ))}
           </div>

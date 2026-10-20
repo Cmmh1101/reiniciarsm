@@ -16,7 +16,7 @@ export default async function AdminResenasPage() {
       <h1 className="font-display text-2xl mb-6">{t.title}</h1>
 
       {reviews.length === 0 ? (
-        <p className="opacity-60">{t.none}</p>
+        <p className="opacity-70">{t.none}</p>
       ) : (
         <>
           {pending.length > 0 && (
@@ -54,12 +54,12 @@ function ReviewTable({
       <table className="w-full text-sm mb-6">
         <thead>
           <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.product}</th>
-            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.customer}</th>
-            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.rating}</th>
-            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.comment}</th>
-            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.date}</th>
-            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{showActions ? t.columns.action : t.columns.status}</th>
+            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.product}</th>
+            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.customer}</th>
+            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.rating}</th>
+            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.comment}</th>
+            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.date}</th>
+            <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{showActions ? t.columns.action : t.columns.status}</th>
           </tr>
         </thead>
         <tbody>
@@ -68,9 +68,9 @@ function ReviewTable({
               <td className="py-3">{r.productName}</td>
               <td className="py-3 opacity-70">
                 {r.contactName ?? "—"}
-                <div className="text-xs opacity-60">{r.contactEmail}</div>
+                <div className="text-xs opacity-70">{r.contactEmail}</div>
               </td>
-              <td className="py-3 text-clay whitespace-nowrap">{"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</td>
+              <td className="py-3 text-clay-deep whitespace-nowrap">{"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}</td>
               <td className="py-3 opacity-70 max-w-[280px]">{r.comment || "—"}</td>
               <td className="py-3 opacity-70 whitespace-nowrap">{new Date(r.created_at).toLocaleDateString(locale)}</td>
               <td className="py-3">{showActions ? <ReviewModerationActions reviewId={r.id} /> : t.statuses[r.status] ?? r.status}</td>

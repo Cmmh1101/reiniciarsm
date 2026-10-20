@@ -38,30 +38,30 @@ export default async function AdminDashboardPage() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
         <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-          <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">{t.diagnostics}</p>
+          <p className="font-mono text-[10px] uppercase tracking-wide opacity-70 mb-2">{t.diagnostics}</p>
           <p className="font-display text-3xl">{stats.funnel.quizCompleted}</p>
         </div>
         <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-          <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">{t.converted}</p>
+          <p className="font-mono text-[10px] uppercase tracking-wide opacity-70 mb-2">{t.converted}</p>
           <p className="font-display text-3xl">
-            {stats.funnel.converted} <span className="text-sm opacity-50">({conversionRate}%)</span>
+            {stats.funnel.converted} <span className="text-sm opacity-70">({conversionRate}%)</span>
           </p>
         </div>
         <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-          <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">{t.revenue}</p>
+          <p className="font-mono text-[10px] uppercase tracking-wide opacity-70 mb-2">{t.revenue}</p>
           <p className="font-display text-3xl">${(stats.totalRevenueCents / 100).toFixed(2)}</p>
         </div>
         <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-          <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">{t.topArchetype}</p>
+          <p className="font-mono text-[10px] uppercase tracking-wide opacity-70 mb-2">{t.topArchetype}</p>
           <p className="font-display text-base leading-snug">{stats.topArchetypes[0]?.archetype ?? "—"}</p>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-10 mb-12">
         <div>
-          <h2 className="font-mono text-xs uppercase tracking-wide opacity-60 mb-4">{t.leadsPerWeek}</h2>
+          <h2 className="font-mono text-xs uppercase tracking-wide opacity-70 mb-4">{t.leadsPerWeek}</h2>
           {stats.leadsPerWeek.length === 0 ? (
-            <p className="opacity-50 text-sm">{t.noData}</p>
+            <p className="opacity-70 text-sm">{t.noData}</p>
           ) : (
             <div className="flex flex-col gap-2">
               {stats.leadsPerWeek.map((w) => (
@@ -72,9 +72,9 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div>
-          <h2 className="font-mono text-xs uppercase tracking-wide opacity-60 mb-4">{t.revenuePerWeek}</h2>
+          <h2 className="font-mono text-xs uppercase tracking-wide opacity-70 mb-4">{t.revenuePerWeek}</h2>
           {stats.revenuePerWeek.length === 0 ? (
-            <p className="opacity-50 text-sm">{t.noPayments}</p>
+            <p className="opacity-70 text-sm">{t.noPayments}</p>
           ) : (
             <div className="flex flex-col gap-2">
               {stats.revenuePerWeek.map((w) => (
@@ -92,9 +92,9 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="mb-12">
-        <h2 className="font-mono text-xs uppercase tracking-wide opacity-60 mb-4">{t.topArchetypes}</h2>
+        <h2 className="font-mono text-xs uppercase tracking-wide opacity-70 mb-4">{t.topArchetypes}</h2>
         {stats.topArchetypes.length === 0 ? (
-          <p className="opacity-50 text-sm">{t.noDiagnostics}</p>
+          <p className="opacity-70 text-sm">{t.noDiagnostics}</p>
         ) : (
           <div className="flex flex-col gap-2">
             {stats.topArchetypes.map((a) => (
@@ -105,13 +105,13 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="border border-[rgba(20,25,43,0.12)] rounded-[2px] p-5">
-        <p className="font-mono text-[10px] uppercase tracking-wide opacity-50 mb-2">{t.traffic}</p>
+        <p className="font-mono text-[10px] uppercase tracking-wide opacity-70 mb-2">{t.traffic}</p>
         {traffic ? (
           <p className="font-display text-lg">
-            {traffic.sessions} {t.sessions} <span className="opacity-50 text-sm font-mono">·</span> {traffic.pageViews} {t.pageViews}
+            {traffic.sessions} {t.sessions} <span className="opacity-70 text-sm font-mono">·</span> {traffic.pageViews} {t.pageViews}
           </p>
         ) : (
-          <p className="opacity-60 text-sm">
+          <p className="opacity-70 text-sm">
             {t.noTraffic}{" "}
             <a href="/admin/analytics" className="underline">
               /admin/analytics

@@ -128,7 +128,7 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
   return (
     <div className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 mb-8 max-w-2xl">
       <h2 className="font-semibold mb-1">{t.title}</h2>
-      <p className="text-xs opacity-60 mb-4">{t.help}</p>
+      <p className="text-xs opacity-70 mb-4">{t.help}</p>
 
       <div className="flex flex-col gap-3.5">
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
@@ -142,7 +142,7 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           <span>
-            {t.preheader} <span className="font-normal opacity-60">{t.preheaderOptional}</span>
+            {t.preheader} <span className="font-normal opacity-70">{t.preheaderOptional}</span>
           </span>
           <input
             value={preheader}
@@ -150,7 +150,7 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
             maxLength={140}
             className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)]"
           />
-          <span className="text-xs font-normal opacity-60">
+          <span className="text-xs font-normal opacity-70">
             {t.preheaderHelp} · {preheader.length}/140
           </span>
         </label>
@@ -168,7 +168,7 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
               </option>
             ))}
           </select>
-          <span className="text-xs font-normal opacity-60">{t.contactLanguageHelp}</span>
+          <span className="text-xs font-normal opacity-70">{t.contactLanguageHelp}</span>
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
@@ -201,11 +201,11 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
               <EditorContent editor={editor} className="prose-post px-4 py-3 min-h-[220px] [&_.ProseMirror]:outline-none" />
             </div>
           )}
-          <p className="text-xs opacity-50 mt-1.5">{t.nameHelp}</p>
+          <p className="text-xs opacity-70 mt-1.5">{t.nameHelp}</p>
         </div>
 
-        {error && <p className="text-clay text-sm">{error}</p>}
-        {result && <p className="text-sage text-sm">{fmt(t.sentResult, { sent: result.sent, total: result.total })}</p>}
+        {error && <p className="text-clay-deep text-sm">{error}</p>}
+        {result && <p className="text-sage-deep text-sm">{fmt(t.sentResult, { sent: result.sent, total: result.total })}</p>}
 
         <div className="flex flex-wrap items-end gap-3 pt-2 border-t border-[rgba(20,25,43,0.1)]">
           <label className="flex flex-col gap-1.5 text-sm font-semibold flex-1 min-w-[220px]">
@@ -222,19 +222,19 @@ export default function NewsletterComposer({ counts }: { counts: Record<Newslett
             type="button"
             onClick={handleSendTest}
             disabled={sendingTest}
-            className="font-body font-semibold text-sm px-4 py-2.5 rounded-[3px] border border-ink disabled:opacity-60"
+            className="font-body font-semibold text-sm px-4 py-2.5 rounded-[3px] border border-ink disabled:opacity-70"
           >
             {sendingTest ? t.sendingTest : t.sendTest}
           </button>
         </div>
-        {testError && <p className="text-clay text-sm">{testError}</p>}
-        {testSent && <p className="text-sage text-sm">{fmt(t.testSent, { email: testEmail })}</p>}
+        {testError && <p className="text-clay-deep text-sm">{testError}</p>}
+        {testSent && <p className="text-sage-deep text-sm">{fmt(t.testSent, { email: testEmail })}</p>}
 
         <button
           type="button"
           onClick={handleSend}
           disabled={sending}
-          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
+          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay-deep text-white self-start disabled:opacity-70"
         >
           {sending ? t.sending : fmt(t.send, { count: recipientCount })}
         </button>

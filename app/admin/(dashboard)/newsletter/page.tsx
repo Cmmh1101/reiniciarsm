@@ -67,17 +67,17 @@ export default async function AdminNewsletterPage() {
 
       <h2 className="font-semibold mb-3">{t.history}</h2>
       {issues.length === 0 ? (
-        <p className="opacity-60">{t.noHistory}</p>
+        <p className="opacity-70">{t.noHistory}</p>
       ) : (
         <table className="w-full text-sm max-w-2xl">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.subject}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.audience}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.sent}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.opened}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.clicks}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.historyColumns.date}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.historyColumns.subject}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.historyColumns.audience}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.historyColumns.sent}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.historyColumns.opened}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.historyColumns.clicks}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.historyColumns.date}</th>
             </tr>
           </thead>
           <tbody>
@@ -88,10 +88,10 @@ export default async function AdminNewsletterPage() {
                 <tr key={issue.id} className="border-b border-[rgba(20,25,43,0.08)]">
                   <td className="py-3">{issue.subject}</td>
                   <td className="py-3 opacity-70">{t.audiences[issue.audience ?? "all"] ?? issue.audience}
-                    {issue.language && issue.language !== "all" && <span className="block text-xs opacity-60">{t.languages[issue.language]}</span>}</td>
+                    {issue.language && issue.language !== "all" && <span className="block text-xs opacity-70">{t.languages[issue.language]}</span>}</td>
                   <td className="py-3 opacity-70">{issue.recipient_count}</td>
                   <td className="py-3 opacity-70">
-                    {stats.opened} <span className="opacity-60">({openRate}%)</span>
+                    {stats.opened} <span className="opacity-70">({openRate}%)</span>
                   </td>
                   <td className="py-3 opacity-70">{stats.clicked}</td>
                   <td className="py-3 opacity-70">{new Date(issue.sent_at).toLocaleDateString(locale)}</td>
@@ -101,7 +101,7 @@ export default async function AdminNewsletterPage() {
           </tbody>
         </table>
       )}
-      <p className="text-xs opacity-50 mt-3 max-w-2xl">{t.opensNote}</p>
+      <p className="text-xs opacity-70 mt-3 max-w-2xl">{t.opensNote}</p>
     </main>
   );
 }

@@ -23,7 +23,7 @@ export default function AdminLanguageSwitcher({ locale, className }: { locale: L
           onClick={() => choose(l)}
           aria-pressed={locale === l}
           lang={l}
-          className={`px-2 py-1 rounded-[3px] border ${locale === l ? "border-current opacity-100" : "border-transparent opacity-50 hover:opacity-100"}`}
+          className={`px-2 py-1 rounded-[3px] border ${locale === l ? "border-current opacity-100" : "border-transparent opacity-70 hover:opacity-100"}`}
         >
           {l}
         </button>

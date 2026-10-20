@@ -44,7 +44,7 @@ export default function ContactStatusEditor({ contactId, status }: { contactId: 
           </option>
         ))}
       </select>
-      {saved && <span className="text-sage text-xs">{t.common.saved}</span>}
+      {saved && <span className="text-sage-deep text-xs">{t.common.saved}</span>}
     </div>
   );
 }

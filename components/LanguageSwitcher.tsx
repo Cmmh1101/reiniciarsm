@@ -27,7 +27,7 @@ export default function LanguageSwitcher({ locale, label, ariaLabel, className }
       lang={target}
       aria-label={ariaLabel}
       onClick={rememberChoice}
-      className={className ?? "font-mono text-[11.5px] tracking-wide uppercase opacity-65 hover:opacity-100 transition-opacity"}
+      className={className ?? "font-mono text-[11.5px] tracking-wide uppercase opacity-70 hover:opacity-100 transition-opacity"}
     >
       {label}
     </a>

@@ -57,8 +57,8 @@ export default function ProductsGrid({ products, locale, copy }: { products: Pro
               <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
             )}
             <div className="p-6 flex flex-col gap-3 flex-1">
-              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{productCategoryLabel(p.category, locale)}</span>
-              <h3 className="text-lg font-display">{p.name}</h3>
+              <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">{productCategoryLabel(p.category, locale)}</span>
+              <h2 className="text-lg font-display">{p.name}</h2>
               {p.description && <p className="text-sm opacity-70">{p.description}</p>}
               {p.reviewCount >= MIN_REVIEWS_TO_SHOW_RATING && p.avgRating !== null && (
                 <StarRating avgRating={p.avgRating} reviewCount={p.reviewCount} />
@@ -66,7 +66,7 @@ export default function ProductsGrid({ products, locale, copy }: { products: Pro
               <div className="mt-auto flex items-center justify-between gap-2">
                 <span className="font-mono text-sm">{p.price_cents === 0 ? copy.free : `$${(p.price_cents / 100).toFixed(2)}`}</span>
                 {p.purchaseCount >= MIN_PURCHASES_TO_SHOW_COUNT && (
-                  <span className="font-mono text-[10.5px] opacity-50">{p.purchaseCount} {copy.purchases}</span>
+                  <span className="font-mono text-[10.5px] opacity-70">{p.purchaseCount} {copy.purchases}</span>
                 )}
               </div>
             </div>

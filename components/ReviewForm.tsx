@@ -62,7 +62,7 @@ export default function ReviewForm({ purchaseId, locale, copy }: { purchaseId: s
             onMouseEnter={() => setHoverRating(n)}
             onMouseLeave={() => setHoverRating(0)}
             onClick={() => setRating(n)}
-            className={`text-4xl leading-none transition-colors ${n <= activeStars ? "text-clay" : "text-[rgba(20,25,43,0.2)]"}`}
+            className={`text-4xl leading-none transition-colors ${n <= activeStars ? "text-clay-deep" : "text-[rgba(20,25,43,0.2)]"}`}
           >
             ★
           </button>
@@ -77,12 +77,12 @@ export default function ReviewForm({ purchaseId, locale, copy }: { purchaseId: s
         className="font-body text-sm px-4 py-3.5 rounded-[2px] border border-[rgba(20,25,43,0.15)] resize-none"
       />
 
-      {error && <p className="text-clay text-sm text-center">{error}</p>}
+      {error && <p className="text-clay-deep text-sm text-center">{error}</p>}
 
       <button
         type="submit"
         disabled={loading}
-        className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper self-center disabled:opacity-60"
+        className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper self-center disabled:opacity-70"
       >
         {loading ? copy.sending : copy.send}
       </button>

@@ -97,7 +97,7 @@ export default function BookingWidget({
         {plan !== "pack" && (
           <div>
             {planSlots.length === 0 ? (
-              <p className="text-sm opacity-60">
+              <p className="text-sm opacity-90">
                 {copy.noSlotsBefore}{" "}
                 <a href={`mailto:${ALT_PAYMENT_EMAIL}`} className="text-clay-soft underline">
                   {ALT_PAYMENT_EMAIL}
@@ -135,12 +135,12 @@ export default function BookingWidget({
         <button
           type="submit"
           disabled={loading}
-          className="font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform disabled:opacity-60"
+          className="font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform disabled:opacity-70"
         >
           {loading ? copy.redirecting : copy.pay[plan]}
         </button>
 
-        <p className="text-xs opacity-55 pt-1">
+        <p className="text-xs opacity-90 pt-1">
           {copy.altPaymentBefore}{" "}
           <a href={`mailto:${ALT_PAYMENT_EMAIL}`} className="text-clay-soft underline">
             {ALT_PAYMENT_EMAIL}

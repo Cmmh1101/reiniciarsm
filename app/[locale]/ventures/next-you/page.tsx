@@ -26,7 +26,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
   joinUrl.searchParams.set("utm_campaign", locale);
 
   const joinButton =
-    "font-mono text-xs tracking-wide uppercase px-[30px] py-[18px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform";
+    "font-mono text-xs tracking-wide uppercase px-[30px] py-[18px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform";
 
   return (
     <main>
@@ -44,7 +44,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
         <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {n.verbs.map((v, i) => (
             <li key={v.verb} className="border-t-2 border-clay pt-4">
-              <p className="font-mono text-[11px] opacity-50 mb-1">{i + 1} / 4</p>
+              <p className="font-mono text-[11px] opacity-70 mb-1">{i + 1} / 4</p>
               <h3 className="font-display text-3xl mb-2">{v.verb}</h3>
               <p className="text-[15px] opacity-80">{v.body}</p>
             </li>
@@ -58,9 +58,9 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
         <ol className="grid md:grid-cols-3 gap-8">
           {n.phases.map((p) => (
             <li key={p.name} className="bg-paper border border-[rgba(20,25,43,0.12)] rounded-[2px] p-7">
-              <p className="font-mono text-[11px] uppercase tracking-wide text-clay mb-2">{p.steps}</p>
+              <p className="font-mono text-[11px] uppercase tracking-wide text-clay-deep mb-2">{p.steps}</p>
               <h3 className="font-display text-2xl mb-1">{p.plain}</h3>
-              <p className="font-mono text-[11px] opacity-50 mb-3">{p.name}</p>
+              <p className="font-mono text-[11px] opacity-70 mb-3">{p.name}</p>
               <p className="text-[15px] opacity-80">{p.promise}</p>
             </li>
           ))}
@@ -77,7 +77,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
               </li>
             ))}
           </ul>
-          <p className="text-sm opacity-65 mt-6 max-w-[44ch]">{n.coachingNote}</p>
+          <p className="text-sm opacity-70 mt-6 max-w-[44ch]">{n.coachingNote}</p>
         </div>
         <div className="bg-ink text-paper rounded-[2px] p-9">
           <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">{n.priceEyebrow}</p>
@@ -86,12 +86,12 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
           <a href={joinUrl.toString()} target="_blank" rel="noopener noreferrer" className={joinButton}>
             {n.cta} ↗
           </a>
-          <p className="text-xs opacity-60 mt-4">{n.ctaNote}</p>
+          <p className="text-xs opacity-70 mt-4">{n.ctaNote}</p>
         </div>
       </section>
 
       <section className="px-page pb-20">
-        <p className="font-mono text-xs uppercase tracking-widest opacity-60 mb-3">{n.moreTitle}</p>
+        <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-3">{n.moreTitle}</p>
         <div className="flex flex-col gap-2 text-[15px]">
           <Link href={localizedPath(locale, "nextStep")} className="underline w-fit">
             {n.quizLink} →

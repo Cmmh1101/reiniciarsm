@@ -188,13 +188,13 @@ export default function ManualPaymentForm({ availableSlots }: { availableSlots: 
           </label>
         )}
 
-        {error && <p className="text-clay text-sm">{error}</p>}
-        {success && <p className="text-sage text-sm">{t.success}</p>}
+        {error && <p className="text-clay-deep text-sm">{error}</p>}
+        {success && <p className="text-sage-deep text-sm">{t.success}</p>}
 
         <button
           type="submit"
           disabled={saving}
-          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
+          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay-deep text-white self-start disabled:opacity-70"
         >
           {saving ? t.saving : t.submit}
         </button>

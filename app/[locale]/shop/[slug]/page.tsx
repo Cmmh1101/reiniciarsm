@@ -46,13 +46,13 @@ export default async function ProductPage({ params }: { params: { locale: string
     <main className="px-page py-24">
       <Link
         href={localizedPath(locale, "shop")}
-        className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity mb-10"
+        className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide opacity-70 hover:opacity-100 transition-opacity mb-10"
       >
         {common.backToShop}
       </Link>
       <div className={`grid gap-16 ${product.image_url ? "md:grid-cols-[1fr_1fr] max-w-[1000px]" : "max-w-[560px]"}`}>
         <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{productCategoryLabel(product.category, locale)}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{productCategoryLabel(product.category, locale)}</p>
           <h1 className="font-display text-[clamp(28px,3.6vw,40px)] leading-[1.1] mb-5">{product.name}</h1>
           {product.description && <p className="text-base opacity-90 mb-6 max-w-[48ch]">{product.description}</p>}
           {(showRating || showPurchaseCount) && (
@@ -60,13 +60,13 @@ export default async function ProductPage({ params }: { params: { locale: string
               {showRating && <StarRating avgRating={stats!.avgRating!} reviewCount={stats!.reviewCount} size="md" />}
               {showRating && showPurchaseCount && <span className="opacity-30">·</span>}
               {showPurchaseCount && (
-                <span className="font-mono text-xs opacity-60">
+                <span className="font-mono text-xs opacity-70">
                   {stats!.purchaseCount} {common.purchases}
                 </span>
               )}
             </div>
           )}
-          <p className="font-display text-3xl text-clay mb-8">{product.price_cents === 0 ? common.free : `$${(product.price_cents / 100).toFixed(2)}`}</p>
+          <p className="font-display text-3xl text-clay-deep mb-8">{product.price_cents === 0 ? common.free : `$${(product.price_cents / 100).toFixed(2)}`}</p>
           <ProductBuyForm productId={product.id} priceCents={product.price_cents} locale={locale} copy={shop.buyForm} />
         </div>
         {product.image_url && (
@@ -83,12 +83,12 @@ export default async function ProductPage({ params }: { params: { locale: string
           <div className="flex flex-col gap-6">
             {reviews.map((r) => (
               <div key={r.id} className="pb-6 border-b border-[rgba(20,25,43,0.08)] last:border-b-0 last:pb-0">
-                <span className="text-clay text-sm" aria-hidden>
+                <span className="text-clay-deep text-sm" aria-hidden>
                   {"★".repeat(r.rating)}
                   {"☆".repeat(5 - r.rating)}
                 </span>
                 {r.comment && <p className="text-sm opacity-80 mt-2">{r.comment}</p>}
-                <p className="font-mono text-[10.5px] opacity-45 mt-2">
+                <p className="font-mono text-[10.5px] opacity-70 mt-2">
                   {r.reviewerName?.trim() || shop.verifiedBuyer} — {new Date(r.created_at).toLocaleDateString(locale)}
                 </p>
               </div>

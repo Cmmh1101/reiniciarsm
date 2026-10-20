@@ -73,7 +73,7 @@ export default function GenerateSlotsForm({ timeZone }: { timeZone: string }) {
   return (
     <form onSubmit={handleSubmit} className="border border-[rgba(20,25,43,0.12)] rounded-[3px] p-6 max-w-2xl bg-white">
       <h2 className="font-semibold mb-1">{t.title}</h2>
-      <p className="text-xs opacity-60 mb-4">{fmt(t.help, { tz: timeZone })}</p>
+      <p className="text-xs opacity-70 mb-4">{fmt(t.help, { tz: timeZone })}</p>
 
       <div className="flex flex-col gap-4">
         <fieldset>
@@ -85,13 +85,13 @@ export default function GenerateSlotsForm({ timeZone }: { timeZone: string }) {
                 type="button"
                 onClick={() => setSessionType(value)}
                 aria-pressed={sessionType === value}
-                className={`text-xs px-3 py-1.5 rounded-full border ${sessionType === value ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"}`}
+                className={`text-xs px-3 py-1.5 rounded-full border ${sessionType === value ? "bg-clay-deep text-white border-clay" : "border-[rgba(20,25,43,0.2)]"}`}
               >
                 {all.sessions.types[value]}
               </button>
             ))}
           </div>
-          <p className="text-xs opacity-60 mt-2">{t.typeHelp}</p>
+          <p className="text-xs opacity-70 mt-2">{t.typeHelp}</p>
         </fieldset>
 
         <fieldset>
@@ -103,7 +103,7 @@ export default function GenerateSlotsForm({ timeZone }: { timeZone: string }) {
                 type="button"
                 onClick={() => toggleDay(d.value)}
                 aria-pressed={days.includes(d.value)}
-                className={`text-xs px-3 py-1.5 rounded-full border ${days.includes(d.value) ? "bg-clay text-white border-clay" : "border-[rgba(20,25,43,0.2)]"}`}
+                className={`text-xs px-3 py-1.5 rounded-full border ${days.includes(d.value) ? "bg-clay-deep text-white border-clay" : "border-[rgba(20,25,43,0.2)]"}`}
               >
                 {t.weekdays[d.value] ?? d.value}
               </button>
@@ -117,16 +117,16 @@ export default function GenerateSlotsForm({ timeZone }: { timeZone: string }) {
             {windows.map((w, i) => (
               <div key={i} className="flex items-center gap-2">
                 <input type="time" value={w.start} onChange={(e) => updateWindow(i, "start", e.target.value)} aria-label={t.from} className={field} />
-                <span className="text-sm opacity-60">{t.to}</span>
+                <span className="text-sm opacity-70">{t.to}</span>
                 <input type="time" value={w.end} onChange={(e) => updateWindow(i, "end", e.target.value)} aria-label={t.until} className={field} />
                 {windows.length > 1 && (
-                  <button type="button" onClick={() => setWindows((prev) => prev.filter((_, idx) => idx !== i))} className="text-xs text-clay">
+                  <button type="button" onClick={() => setWindows((prev) => prev.filter((_, idx) => idx !== i))} className="text-xs text-clay-deep">
                     {t.remove}
                   </button>
                 )}
               </div>
             ))}
-            <button type="button" onClick={() => setWindows((prev) => [...prev, { start: "08:00", end: "10:00" }])} className="text-xs text-clay self-start">
+            <button type="button" onClick={() => setWindows((prev) => [...prev, { start: "08:00", end: "10:00" }])} className="text-xs text-clay-deep self-start">
               {t.addWindow}
             </button>
           </div>
@@ -144,18 +144,18 @@ export default function GenerateSlotsForm({ timeZone }: { timeZone: string }) {
         </div>
 
         {error && (
-          <p role="alert" className="text-clay text-sm">
+          <p role="alert" className="text-clay-deep text-sm">
             {error}
           </p>
         )}
         {result && (
-          <p role="status" className="text-sage text-sm">
+          <p role="status" className="text-sage-deep text-sm">
             {fmt(t.created, { created: result.created })}
             {result.skipped > 0 ? fmt(t.skipped, { skipped: result.skipped }) : ""}
           </p>
         )}
 
-        <button type="submit" disabled={saving} className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60">
+        <button type="submit" disabled={saving} className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay-deep text-white self-start disabled:opacity-70">
           {saving ? t.generating : t.submit}
         </button>
       </div>

@@ -28,13 +28,13 @@ export default async function AdminProductosPage() {
     <main className="p-10">
       <div className="flex justify-between items-center mb-8">
         <h1 className="font-display text-2xl">{t.title}</h1>
-        <Link href="/admin/productos/new" className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white">
+        <Link href="/admin/productos/new" className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay-deep text-white">
           {t.new}
         </Link>
       </div>
 
       {products.length === 0 ? (
-        <p className="opacity-60">{t.none}</p>
+        <p className="opacity-70">{t.none}</p>
       ) : (
         <>
           {/* Narrow screens: compact rows, tap to expand details below the name — no horizontal scroll. */}
@@ -52,10 +52,10 @@ export default async function AdminProductosPage() {
                     )}
                     <div className="min-w-0 flex-1">
                       <div className="font-medium truncate text-sm">{p.name}</div>
-                      <div className="text-[11.5px] opacity-45 font-mono truncate">/shop/{p.slug}</div>
+                      <div className="text-[11.5px] opacity-70 font-mono truncate">/shop/{p.slug}</div>
                     </div>
                     <svg
-                      className="w-4 h-4 opacity-40 flex-shrink-0 transition-transform group-open:rotate-180"
+                      className="w-4 h-4 opacity-70 flex-shrink-0 transition-transform group-open:rotate-180"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -67,19 +67,19 @@ export default async function AdminProductosPage() {
                   <div className="px-4 pb-4 pl-[4.25rem]">
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm mb-3.5">
                       <div>
-                        <div className="text-[10.5px] uppercase tracking-wide opacity-45 font-mono mb-0.5">{t.columns.category}</div>
+                        <div className="text-[10.5px] uppercase tracking-wide opacity-70 font-mono mb-0.5">{t.columns.category}</div>
                         <div>{t.categories[p.category] ?? p.category}</div>
                       </div>
                       <div>
-                        <div className="text-[10.5px] uppercase tracking-wide opacity-45 font-mono mb-0.5">{t.columns.price}</div>
+                        <div className="text-[10.5px] uppercase tracking-wide opacity-70 font-mono mb-0.5">{t.columns.price}</div>
                         <div className="tabular-nums">{p.price_cents === 0 ? all.common.free : `$${(p.price_cents / 100).toFixed(2)}`}</div>
                       </div>
                       <div>
-                        <div className="text-[10.5px] uppercase tracking-wide opacity-45 font-mono mb-0.5">{t.columns.sales}</div>
+                        <div className="text-[10.5px] uppercase tracking-wide opacity-70 font-mono mb-0.5">{t.columns.sales}</div>
                         <div className="tabular-nums">{s.count}</div>
                       </div>
                       <div>
-                        <div className="text-[10.5px] uppercase tracking-wide opacity-45 font-mono mb-0.5">{t.columns.revenue}</div>
+                        <div className="text-[10.5px] uppercase tracking-wide opacity-70 font-mono mb-0.5">{t.columns.revenue}</div>
                         <div className="tabular-nums">${(s.revenueCents / 100).toFixed(2)}</div>
                       </div>
                     </div>
@@ -100,12 +100,12 @@ export default async function AdminProductosPage() {
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="text-left bg-[rgba(20,25,43,0.025)] border-b border-[rgba(20,25,43,0.1)]">
-                  <th className="py-3 pl-5 pr-3 font-mono text-[10.5px] uppercase tracking-wide opacity-50 font-medium">{t.columns.product}</th>
-                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-50 font-medium">{t.columns.category}</th>
-                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-50 font-medium text-right">{t.columns.price}</th>
-                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-50 font-medium text-right">{t.columns.sales}</th>
-                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-50 font-medium text-right">{t.columns.revenue}</th>
-                  <th className="py-3 pl-3 pr-5 font-mono text-[10.5px] uppercase tracking-wide opacity-50 font-medium">{t.columns.status}</th>
+                  <th className="py-3 pl-5 pr-3 font-mono text-[10.5px] uppercase tracking-wide opacity-70 font-medium">{t.columns.product}</th>
+                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-70 font-medium">{t.columns.category}</th>
+                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-70 font-medium text-right">{t.columns.price}</th>
+                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-70 font-medium text-right">{t.columns.sales}</th>
+                  <th className="py-3 px-3 font-mono text-[10.5px] uppercase tracking-wide opacity-70 font-medium text-right">{t.columns.revenue}</th>
+                  <th className="py-3 pl-3 pr-5 font-mono text-[10.5px] uppercase tracking-wide opacity-70 font-medium">{t.columns.status}</th>
                 </tr>
               </thead>
               <tbody>
@@ -129,7 +129,7 @@ export default async function AdminProductosPage() {
                             <Link href={`/admin/productos/${p.id}/edit`} className="hover:underline font-medium">
                               {p.name}
                             </Link>
-                            <div className="text-[11.5px] opacity-45 font-mono truncate">/shop/{p.slug}</div>
+                            <div className="text-[11.5px] opacity-70 font-mono truncate">/shop/{p.slug}</div>
                           </div>
                         </div>
                       </td>

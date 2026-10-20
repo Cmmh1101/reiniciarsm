@@ -95,7 +95,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
 
         {screen === "cover" && (
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">
               {ui.eyebrow}
             </p>
             <h2 className="font-display font-semibold text-2xl md:text-4xl mb-4">
@@ -107,7 +107,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
             <button
               type="button"
               onClick={start}
-              className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform"
+              className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform"
             >
               {ui.start}
             </button>
@@ -116,7 +116,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
 
         {screen === "questions" && (
           <div>
-            <p className="font-mono text-[13px] text-sage mb-2">
+            <p className="font-mono text-[13px] text-clay-soft mb-2">
               {ui.question(currentQuestion + 1, PILLARS.length)}
             </p>
             <h2 className="font-display font-semibold text-xl md:text-[26px] mb-6">
@@ -139,7 +139,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
 
         {screen === "capture" && (
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">
               {ui.captureEyebrow}
             </p>
             <h2 className="font-display font-semibold text-xl md:text-[28px] mb-4">
@@ -180,14 +180,14 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
                 />
               </label>
               {error && (
-                <p role="alert" className="text-clay text-sm min-h-[1.1em]">
+                <p role="alert" className="text-clay-soft text-sm min-h-[1.1em]">
                   {error}
                 </p>
               )}
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform disabled:opacity-60"
+                className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform disabled:opacity-70"
               >
                 {submitting ? ui.sending : ui.seeResult}
               </button>
@@ -197,7 +197,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
 
         {screen === "result" && winner && (
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest text-clay mb-3">
+            <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">
               {ui.resultEyebrow}
             </p>
             <h2 className="font-display font-semibold text-xl md:text-[28px] mb-4">
@@ -211,7 +211,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
                 <p className="font-mono text-sm uppercase tracking-wide text-[#E1D6C2] mb-4">
                   {phase ? (
                     <>
-                      {ui.inPhase} <span className="text-clay">{phase.name}</span> &middot; {ui.priorityPillar} {label}
+                      {ui.inPhase} <span className="text-clay-soft">{phase.name}</span> &middot; {ui.priorityPillar} {label}
                     </>
                   ) : (
                     <>
@@ -224,7 +224,7 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
             <p className="text-[rgba(237,230,216,0.8)] mb-7">{getPillarText(locale, winner.key).description}</p>
             <Link
               href={localizedPath(locale, "nextYou")}
-              className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform"
+              className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform"
             >
               {ui.join}
             </Link>

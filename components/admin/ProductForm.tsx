@@ -133,7 +133,7 @@ export default function ProductForm({ product }: { product?: Product }) {
               }`}
             >
               {LANG_LABEL[l]}
-              {l !== lang && !names[l].trim() && <span className="opacity-60"> {fmt(t.emptyUse, { other: l === "es" ? LANG_LABEL.en : LANG_LABEL.es })}</span>}
+              {l !== lang && !names[l].trim() && <span className="opacity-70"> {fmt(t.emptyUse, { other: l === "es" ? LANG_LABEL.en : LANG_LABEL.es })}</span>}
             </button>
           ))}
         </div>
@@ -199,7 +199,7 @@ export default function ProductForm({ product }: { product?: Product }) {
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           <span>{t.image}</span>
-          <span className="text-xs opacity-60 font-normal">
+          <span className="text-xs opacity-70 font-normal">
             {t.imageHelp}
           </span>
           {imageUrl && (
@@ -212,24 +212,24 @@ export default function ProductForm({ product }: { product?: Product }) {
             onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
             className="text-sm"
           />
-          {uploadingImage && <span className="text-xs opacity-60">{t.uploadingImage}</span>}
+          {uploadingImage && <span className="text-xs opacity-70">{t.uploadingImage}</span>}
         </label>
 
         <label className="flex flex-col gap-1.5 text-sm font-semibold">
           <span>{isEdit ? t.replaceFile : t.file}</span>
           {isEdit && product && (
-            <span className="text-xs opacity-60 font-normal">{fmt(t.currentFile, { name: product.file_name })}</span>
+            <span className="text-xs opacity-70 font-normal">{fmt(t.currentFile, { name: product.file_name })}</span>
           )}
           <input type="file" onChange={(e) => setFile(e.target.files?.[0] ?? null)} className="text-sm" />
-          {file && <span className="text-xs opacity-60">{fmt(t.newFile, { name: file.name })}</span>}
+          {file && <span className="text-xs opacity-70">{fmt(t.newFile, { name: file.name })}</span>}
         </label>
 
-        {error && <p className="text-clay text-sm">{error}</p>}
+        {error && <p className="text-clay-deep text-sm">{error}</p>}
 
         <button
           type="submit"
           disabled={uploading || uploadingImage || saving}
-          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white self-start disabled:opacity-60"
+          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay-deep text-white self-start disabled:opacity-70"
         >
           {uploading ? t.uploadingFile : saving ? all.common.saving : isEdit ? t.saveChanges : t.create}
         </button>

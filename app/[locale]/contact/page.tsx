@@ -20,11 +20,11 @@ export default function ContactPage({ params, searchParams }: { params: { locale
     <main className="px-page py-24">
       <div className="grid md:grid-cols-[1fr_1fr] gap-16">
         <div>
-          <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{contact.eyebrow}</p>
+          <p className="font-mono text-xs uppercase tracking-widest text-clay-deep mb-4">{contact.eyebrow}</p>
           <h1 className="font-display text-[clamp(30px,4vw,44px)] leading-[1.1] mb-5 max-w-[16ch]">{contact.title}</h1>
           <p className="text-base opacity-90 mb-8 max-w-[48ch]">{contact.lead}</p>
           <div>
-            <p className="font-mono text-xs uppercase tracking-widest opacity-50 mb-2">Email</p>
+            <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-2">Email</p>
             <a href="mailto:hello@carlamontano.io" className="text-base underline">
               hello@carlamontano.io
             </a>

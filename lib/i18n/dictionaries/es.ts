@@ -39,6 +39,7 @@ export const es: Dictionary = {
     legal: "Legal",
     privacy: "Privacidad",
     terms: "Términos",
+    accessibility: "Accesibilidad",
     rights: "© 2026 Carla Montaño",
     montanoSystems: "Montano Systems",
     acadetech: "Acadetech",
@@ -776,6 +777,46 @@ export const es: Dictionary = {
         { title: "Menores de edad", paragraphs: ["Este sitio no está dirigido a menores de 18 años y no recopilamos intencionalmente su información."] },
         { title: "Cambios a esta política", paragraphs: ["Podemos actualizar esta política de vez en cuando. La fecha de “última actualización” arriba refleja la versión más reciente."] },
         { title: "Contacto", paragraphs: ["¿Preguntas sobre esta política? Escribe a hello@carlamontano.io."] },
+      ],
+    },
+    accessibility: {
+      title: "Declaración de accesibilidad",
+      description: "Cómo funciona este sitio para personas que usan lectores de pantalla, teclado y otras tecnologías de apoyo, y cómo reportar un problema.",
+      intro:
+        "Quiero que todas las personas puedan usar este sitio web, incluidas las que usan lectores de pantalla, teclado, control por voz o ampliación, y las que tienen baja visión o diferencias en la percepción del color. Mi meta es cumplir las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.1, nivel AA. Sigo trabajando en ello y no afirmo que el sitio sea perfecto.",
+      sections: [
+        {
+          title: "Qué se ha hecho",
+          bullets: [
+            "Los textos y botones se revisan para tener al menos 4,5:1 de contraste de color, incluido el texto más claro sobre fondos oscuros.",
+            "Todo elemento interactivo muestra un contorno visible al moverte con el teclado, y hay un enlace para saltar al contenido.",
+            "Cada página declara su idioma, y puedes cambiar entre español e inglés desde cualquier página.",
+            "Los formularios tienen etiquetas y mensajes de error que dicen qué salió mal.",
+            "Los títulos siguen un orden lógico, y las imágenes que aportan significado tienen una descripción de texto.",
+            "Las animaciones y efectos al pasar el cursor se desactivan si tu dispositivo está configurado para reducir el movimiento.",
+          ],
+        },
+        {
+          title: "Limitaciones conocidas",
+          bullets: [
+            "Algunas publicaciones antiguas del blog pueden tener imágenes sin descripción. Las corrijo al editar cada publicación.",
+            "Los productos descargables (plantillas, ebooks y workbooks) no se han revisado en accesibilidad, y varios están solo en español.",
+            "Estoy agregando subtítulos a los videos a medida que se publican; los videos más antiguos quizás aún no los tengan.",
+            "Los servicios de terceros, como la página de pago, la comunidad en Skool y los videos incrustados, tienen su propia accesibilidad, que no controlo.",
+          ],
+        },
+        {
+          title: "Cuéntame si encuentras un problema",
+          paragraphs: [
+            "Si algo de este sitio no funciona para ti, escríbeme a hello@carlamontano.io o usa el formulario de contacto. Indícame la página y qué pasó. Me propongo responder en un máximo de cinco días hábiles y corregir el problema lo antes posible.",
+          ],
+        },
+        {
+          title: "Cómo se revisó",
+          paragraphs: [
+            "Esta declaración se revisó por última vez el 20 de octubre de 2026. La revisión usó comprobaciones automáticas de contraste de color, etiquetas, títulos y estructura de página en las páginas principales, en ambos idiomas. Las comprobaciones automáticas no detectan todo, así que los comentarios de personas reales son bienvenidos.",
+          ],
+        },
       ],
     },
     terms: {

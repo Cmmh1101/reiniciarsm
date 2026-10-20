@@ -12,7 +12,7 @@ export function generateMetadata({ params }: { params: { locale: string } }): Me
   return pageMetadata({ locale: params.locale, route: "schools", title: schools.meta.title, description: schools.meta.description });
 }
 
-const BTN_P = "font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform";
+const BTN_P = "font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform";
 const BTN_S = "font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] border border-current inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform";
 
 export default function SchoolsPage({ params }: { params: { locale: string } }) {
@@ -54,11 +54,11 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         <div className="grid lg:grid-cols-2 gap-8">
           {s.levels.map((l) => (
             <article key={l.name} className="bg-paper border border-[rgba(20,25,43,0.15)] rounded-[2px] p-8 flex flex-col gap-4">
-              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{l.tag}</span>
+              <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">{l.tag}</span>
               <h3 className="font-display text-2xl">{l.name}</h3>
               <p>
                 <span className="font-display text-3xl">{l.price}</span>
-                <span className="block font-mono text-[11px] uppercase tracking-wide opacity-60 mt-1">{l.priceNote}</span>
+                <span className="block font-mono text-[11px] uppercase tracking-wide opacity-70 mt-1">{l.priceNote}</span>
               </p>
               <p className="text-[15px] opacity-85">{l.body}</p>
               <ul className="flex flex-col gap-2 text-sm mb-2">
@@ -87,7 +87,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         <div className="grid md:grid-cols-2 gap-8">
           {s.addons.map((a) => (
             <div key={a.name} className="border border-[rgba(20,25,43,0.15)] rounded-[2px] p-7">
-              <span className="font-mono text-[10px] tracking-wide uppercase text-clay">{a.status}</span>
+              <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">{a.status}</span>
               <h3 className="font-display text-xl my-2">{a.name}</h3>
               <p className="text-[15px] opacity-80">{a.body}</p>
             </div>
@@ -116,7 +116,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
               <h3 className="font-display text-xl">{plan.name}</h3>
               <p>
                 <span className="font-display text-3xl">{plan.price}</span>
-                <span className="ml-2 font-mono text-[11px] uppercase tracking-wide opacity-60">{plan.priceNote}</span>
+                <span className="ml-2 font-mono text-[11px] uppercase tracking-wide opacity-70">{plan.priceNote}</span>
               </p>
               <ul className="flex flex-col gap-2 text-sm mt-1">
                 {plan.includes.map((i) => (
@@ -129,13 +129,13 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
           ))}
         </div>
         <div className="max-w-[760px]">
-          <h3 className="font-mono text-xs uppercase tracking-widest opacity-60 mb-3">{s.care.notIncludedTitle}</h3>
+          <h3 className="font-mono text-xs uppercase tracking-widest opacity-70 mb-3">{s.care.notIncludedTitle}</h3>
           <ul className="flex flex-col gap-1.5 text-[14.5px] opacity-85 mb-5">
             {s.care.notIncluded.map((n) => (
               <li key={n}>— {n}</li>
             ))}
           </ul>
-          <p className="font-mono text-[11px] opacity-60">{s.care.note}</p>
+          <p className="font-mono text-[11px] opacity-70">{s.care.note}</p>
         </div>
       </section>
 
@@ -151,7 +151,7 @@ export default function SchoolsPage({ params }: { params: { locale: string } }) 
         </div>
       </section>
 
-      <section className="bg-clay text-paper text-center px-page py-20">
+      <section className="bg-clay-deep text-paper text-center px-page py-20">
         <h2 className="font-display text-[clamp(26px,3.4vw,42px)] leading-[1.12] max-w-[22ch] mx-auto mb-4">{s.finalTitle}</h2>
         <p className="opacity-90 max-w-[48ch] mx-auto mb-8">{s.finalBody}</p>
         <Link href={request} className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-ink text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">

@@ -32,7 +32,7 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
     }
   }
 
-  const buttonClass = "font-mono text-xs px-3.5 py-2 rounded-[3px] border border-[rgba(20,25,43,0.25)] disabled:opacity-60";
+  const buttonClass = "font-mono text-xs px-3.5 py-2 rounded-[3px] border border-[rgba(20,25,43,0.25)] disabled:opacity-70";
 
   return (
     <div className="flex flex-col gap-2">
@@ -42,7 +42,7 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
         // eslint-disable-next-line @next/next/no-img-element
         <img src={value} alt="" className="w-full max-w-[420px] aspect-[16/9] object-cover rounded-[3px] border border-[rgba(20,25,43,0.15)]" />
       ) : (
-        <div className="w-full max-w-[420px] aspect-[16/9] rounded-[3px] border border-dashed border-[rgba(20,25,43,0.25)] flex items-center justify-center text-xs font-mono opacity-50">
+        <div className="w-full max-w-[420px] aspect-[16/9] rounded-[3px] border border-dashed border-[rgba(20,25,43,0.25)] flex items-center justify-center text-xs font-mono opacity-70">
           {t.none}
         </div>
       )}
@@ -56,7 +56,7 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
             {t.remove}
           </button>
         )}
-        <button type="button" onClick={() => setShowUrl((v) => !v)} className="font-mono text-xs opacity-60 hover:opacity-100 underline">
+        <button type="button" onClick={() => setShowUrl((v) => !v)} className="font-mono text-xs opacity-70 hover:opacity-100 underline">
           {showUrl ? t.hideUrl : t.useUrl}
         </button>
         <input
@@ -80,8 +80,8 @@ export default function ImageUploadField({ label, value, onChange }: { label: st
           className="font-body text-sm px-3.5 py-2.5 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
         />
       )}
-      <span className="text-xs opacity-50">{t.help}</span>
-      {error && <p className="text-clay text-sm">{error}</p>}
+      <span className="text-xs opacity-70">{t.help}</span>
+      {error && <p className="text-clay-deep text-sm">{error}</p>}
     </div>
   );
 }

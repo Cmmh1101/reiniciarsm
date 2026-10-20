@@ -13,7 +13,9 @@
   --paper-line: rgba(20, 25, 43, 0.12);
   --clay: #be5a34;
   --clay-soft: #d98a66;
+  --clay-deep: #984222;
   --sage: #6e7f5c;
+  --sage-deep: #566647;
   --gold: #c9a227;
   --font-display: "Bricolage Grotesque", "Inter", sans-serif;
   --font-body: "Inter", sans-serif;
@@ -77,7 +79,8 @@ body {
 .prose-post p {
   margin-bottom: 22px;
   font-size: 17px;
-  opacity: 0.88;
+  /* A solid tint rather than opacity, so links inside the text keep their own full contrast. */
+  color: rgba(20, 25, 43, 0.92);
 }
 .prose-post h2 {
   font-size: 26px;
@@ -93,7 +96,7 @@ body {
   font-style: normal;
   font-weight: 500;
   font-size: 22px;
-  color: var(--clay);
+  color: var(--clay-deep);
   border-left: 3px solid var(--clay);
   padding-left: 24px;
   margin: 36px 0;
@@ -106,7 +109,7 @@ body {
 .prose-post li {
   margin-bottom: 10px;
   font-size: 17px;
-  opacity: 0.88;
+  color: rgba(20, 25, 43, 0.92);
 }
 .prose-post img {
   max-width: 100%;
@@ -115,7 +118,7 @@ body {
   margin: 24px 0;
 }
 .prose-post a {
-  color: var(--clay);
+  color: var(--clay-deep);
   text-decoration: underline;
 }
 
@@ -149,4 +152,36 @@ body {
     opacity: 0.6;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M3 19 C 7 14, 6 8, 12 8 C 18 8, 15 15, 21 15' stroke='%23BE5A34' stroke-width='0.3' stroke-linecap='round'/%3E%3Ccircle cx='3' cy='19' r='0.6' fill='%23EDE6D8'/%3E%3Ccircle cx='21' cy='15' r='0.6' fill='%23BE5A34'/%3E%3C/svg%3E") center / contain no-repeat;
   }
+}
+
+/* Accessibility baseline ---------------------------------------------------------------------- */
+
+/* A visible keyboard focus ring on every interactive element (3:1 against both the paper and ink grounds). */
+:focus-visible {
+  outline: 3px solid var(--clay);
+  outline-offset: 2px;
+}
+
+/* Respect the "reduce motion" setting: no smooth scrolling, no hover lifts, no entrance animations. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .hover\:-translate-y-px:hover {
+    transform: none !important;
+  }
+}
+
+/* Placeholder text is not a substitute for a label, but it must still be readable (the browser default is too pale). */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(20, 25, 43, 0.68);
+  opacity: 1;
 }

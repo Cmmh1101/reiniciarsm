@@ -28,8 +28,8 @@ export default function ProductActiveToggle({ productId, active }: { productId: 
       type="button"
       onClick={toggle}
       disabled={saving}
-      className={`font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border disabled:opacity-50 ${
-        active ? "border-sage text-sage" : "border-[rgba(20,25,43,0.2)] opacity-60"
+      className={`font-mono text-[10.5px] uppercase tracking-wide px-2.5 py-1 rounded-full border disabled:opacity-70 ${
+        active ? "border-sage text-sage-deep" : "border-[rgba(20,25,43,0.2)] opacity-70"
       }`}
     >
       {active ? t.products.active : t.products.inactive}

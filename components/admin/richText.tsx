@@ -226,7 +226,7 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
         />
 
         <Divider />
-        <span className="text-[10px] font-mono opacity-50 mr-0.5">{t.textGroup}</span>
+        <span className="text-[10px] font-mono opacity-70 mr-0.5">{t.textGroup}</span>
         <ToolbarButton title={t.alignLeft} active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}>
           ⇤
         </ToolbarButton>
@@ -240,7 +240,7 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
 
       {editor.isActive("image") && (
         <div className="flex flex-wrap items-center gap-1 mt-2 pt-2 border-t border-[rgba(20,25,43,0.08)]">
-          <span className="text-[10px] font-mono opacity-50 mr-0.5">{t.imageGroup}</span>
+          <span className="text-[10px] font-mono opacity-70 mr-0.5">{t.imageGroup}</span>
           {IMAGE_SIZES.map((size) => (
             <ToolbarButton
               key={size.value}
@@ -250,7 +250,7 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
               {size.label}
             </ToolbarButton>
           ))}
-          <span className="text-[10px] font-mono opacity-50 mx-0.5">{t.imageAlign}</span>
+          <span className="text-[10px] font-mono opacity-70 mx-0.5">{t.imageAlign}</span>
           {IMAGE_ALIGNS.map((align) => (
             <ToolbarButton
               key={align.value}
@@ -271,7 +271,7 @@ export function RichToolbar({ editor, extra }: { editor: Editor; extra?: React.R
           </ToolbarButton>
         </div>
       )}
-      {error && <p className="text-clay text-xs mt-2">{error}</p>}
+      {error && <p className="text-clay-deep text-xs mt-2">{error}</p>}
     </div>
   );
 }

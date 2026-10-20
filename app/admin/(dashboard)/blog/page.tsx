@@ -26,22 +26,22 @@ export default async function AdminBlogListPage() {
         <h1 className="font-display text-2xl">{t.title}</h1>
         <Link
           href="/admin/blog/new"
-          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay text-white"
+          className="font-body font-semibold text-sm px-5 py-2.5 rounded-[3px] bg-clay-deep text-white"
         >
           {t.new}
         </Link>
       </div>
 
       {posts.length === 0 ? (
-        <p className="opacity-60">{t.none}</p>
+        <p className="opacity-70">{t.none}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.title}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.languages}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.pillar}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.status}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.title}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.languages}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.pillar}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.status}</th>
             </tr>
           </thead>
           <tbody>
@@ -56,9 +56,9 @@ export default async function AdminBlogListPage() {
                 <td className="py-3 opacity-70">{pillarLabel(post.pillar, locale)}</td>
                 <td className="py-3">
                   {post.published_at ? (
-                    <span className="text-sage">{t.published}</span>
+                    <span className="text-sage-deep">{t.published}</span>
                   ) : (
-                    <span className="opacity-50">{t.draft}</span>
+                    <span className="opacity-70">{t.draft}</span>
                   )}
                 </td>
               </tr>

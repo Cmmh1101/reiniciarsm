@@ -10,7 +10,7 @@ import { MONTANO_SYSTEMS_URL } from "@/lib/constants";
 
 type Screen = "cover" | "questions" | "capture" | "result";
 
-const buttonClass = "inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay text-white hover:-translate-y-px transition-transform";
+const buttonClass = "inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform";
 const secondaryClass = "inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] border border-[rgba(237,230,216,0.4)] hover:-translate-y-px transition-transform";
 
 function linkFor(locale: Locale, target: ProfileText["primary"]["target"] | ProfileText["secondary"]["target"]): { href: string; external?: boolean } {
@@ -143,7 +143,7 @@ export default function NextStepQuiz({ locale }: { locale: Locale }) {
 
         {screen === "questions" && q && (
           <div>
-            <p className="font-mono text-[13px] text-sage mb-2">{c.questionOf(current + 1, QUESTION_COUNT)}</p>
+            <p className="font-mono text-[13px] text-clay-soft mb-2">{c.questionOf(current + 1, QUESTION_COUNT)}</p>
             <h2 className="font-display font-semibold text-xl md:text-[26px] mb-6">{q.question}</h2>
             <div className="flex flex-col gap-2.5">
               {q.options.map((opt, i) => (
@@ -160,7 +160,7 @@ export default function NextStepQuiz({ locale }: { locale: Locale }) {
               ))}
             </div>
             {current > 0 && (
-              <button type="button" onClick={() => setCurrent(current - 1)} className="mt-5 font-mono text-xs opacity-60 hover:opacity-100">
+              <button type="button" onClick={() => setCurrent(current - 1)} className="mt-5 font-mono text-xs opacity-70 hover:opacity-100">
                 ← {locale === "en" ? "Back" : "Atrás"}
               </button>
             )}
@@ -203,7 +203,7 @@ export default function NextStepQuiz({ locale }: { locale: Locale }) {
                   {error}
                 </p>
               )}
-              <button type="submit" disabled={submitting} className={`${buttonClass} disabled:opacity-60`}>
+              <button type="submit" disabled={submitting} className={`${buttonClass} disabled:opacity-70`}>
                 {submitting ? c.sending : c.seeResult}
               </button>
             </form>
@@ -219,8 +219,8 @@ export default function NextStepQuiz({ locale }: { locale: Locale }) {
               <ActionLink locale={locale} target={result.primary.target} label={result.primary.cta} className={buttonClass} />
               <ActionLink locale={locale} target={result.secondary.target} label={result.secondary.cta} className={secondaryClass} />
             </div>
-            <p className="text-xs opacity-55 mb-5">{c.emailNote}</p>
-            <button type="button" onClick={start} className="font-mono text-xs opacity-60 hover:opacity-100 underline">
+            <p className="text-xs opacity-70 mb-5">{c.emailNote}</p>
+            <button type="button" onClick={start} className="font-mono text-xs opacity-70 hover:opacity-100 underline">
               {c.retake}
             </button>
           </div>

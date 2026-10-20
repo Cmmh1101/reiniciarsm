@@ -37,7 +37,7 @@ export default function Header({ locale, nav, siteName }: { locale: Locale; nav:
 
         <div className="hidden lg:flex gap-5 xl:gap-6 font-mono text-[11.5px] tracking-wide uppercase">
           {DESKTOP_LINKS.map((link) => (
-            <Link key={link.route} href={localizedPath(locale, link.route)} className="opacity-65 hover:opacity-100 transition-opacity">
+            <Link key={link.route} href={localizedPath(locale, link.route)} className="opacity-70 hover:opacity-100 transition-opacity">
               {nav[link.label]}
             </Link>
           ))}
@@ -47,7 +47,7 @@ export default function Header({ locale, nav, siteName }: { locale: Locale; nav:
           <LanguageSwitcher locale={locale} label={nav.switchTo} ariaLabel={nav.switchAria} />
           <Link
             href={localizedPath(locale, "workWithMe")}
-            className="hidden sm:inline-block font-mono text-xs tracking-wide uppercase px-[18px] py-2.5 rounded-[2px] bg-clay text-paper"
+            className="hidden sm:inline-block font-mono text-xs tracking-wide uppercase px-[18px] py-2.5 rounded-[2px] bg-clay-deep text-paper"
             onClick={close}
           >
             {nav.workWithMe}

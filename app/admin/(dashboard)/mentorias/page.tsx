@@ -64,24 +64,24 @@ export default async function AdminSessionsPage({ searchParams }: { searchParams
 
       <h2 className="font-semibold mb-3">{t.bookings.title}</h2>
       {bookings.length === 0 ? (
-        <p className="opacity-60">{t.bookings.none}</p>
+        <p className="opacity-70">{t.bookings.none}</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.bookings.columns.contact}</th>
-                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.bookings.columns.time}</th>
-                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.bookings.columns.type}</th>
-                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.bookings.columns.status}</th>
+                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.bookings.columns.contact}</th>
+                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.bookings.columns.time}</th>
+                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.bookings.columns.type}</th>
+                <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.bookings.columns.status}</th>
               </tr>
             </thead>
             <tbody>
               {bookings.map((b) => (
-                <tr key={b.id} className={`border-b border-[rgba(20,25,43,0.08)] ${b.status === "cancelled" ? "opacity-50" : ""}`}>
+                <tr key={b.id} className={`border-b border-[rgba(20,25,43,0.08)] ${b.status === "cancelled" ? "opacity-70" : ""}`}>
                   <td className="py-3">
                     {b.contacts?.name ?? "—"}
-                    <div className="text-xs opacity-60">{b.contacts?.email}</div>
+                    <div className="text-xs opacity-70">{b.contacts?.email}</div>
                   </td>
                   <td className="py-3 opacity-70">
                     {b.mentoria_slots

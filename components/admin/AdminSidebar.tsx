@@ -32,7 +32,7 @@ export default function AdminSidebar() {
       <div className="mt-auto flex flex-col gap-4">
         <AdminLanguageSwitcher locale={locale} />
         <form action={logout}>
-          <button type="submit" className="font-mono text-xs uppercase tracking-wide opacity-60 hover:opacity-100 transition-opacity">
+          <button type="submit" className="font-mono text-xs uppercase tracking-wide opacity-70 hover:opacity-100 transition-opacity">
             {nav.signOut}
           </button>
         </form>

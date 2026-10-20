@@ -39,7 +39,7 @@ export default async function WorkWithMePage({
   return (
     <main>
       <header className="hero-dark bg-ink text-paper px-page pt-20 pb-20">
-        <p className="font-mono text-xs uppercase tracking-widest text-clay mb-4">{w.eyebrow}</p>
+        <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-4">{w.eyebrow}</p>
         <h1 className="font-display text-[clamp(34px,5vw,60px)] leading-[1.05] mb-6 max-w-[18ch]">{w.title}</h1>
         <p className="text-lg opacity-85 max-w-[56ch]">{w.lead}</p>
       </header>
@@ -50,7 +50,7 @@ export default async function WorkWithMePage({
             <h2 className="font-display text-2xl">{o.name}</h2>
             <p>
               <span className="font-display text-3xl">{o.price}</span>
-              <span className="block font-mono text-[11px] uppercase tracking-wide opacity-60 mt-1">{o.priceNote}</span>
+              <span className="block font-mono text-[11px] uppercase tracking-wide opacity-70 mt-1">{o.priceNote}</span>
             </p>
             <p className="text-[15px] opacity-85">{o.body}</p>
             <ul className="flex flex-col gap-2 text-sm mt-1 mb-2">
@@ -58,7 +58,7 @@ export default async function WorkWithMePage({
                 <li key={i} className="border-l-2 border-sage pl-3">{i}</li>
               ))}
             </ul>
-            <Link href={hrefFor(o.key)} className="mt-auto self-start font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
+            <Link href={hrefFor(o.key)} className="mt-auto self-start font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5 hover:-translate-y-px transition-transform">
               {o.cta} →
             </Link>
           </article>
@@ -88,7 +88,7 @@ export default async function WorkWithMePage({
             </div>
           ))}
         </div>
-        <p className="font-mono text-[11px] opacity-60 mt-10">{w.note}</p>
+        <p className="font-mono text-[11px] opacity-70 mt-10">{w.note}</p>
       </section>
 
       <section className="px-page py-16 grid md:grid-cols-2 gap-8">

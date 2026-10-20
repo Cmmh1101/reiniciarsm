@@ -35,9 +35,11 @@ interface Props {
   locale: Locale;
   copy: Dictionary["newsletter"];
   withName?: boolean;
+  // On a dark background the error text needs the lighter terracotta to stay readable.
+  dark?: boolean;
 }
 
-export default function NewsletterForm({ locale, copy, withName = true }: Props) {
+export default function NewsletterForm({ locale, copy, withName = true, dark = false }: Props) {
   const { status, submit } = useNewsletterSubmit(locale);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -61,11 +63,11 @@ export default function NewsletterForm({ locale, copy, withName = true }: Props)
       <button
         type="submit"
         disabled={status === "loading"}
-        className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay text-paper inline-flex items-center gap-2.5 disabled:opacity-60"
+        className="font-mono text-xs tracking-wide uppercase px-[26px] py-[15px] rounded-[2px] bg-clay-deep text-paper inline-flex items-center gap-2.5 disabled:opacity-70"
       >
         {status === "loading" ? copy.sending : `${copy.button} →`}
       </button>
-      {status === "error" && <p role="alert" className="text-clay text-xs w-full">{copy.error}</p>}
+      {status === "error" && <p role="alert" className={`${dark ? "text-clay-soft" : "text-clay-deep"} text-xs w-full`}>{copy.error}</p>}
     </form>
   );
 }

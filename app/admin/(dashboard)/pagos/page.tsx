@@ -44,16 +44,16 @@ export default async function AdminPagosPage() {
       <ManualPaymentForm availableSlots={availableSlots} />
 
       {payments.length === 0 ? (
-        <p className="opacity-60">{t.none}</p>
+        <p className="opacity-70">{t.none}</p>
       ) : (
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.contact}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.product}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.method}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.amount}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-60">{t.columns.date}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.contact}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.product}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.method}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.amount}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.date}</th>
             </tr>
           </thead>
           <tbody>
@@ -61,7 +61,7 @@ export default async function AdminPagosPage() {
               <tr key={p.id} className="border-b border-[rgba(20,25,43,0.08)]">
                 <td className="py-3">
                   {p.contacts?.name ?? "—"}
-                  <div className="text-xs opacity-60">{p.contacts?.email}</div>
+                  <div className="text-xs opacity-70">{p.contacts?.email}</div>
                 </td>
                 <td className="py-3 opacity-70">{t.products[p.product] ?? p.product}</td>
                 <td className="py-3 opacity-70">{t.methods[p.payment_method] ?? p.payment_method}</td>

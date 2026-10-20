@@ -19,7 +19,7 @@ export function applyNameToken(html: string, name: string | null): string {
 }
 
 function linkifyEscaped(escaped: string): string {
-  return escaped.replace(/(https?:\/\/[^\s<]+)/g, (url) => `<a href="${url}" style="color:#BE5A34;">${url}</a>`);
+  return escaped.replace(/(https?:\/\/[^\s<]+)/g, (url) => `<a href="${url}" style="color:#984222;">${url}</a>`);
 }
 
 const CTA_LINE_RE = /^(.+?)\s*→\s*(https?:\/\/\S+?)\.?$/;
@@ -30,7 +30,7 @@ function renderParagraph(paragraph: string): string {
     const [, label, url] = ctaMatch;
     return (
       `<p style="text-align:center;margin:28px 0;">` +
-      `<a href="${url}" style="background:#BE5A34;color:#EDE6D8;text-decoration:none;padding:14px 28px;border-radius:3px;display:inline-block;font-weight:600;">${escapeHtml(label.trim())} →</a>` +
+      `<a href="${url}" style="background:#984222;color:#EDE6D8;text-decoration:none;padding:14px 28px;border-radius:3px;display:inline-block;font-weight:600;">${escapeHtml(label.trim())} →</a>` +
       `</p>`
     );
   }
@@ -124,10 +124,10 @@ export function styleTiptapHtml(html: string): string {
   out = addDefaultStyle(
     out,
     "blockquote",
-    "font-family:Georgia,serif;font-style:italic;color:#BE5A34;border-left:3px solid #BE5A34;padding-left:18px;margin:20px 0;"
+    "font-family:Georgia,serif;font-style:italic;color:#984222;border-left:3px solid #984222;padding-left:18px;margin:20px 0;"
   );
   out = addDefaultStyle(out, "img", "max-width:100%;border-radius:4px;margin:12px 0;");
-  out = addDefaultStyle(out, "a", "color:#BE5A34;");
+  out = addDefaultStyle(out, "a", "color:#984222;");
   return out;
 }
 

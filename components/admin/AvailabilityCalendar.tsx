@@ -177,7 +177,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
         </Link>
         <h2 className="font-display text-lg ml-2">{fmt(t.calendar.week, { range: weekRange })}</h2>
         <label className="ml-auto flex items-center gap-2 text-xs">
-          <span className="opacity-60">{t.calendar.jumpTo}</span>
+          <span className="opacity-70">{t.calendar.jumpTo}</span>
           <input
             type="date"
             value={weekStart}
@@ -197,7 +197,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
             </li>
           ))}
         </ul>
-        <span className="opacity-50 ml-auto">{fmt(t.timezone, { tz: timeZone })}</span>
+        <span className="opacity-70 ml-auto">{fmt(t.timezone, { tz: timeZone })}</span>
       </div>
 
       {/* Week grid */}
@@ -210,14 +210,14 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
               const isToday = key === todayKey;
               return (
                 <div key={key} className={`px-2 py-2 border-l border-[rgba(20,25,43,0.08)] ${isToday ? "bg-[rgba(190,90,52,0.08)]" : ""}`}>
-                  <div className="text-[11px] font-mono uppercase tracking-wide opacity-60">{dayLabel(key, { weekday: "short" })}</div>
-                  <div className={`font-display text-lg leading-tight ${isToday ? "text-clay" : ""}`}>{dayLabel(key, { day: "numeric", month: "short" })}</div>
+                  <div className="text-[11px] font-mono uppercase tracking-wide opacity-70">{dayLabel(key, { weekday: "short" })}</div>
+                  <div className={`font-display text-lg leading-tight ${isToday ? "text-clay-deep" : ""}`}>{dayLabel(key, { day: "numeric", month: "short" })}</div>
                   {action && (
                     <button
                       type="button"
                       disabled={busy}
                       onClick={() => confirm(action.confirm) && setBlocked(action.ids, action.blocked)}
-                      className="mt-1 text-[10.5px] font-mono uppercase tracking-wide underline opacity-60 hover:opacity-100 disabled:opacity-40"
+                      className="mt-1 text-[10.5px] font-mono uppercase tracking-wide underline opacity-70 hover:opacity-100 disabled:opacity-70"
                     >
                       {action.label}
                     </button>
@@ -230,7 +230,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
           <div className="grid grid-cols-[52px_repeat(7,minmax(0,1fr))]">
             <div className="relative" style={{ height: gridHeight }}>
               {hours.map((h, i) => (
-                <div key={h} className="absolute right-2 -translate-y-1/2 text-[10.5px] font-mono opacity-50" style={{ top: i * ROW_H + (i === 0 ? 8 : 0) }}>
+                <div key={h} className="absolute right-2 -translate-y-1/2 text-[10.5px] font-mono opacity-70" style={{ top: i * ROW_H + (i === 0 ? 8 : 0) }}>
                   {new Date(Date.UTC(2000, 0, 1, h)).toLocaleTimeString(locale, { hour: "numeric", timeZone: "UTC" })}
                 </div>
               ))}
@@ -278,13 +278,13 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
         </div>
       </div>
 
-      {slots.length === 0 && <p className="text-sm opacity-60 mt-3">{t.calendar.empty}</p>}
-      {!hasBlocking && slots.length > 0 && <p className="text-xs text-clay mt-3">{t.migrationMissing}</p>}
+      {slots.length === 0 && <p className="text-sm opacity-70 mt-3">{t.calendar.empty}</p>}
+      {!hasBlocking && slots.length > 0 && <p className="text-xs text-clay-deep mt-3">{t.migrationMissing}</p>}
 
       {/* Selected time */}
       <div aria-live="polite" className="mt-5">
         {!selected ? (
-          slots.length > 0 && <p className="text-sm opacity-50">{t.calendar.selectHint}</p>
+          slots.length > 0 && <p className="text-sm opacity-70">{t.calendar.selectHint}</p>
         ) : (
           <div className="border border-[rgba(20,25,43,0.15)] rounded-[3px] p-5 bg-white max-w-2xl">
             <div className="flex items-start justify-between gap-4 mb-3">
@@ -292,9 +292,9 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
                 <p className="font-display text-lg">
                   {new Date(selected.start_time).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long", timeZone })} · {timeLabel(selected.start_time)}
                 </p>
-                <p className="text-xs font-mono opacity-60">{t.types[selected.session_type]}</p>
+                <p className="text-xs font-mono opacity-70">{t.types[selected.session_type]}</p>
               </div>
-              <button type="button" onClick={() => setSelectedId(null)} className="text-xs font-mono uppercase tracking-wide opacity-60 hover:opacity-100">
+              <button type="button" onClick={() => setSelectedId(null)} className="text-xs font-mono uppercase tracking-wide opacity-70 hover:opacity-100">
                 {all.common.close}
               </button>
             </div>
@@ -310,9 +310,9 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
 
             {selected.state === "booked" && selected.booking && (
               <div className="text-sm mb-4">
-                <p className="text-xs font-mono uppercase tracking-wide opacity-50 mb-1">{t.panel.client}</p>
+                <p className="text-xs font-mono uppercase tracking-wide opacity-70 mb-1">{t.panel.client}</p>
                 <p>{selected.booking.name || "—"}</p>
-                <p className="opacity-60">{selected.booking.email}</p>
+                <p className="opacity-70">{selected.booking.email}</p>
               </div>
             )}
 
@@ -320,7 +320,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
               {selected.state === "open" && hasBlocking && (
                 <>
                   <label className="flex flex-col gap-1 text-xs flex-1 min-w-[200px]">
-                    <span className="opacity-60">{t.panel.reason}</span>
+                    <span className="opacity-70">{t.panel.reason}</span>
                     <input
                       value={reason}
                       onChange={(e) => setReason(e.target.value)}
@@ -329,18 +329,18 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
                       className="font-body text-sm px-3 py-2 rounded-[3px] border border-[rgba(20,25,43,0.2)]"
                     />
                   </label>
-                  <button type="button" disabled={busy} onClick={() => setBlocked([selected.id], true, reason)} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] bg-ink text-paper disabled:opacity-60">
+                  <button type="button" disabled={busy} onClick={() => setBlocked([selected.id], true, reason)} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] bg-ink text-paper disabled:opacity-70">
                     {t.panel.block}
                   </button>
                 </>
               )}
               {selected.state === "blocked" && (
-                <button type="button" disabled={busy} onClick={() => setBlocked([selected.id], false)} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] bg-ink text-paper disabled:opacity-60">
+                <button type="button" disabled={busy} onClick={() => setBlocked([selected.id], false)} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] bg-ink text-paper disabled:opacity-70">
                   {t.panel.unblock}
                 </button>
               )}
               {selected.state === "open" && (
-                <button type="button" disabled={busy} onClick={() => setShowBook((v) => !v)} aria-expanded={showBook} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] border border-ink disabled:opacity-60">
+                <button type="button" disabled={busy} onClick={() => setShowBook((v) => !v)} aria-expanded={showBook} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] border border-ink disabled:opacity-70">
                   {t.panel.bookFor}
                 </button>
               )}
@@ -349,7 +349,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
                   type="button"
                   disabled={busy}
                   onClick={() => confirm(t.panel.cancelConfirm) && run(() => post("/api/admin/slots/cancel-booking", { booking_id: selected.booking!.id }))}
-                  className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] border border-clay text-clay disabled:opacity-60"
+                  className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] border border-clay text-clay-deep disabled:opacity-70"
                 >
                   {t.panel.cancelBooking}
                 </button>
@@ -359,7 +359,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
                   type="button"
                   disabled={busy}
                   onClick={() => confirm(t.panel.deleteConfirm) && run(() => post("/api/admin/slots/delete", { slot_ids: [selected.id] }), undefined, () => setSelectedId(null))}
-                  className="font-mono text-xs uppercase tracking-wide underline opacity-60 hover:opacity-100 disabled:opacity-40 ml-auto"
+                  className="font-mono text-xs uppercase tracking-wide underline opacity-70 hover:opacity-100 disabled:opacity-70 ml-auto"
                 >
                   {t.panel.deleteSlot}
                 </button>
@@ -368,7 +368,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
 
             {showBook && selected.state === "open" && (
               <div className="mt-4 pt-4 border-t border-[rgba(20,25,43,0.1)] grid sm:grid-cols-2 gap-3">
-                <p className="sm:col-span-2 text-xs opacity-60">{t.panel.bookHelp}</p>
+                <p className="sm:col-span-2 text-xs opacity-70">{t.panel.bookHelp}</p>
                 <label className="flex flex-col gap-1 text-xs font-semibold">
                   <span>{all.common.name}</span>
                   <input value={book.name} onChange={(e) => setBook({ ...book, name: e.target.value })} autoComplete="off" className="font-body text-sm font-normal px-3 py-2 rounded-[3px] border border-[rgba(20,25,43,0.2)]" />
@@ -399,7 +399,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
                   </select>
                 </label>
                 <div className="sm:col-span-2">
-                  <button type="button" disabled={busy} onClick={submitBooking} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] bg-clay text-white disabled:opacity-60">
+                  <button type="button" disabled={busy} onClick={submitBooking} className="font-body font-semibold text-sm px-4 py-2 rounded-[3px] bg-clay-deep text-white disabled:opacity-70">
                     {t.panel.bookSubmit}
                   </button>
                 </div>
@@ -407,7 +407,7 @@ export default function AvailabilityCalendar({ slots, weekStart, todayKey, timeZ
             )}
 
             {message && (
-              <p role={message.kind === "error" ? "alert" : "status"} className={`text-sm mt-3 ${message.kind === "error" ? "text-clay" : "text-sage"}`}>
+              <p role={message.kind === "error" ? "alert" : "status"} className={`text-sm mt-3 ${message.kind === "error" ? "text-clay-deep" : "text-sage-deep"}`}>
                 {message.text}
               </p>
             )}
