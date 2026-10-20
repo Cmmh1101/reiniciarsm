@@ -575,7 +575,7 @@ export const es: Dictionary = {
     cards: [
       { key: "quiz", title: "Descubre tu siguiente paso", body: "Ocho preguntas rápidas y una recomendación clara: una solución rápida, un plan, un cambio de carrera, aprender a tu ritmo o mejores sistemas.", cta: "Hacer el diagnóstico de 2 minutos" },
       { key: "sos", title: "Resuelve algo ahora", body: "Una videollamada de 30 minutos para un problema concreto de tecnología: una cuenta, una línea telefónica, una app que no coopera.", cta: "Reservar un Tech SOS — $50" },
-      { key: "community", title: "Únete a la comunidad", body: "Una comunidad y un método para quienes están en transición de carrera, con sesiones en vivo y acompañamiento.", cta: "Explorar la comunidad" },
+      { key: "community", title: "Únete a la comunidad", body: "Una comunidad y un camino claro para cambiar de carrera: clases cortas, una tarea pequeña por semana y coaching en vivo 2 veces por semana.", cta: "Explorar la comunidad" },
       { key: "shop", title: "Plantillas, guías y ebooks", body: "Recursos prácticos que puedes usar hoy, entregados a tu correo.", cta: "Ver la tienda" },
     ],
     business: {

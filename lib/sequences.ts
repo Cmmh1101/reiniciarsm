@@ -35,7 +35,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       "Lo que rompió mi ciclo de duda no fue sentir menos miedo. Fue un fin de semana como voluntaria en GiveCamp Memphis, construyendo una página web para una organización sin fines de lucro. Terminé liderando ese equipo. Ese resultado real —no una promesa, algo que pude ver terminado— fue la primera prueba de que sí era posible.\n\nSi tú estás en el ciclo de \"lo intento, dudo, paro, vuelvo a intentar\", la salida no es esperar a sentirte más segura. Es buscar un proyecto pequeño y real donde puedas ver evidencia de que sí puedes — no una promesa más, algo terminado.\n\n¿Cuál podría ser esa prueba pequeña para ti esta semana?",
     subject3: "No tienes que romper este ciclo sola",
     body3:
-      "Algo que aprendí después de mis propios ciclos de duda: se rompen más rápido acompañada que sola.\n\nEn la Comunidad Next You, el pilar de Mentalidad es de los que más trabajamos en las sesiones en vivo — no con charlas motivacionales, sino con ejercicios concretos para identificar qué creencia específica te está frenando, y qué micro-paso puedes dar esta semana.\n\nSi sientes que ya es momento de dejar de intentarlo en aislamiento, te dejo la puerta abierta: [Únete a la Comunidad Next You →]",
+      "Algo que aprendí después de mis propios ciclos de duda: se rompen más rápido acompañada que sola.\n\nAsí funciona la comunidad NEXT YOU — un paso a la vez: una clase corta sobre la creencia que te frena, una tarea pequeña, y coaching en vivo dos veces por semana donde puedes traer lo que te trabó.\n\nSi sientes que ya es momento de dejar de intentarlo en aislamiento, te dejo la puerta abierta: [Únete a la Comunidad Next You →]",
   },
   direccion: {
     subject2: "Cómo elegí un camino cuando tenía demasiadas opciones",
@@ -43,7 +43,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       "Cuando empecé a explorar tecnología, había demasiados caminos posibles: desarrollo, diseño, automatización, gestión de proyectos. No fue investigar más lo que me dio claridad — fue elegir UNA dirección concreta, aunque no tuviera la certeza de que era \"la correcta\", y comprometerme con ella el tiempo suficiente para saber si funcionaba.\n\nLa dirección no se encuentra pensando más. Se encuentra actuando en una sola vía el tiempo suficiente para tener evidencia real.\n\n¿Cuál es la UNA dirección a la que podrías comprometerte las próximas 4 semanas, aunque no estés 100% segura?",
     subject3: "Un mapa de próximo paso, no de toda la vida",
     body3:
-      "No necesitas un mapa de toda tu vida. Necesitas el siguiente paso concreto.\n\nEn la Comunidad Next You trabajamos exactamente eso en el pilar de Dirección: no planes de 10 años, sino tu próximo paso claro, con acompañamiento para sostenerlo cuando la duda regrese — porque va a regresar, y está bien.\n\nSi quieres dejar de perseguir todos los caminos a la vez: [Únete a la Comunidad Next You →]",
+      "No necesitas un mapa de toda tu vida. Necesitas el siguiente paso concreto.\n\nAsí funciona NEXT YOU: un paso a la vez, con clases cortas, una tarea pequeña en cada una, y coaching en vivo dos veces por semana para traer la duda cuando regrese — porque va a regresar, y está bien.\n\nSi quieres dejar de perseguir todos los caminos a la vez: [Únete a la Comunidad Next You →]",
   },
   tecnologia: {
     subject2: "No necesitas un curso más, necesitas un proyecto real",
@@ -51,7 +51,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       "La mayoría de la gente que se queda atascada con la tecnología no le falta información — tiene demasiada, de demasiados cursos distintos, sin nunca construir nada real y terminado.\n\nLo que a mí me dio confianza no fue otro curso. Fue construir algo pequeño y real: una página web de fin de semana para una ONG. Nadie me pidió título ni certificación — solo un resultado que pudieran ver.\n\n¿Cuál sería el proyecto más pequeño y real que podrías construir esta semana, aunque no sea perfecto?",
     subject3: "Tecnología sin miedo, con acompañamiento real",
     body3:
-      "En la Comunidad Next You, el pilar de Tecnología e IA está pensado para quien empieza literalmente desde cero — sin asumir que ya sabes programar, sin lenguaje técnico que confunda más de lo que ayuda.\n\nSi quieres perderle el miedo a la tecnología con pasos pequeños y guiados, en vez de intentarlo sola frente a mil tutoriales distintos: [Únete a la Comunidad Next You →]",
+      "En NEXT YOU puedes empezar literalmente desde cero — sin asumir que ya sabes programar, sin lenguaje técnico que confunda más de lo que ayuda. Clases cortas, una tarea pequeña en cada una, y coaching en vivo donde puedes preguntar lo que sea.\n\nSi quieres perderle el miedo a la tecnología con pasos pequeños y guiados, en vez de intentarlo sola frente a mil tutoriales distintos: [Únete a la Comunidad Next You →]",
   },
   empleabilidad: {
     subject2: 'Cómo hice visible una experiencia que "no calificaba"',
@@ -59,7 +59,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       'Durante mucho tiempo pensé que mi experiencia —mesera, limpieza, comedor escolar— no contaba para nada "profesional". Estaba equivocada. Cada uno de esos trabajos demostraba algo real: adaptabilidad, resiliencia, capacidad de aprender rápido bajo presión.\n\nEl problema no era mi experiencia. Era cómo la estaba contando —o no contando en absoluto.\n\nHaz este ejercicio: toma tu trabajo actual (o el último que tuviste) y escribe una frase de qué habilidad concreta demuestra, más allá del título del puesto.',
     subject3: "Oportunidades reales, no solo consejos de CV",
     body3:
-      "En la Comunidad Next You, el pilar de Empleabilidad incluye algo que casi nadie más ofrece: oportunidades de trabajo y colaboración reales compartidas dentro de la comunidad, no solo plantillas de CV genéricas.\n\nSi quieres dejar de sentir que tu experiencia es invisible para el mercado: [Únete a la Comunidad Next You →]",
+      "En NEXT YOU trabajamos en hacer visible lo que ya sabes hacer, con una tarea pequeña a la vez — cómo cuentas tu experiencia, tu perfil profesional, tu próxima postulación — y con coaching en vivo donde puedes traer ejemplos reales.\n\nSi quieres dejar de sentir que tu experiencia es invisible para el mercado: [Únete a la Comunidad Next You →]",
   },
   ingles: {
     subject2: "El idioma no mide tu capacidad, mide tu práctica",
@@ -67,7 +67,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       "Aprobar esa certificación en inglés no significó que de repente dominaba el idioma perfectamente. Significó que dejé de esperar a sentirme lista para usarlo, y empecé a practicarlo en situaciones reales, con errores incluidos.\n\nEl inglés profesional no se aprende evitando situaciones incómodas. Se aprende atravesándolas, una conversación imperfecta a la vez.\n\n¿Cuál sería una sola conversación en inglés que has estado posponiendo esta semana?",
     subject3: "Práctica real de inglés, no otra app de gramática",
     body3:
-      "En la Comunidad Next You, el pilar de Inglés Profesional incluye sesiones de conversación en vivo — práctica real con otras personas en tu misma situación, no otra app de gramática que nunca terminas.\n\nSi quieres dejar de posponer las oportunidades que ya podrías tomar: [Únete a la Comunidad Next You →]",
+      "En NEXT YOU el coaching en vivo alterna idiomas — español los martes e inglés los jueves — así que el jueves es un lugar real para practicar inglés profesional con otras personas en tu misma situación, con errores incluidos.\n\nSi quieres dejar de posponer las oportunidades que ya podrías tomar: [Únete a la Comunidad Next You →]",
   },
   productividad: {
     subject2: "Los 3 permisos que sostuvieron mi rutina más intensa",
@@ -75,7 +75,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       'Sostener ese ritmo no fue solo disciplina. Fue darme permisos concretos: permiso para no saberlo todo antes de avanzar, permiso para pedir ayuda en vez de intentarlo completamente sola, y permiso para redefinir qué es "suficiente" en un día ocupado.\n\nEl tiempo no aparece solo — se construye con decisiones temporales e incómodas, no con más horas mágicas en el día.\n\n¿Qué estarías dispuesta a mover temporalmente esta semana para avanzar en lo que de verdad importa?',
     subject3: "Un sistema, no más fuerza de voluntad",
     body3:
-      'En la Comunidad Next You, el pilar de Productividad no se trata de "esfuérzate más" — se trata de sistemas simples que le den espacio real a tu reinvención, sin sacrificar trabajo, familia ni descanso.\n\nSi quieres dejar de estar ocupada sin avanzar: [Únete a la Comunidad Next You →]',
+      "En NEXT YOU, la productividad no se trata de \"esfuérzate más\" — se trata de una tarea pequeña por semana, en un orden claro, para que tu reinvención tenga espacio real sin sacrificar trabajo, familia ni descanso.\n\nSi quieres dejar de estar ocupada sin avanzar: [Únete a la Comunidad Next You →]",
   },
   bienestar: {
     subject2: "El bienestar no es un lujo aparte del método",
@@ -83,7 +83,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       'Durante mucho tiempo traté el descanso como algo que "ganaba" después de cumplir todo lo demás. Fue al revés: los periodos donde más avancé de verdad fueron los que tenían un límite claro de cuánto sacrificio estaba dispuesta a sostener, y por cuánto tiempo.\n\nSi estás empujando sin límites definidos ahora mismo, la pregunta no es "¿cómo aguanto más?" — es "¿qué límite necesito ponerle a esto para sostenerlo?"',
     subject3: "No tienes que sostener esto sola, agotada",
     body3:
-      "En la Comunidad Next You, el pilar de Bienestar está integrado en cada sesión — no como un tema aparte, sino como parte real de cómo diseñamos cualquier reinicio. Reiniciar tu carrera no debería costarte tu salud.\n\nSi sientes que estás al límite: [Únete a la Comunidad Next You →]",
+      "En NEXT YOU el ritmo está pensado para ser sostenible: una clase corta y una tarea pequeña por semana, no una montaña de tareas. Reiniciar tu carrera no debería costarte tu salud.\n\nSi sientes que estás al límite: [Únete a la Comunidad Next You →]",
   },
   comunidad: {
     subject2: "Lo que logré en equipo que no logré sola",
@@ -91,7 +91,7 @@ const QUIZ_SEQUENCE_CONTENT: Record<PillarKey, { subject2: string; body2: string
       "Pasé dos años intentando aprender tecnología completamente sola. Dudaba, paraba, volvía a intentar. Lo que finalmente funcionó fue un fin de semana en equipo —GiveCamp Memphis— construyendo algo real junto a otra persona, no otro intento en solitario frente a una pantalla.\n\nNo es que necesites que alguien haga el trabajo por ti. Es que el mismo esfuerzo, acompañado, se sostiene distinto.\n\n¿Con quién podrías compartir tu próximo paso esta semana, en vez de guardarlo para ti sola?",
     subject3: "No vas a reiniciar sola",
     body3:
-      "La Comunidad Next You existe exactamente para esto: accountability partners, retos compartidos, y un Muro de Victorias donde cada avance —grande o pequeño— se celebra con alguien más, no en silencio.\n\nSi ya estás lista para dejar de intentarlo en aislamiento: [Únete a la Comunidad Next You →]",
+      "NEXT YOU existe exactamente para esto: una comunidad donde cuentas tu avance cada semana, preguntas lo que te trabó y nos vemos en vivo dos veces por semana — para que cada paso, grande o pequeño, se comparta con alguien y no se cargue en silencio.\n\nSi ya estás lista para dejar de intentarlo en aislamiento: [Únete a la Comunidad Next You →]",
   },
 };
 
@@ -204,14 +204,14 @@ export const NEWSLETTER_SEQUENCE: SequenceStep[] = [
     subject: "No vas a reiniciar sola",
     body: (name, unsubscribeUrl) =>
       `${greeting(name)}\n\n` +
-      `Llevas unos días conmigo y ya conoces mi historia y el método detrás de Reiniciar Sin Mapa. Hoy quiero contarte dónde vive todo esto en la práctica: la Comunidad Next You.\n\n` +
-      `No es un grupo de Facebook silencioso ni un curso grabado que nadie termina. Así se ve una semana adentro:\n\n` +
-      `— Lunes: planteo la intención de la semana, ligada a un pilar específico y un micro-reto concreto.\n` +
-      `— Miércoles: check-in con tu accountability partner del mes.\n` +
-      `— Viernes: compartimos avances en el Muro de Victorias — grandes o pequeños, todos cuentan.\n` +
-      `— Una vez al mes: sesión en vivo conmigo, profundizando un pilar.\n\n` +
+      `Llevas unos días conmigo y ya conoces mi historia y el método detrás de Reiniciar Sin Mapa. Hoy quiero contarte dónde vive todo esto en la práctica: la comunidad NEXT YOU.\n\n` +
+      `No es un grupo silencioso ni un curso grabado que nadie termina. Funciona con cuatro verbos, siempre los mismos: mira, haz, cuenta y pregunta.\n\n` +
+      `— Mira: una clase corta cada semana, de 5 a 10 minutos.\n` +
+      `— Haz: una tarea pequeña. Solo una.\n` +
+      `— Cuenta: le cuentas a la comunidad cómo te fue.\n` +
+      `— Pregunta: traes lo que te trabó al coaching en vivo, dos veces por semana (martes en español, jueves en inglés).\n\n` +
       `Dentro hay personas que hoy mismo están donde tú podrías estar en seis meses. Y otras que están exactamente donde tú estás ahora.\n\n` +
-      `Si sientes que ya no quieres intentar esto sola/o, te dejo la puerta abierta aquí: ${communityPageUrl()}\n\n` +
+      `Si no quieres intentar esto sola/o, te dejo la puerta abierta aquí: ${communityPageUrl()}\n\n` +
       `No necesitas tener todo resuelto para entrar. Solo el siguiente paso.` +
       footer(unsubscribeUrl),
   },
@@ -285,14 +285,13 @@ export const NEWSLETTER_SEQUENCE_EN: SequenceStep[] = [
     body: (name, unsubscribeUrl) =>
       `${greetingEn(name)}\n\n` +
       `You've been with me for a few days and you already know my story and the method behind Reiniciar Sin Mapa. Today I want to tell you where all of this lives in practice: the NEXT YOU community.\n\n` +
-      `It isn't a silent Facebook group or a recorded course nobody finishes. This is what a week inside looks like:\n\n` +
-      `— Monday: I set the week's intention, tied to a specific pillar and a concrete micro-challenge.\n` +
-      `— Wednesday: check-in with your accountability partner for the month.\n` +
-      `— Friday: we share progress on the Wall of Wins — big or small, everything counts.\n` +
-      `— Once a month: a live session with me, going deep on one pillar.\n\n` +
+      `It isn't a silent group or a recorded course nobody finishes. It works with four verbs, always the same: watch, do, share and ask.\n\n` +
+      `— Watch: one short lesson each week, 5 to 10 minutes.\n` +
+      `— Do: one small task. Just one.\n` +
+      `— Share: tell the community how it went.\n` +
+      `— Ask: bring what got you stuck to the live coaching, twice a week (Spanish on Tuesdays, English on Thursdays).\n\n` +
       `Inside are people who are today where you could be in six months. And others who are exactly where you are now.\n\n` +
-      `A heads-up: the live sessions and most conversations are in Spanish today.\n\n` +
-      `If you don't want to try this alone anymore, the door is open here: ${siteUrl()}/en/ventures/next-you\n\n` +
+      `If you don't want to try this alone, the door is open here: ${siteUrl()}/en/ventures/next-you\n\n` +
       `You don't need to have everything figured out to join. Just the next step.` +
       footerEn(unsubscribeUrl),
   },

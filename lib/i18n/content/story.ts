@@ -108,8 +108,8 @@ const es: StoryContent = {
     {
       key: "community",
       title: "Únete A La Comunidad",
-      body: "El hogar de quienes están reiniciando en paralelo a ti — retos mensuales, sesiones en vivo y acompañamiento real.",
-      bullets: ["8 canales por pilar", "Sesiones en vivo mensuales", "Muro de victorias"],
+      body: "Una comunidad y un camino claro para cambiar de carrera, un paso a la vez: clases cortas, una tarea por semana y coaching en vivo.",
+      bullets: ["Una clase corta por semana", "Coaching en vivo 2 veces por semana", "Un lugar para contar tus avances"],
       cta: "Entrar A La Comunidad →",
     },
     {
@@ -197,8 +197,8 @@ const en: StoryContent = {
     {
       key: "community",
       title: "Join The Community",
-      body: "The home of people restarting alongside you — monthly challenges, live sessions and real support.",
-      bullets: ["8 channels, one per pillar", "Monthly live sessions", "Wall of wins"],
+      body: "A community and a clear path for changing careers, one step at a time: short lessons, one task a week and live coaching.",
+      bullets: ["One short lesson a week", "Live coaching twice a week", "A place to share your progress"],
       cta: "Explore The Community →",
     },
     {

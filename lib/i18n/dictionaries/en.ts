@@ -583,7 +583,7 @@ export const en = {
     cards: [
       { key: "quiz", title: "Find your next step", body: "Eight quick questions and a clear recommendation: a quick fix, a plan, a career move, self-paced learning or better systems.", cta: "Take the 2-minute quiz" },
       { key: "sos", title: "Get help with something now", body: "A 30-minute video call for one concrete tech problem — an account, a phone line, an app that won't cooperate.", cta: "Book a Tech SOS — $50" },
-      { key: "community", title: "Join the community", body: "A community and method for people navigating a career transition, with live sessions and accountability.", cta: "Explore the community" },
+      { key: "community", title: "Join the community", body: "A community and a clear path for changing careers: short lessons, one small task a week and live coaching twice a week.", cta: "Explore the community" },
       { key: "shop", title: "Templates, guides and ebooks", body: "Practical resources you can use today, delivered to your inbox.", cta: "Browse the shop" },
     ],
     business: {
