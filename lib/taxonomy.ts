@@ -1,52 +1,70 @@
-// Fixed blog taxonomy (docs/CM-plan-admin-crm-analytics.md §2) — closed dropdowns,
-// not free text, so pillar/phase values stay consistent across posts.
+// Blog taxonomy. A post has ONE category (closed list, so the public label and any category page stay
+// consistent) and any number of free-form tags (for filtering, and for pages that show only some
+// articles — e.g. a schools landing listing posts tagged "schools").
+//
+// The category is stored in the blog_posts.pillar column. Posts saved before the categories existed
+// hold one of the old Spanish pillar names; categoryKey() maps those, so nothing needs migrating.
 
-export const PILLARS = [
-  "Mentalidad",
-  "Dirección",
-  "Tecnología e IA",
-  "Empleabilidad",
-  "Inglés profesional",
-  "Productividad",
-  "Bienestar",
-  "Comunidad",
-] as const;
+export interface BlogCategory {
+  key: string;
+  es: string;
+  en: string;
+}
 
-// Literal strings match the options already used in Notion — keep them identical
-// so both systems stay consistent. "No aplica" is a UI-only sentinel: it maps to
-// a null arc_phase in the database (not every post is autobiographical), never
-// stored as the literal string.
-export const ARC_PHASES = [
-  "01 Mundo ordinario",
-  "02 Llamado forzado",
-  "03 Travesía del umbral",
-  "04 Método propio",
-  "05 Prueba mayor",
-  "06 Regreso transformado",
-  "07 Elixir",
-] as const;
+export const BLOG_CATEGORIES: BlogCategory[] = [
+  { key: "tecnologia-ia", es: "Tecnología e IA", en: "Technology & AI" },
+  { key: "sistemas-herramientas", es: "Sistemas y herramientas", en: "Systems & tools" },
+  { key: "escuelas-educacion", es: "Escuelas y educación", en: "Schools & education" },
+  { key: "organizaciones", es: "Organizaciones y equipos", en: "Organizations & teams" },
+  { key: "carrera", es: "Carrera y empleabilidad", en: "Career & employability" },
+  { key: "ingles-profesional", es: "Inglés profesional", en: "Professional English" },
+  { key: "productividad-bienestar", es: "Productividad y bienestar", en: "Productivity & wellbeing" },
+  { key: "comunidad", es: "Comunidad NEXT YOU", en: "NEXT YOU community" },
+  { key: "mi-historia", es: "Mi historia", en: "My story" },
+];
 
-export const ARC_PHASE_NOT_APPLICABLE = "No aplica";
+const LEGACY_PILLAR_CATEGORY: Record<string, string> = {
+  Mentalidad: "carrera",
+  "Dirección": "carrera",
+  "Tecnología e IA": "tecnologia-ia",
+  Empleabilidad: "carrera",
+  "Inglés profesional": "ingles-profesional",
+  Productividad: "productividad-bienestar",
+  Bienestar: "productividad-bienestar",
+  Comunidad: "comunidad",
+};
+
+/** The category key for whatever is stored in the post (a current key or an old Spanish pillar name). */
+export function categoryKey(stored: string): string {
+  if (BLOG_CATEGORIES.some((c) => c.key === stored)) return stored;
+  return LEGACY_PILLAR_CATEGORY[stored] ?? stored;
+}
+
+export function categoryLabel(stored: string, locale: "en" | "es"): string {
+  const key = categoryKey(stored);
+  const category = BLOG_CATEGORIES.find((c) => c.key === key);
+  return category ? category[locale] : stored;
+}
+
+/** Tags that mark who an article is for — the quick picks in the editor, and what audience pages filter on. */
+export const AUDIENCE_TAGS = ["individuals", "schools", "organizations"] as const;
+
+export const MAX_TAGS = 12;
+
+/** Lowercase, accent-free, hyphenated — "Escuelas Públicas" and "escuelas-publicas" are the same tag. */
+export function normalizeTag(input: string): string {
+  return input
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40);
+}
 
 // Fixed product categories (digital products, Fase 5+) — same closed-dropdown reasoning as
 // above: keeps values consistent for the public /productos category filter.
 export const PRODUCT_CATEGORIES = ["Ebook", "Plantilla", "Guía", "Curso", "Otro"] as const;
-
-// English display labels for the (Spanish-keyed) blog pillars — posts always store the Spanish key.
-export const PILLAR_LABEL_EN: Record<string, string> = {
-  Mentalidad: "Mindset",
-  "Dirección": "Direction",
-  "Tecnología e IA": "Technology & AI",
-  Empleabilidad: "Employability",
-  "Inglés profesional": "Professional English",
-  Productividad: "Productivity",
-  Bienestar: "Wellbeing",
-  Comunidad: "Community",
-};
-
-export function pillarLabel(pillar: string, locale: "en" | "es"): string {
-  return locale === "en" ? PILLAR_LABEL_EN[pillar] ?? pillar : pillar;
-}
 
 // English display labels for the (Spanish-valued) product categories — products always store the Spanish value.
 export const PRODUCT_CATEGORY_LABEL_EN: Record<string, string> = {

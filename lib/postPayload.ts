@@ -1,3 +1,4 @@
+import { MAX_TAGS, normalizeTag } from "@/lib/taxonomy";
 // Shared by the admin create/update routes: reads the Spanish and English versions of a post from the request body.
 export interface PostLanguage {
   title: string;
@@ -17,4 +18,11 @@ export function readLanguages(body: Record<string, unknown>): { es: PostLanguage
 /** A language counts as written once it has both a title and content. */
 export function hasLanguage(l: PostLanguage): boolean {
   return !!l.title && !!l.content;
+}
+
+/** Tags from the request body: normalized, de-duplicated, capped. */
+export function readTags(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  const tags = value.filter((v): v is string => typeof v === "string").map(normalizeTag).filter(Boolean);
+  return Array.from(new Set(tags)).slice(0, MAX_TAGS);
 }

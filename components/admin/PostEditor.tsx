@@ -7,13 +7,14 @@ import { buildExtensions, RichToolbar } from "@/components/admin/richText";
 import ImageUploadField from "@/components/admin/ImageUploadField";
 import { useAdminI18n } from "@/components/admin/AdminI18n";
 import { fmt } from "@/lib/admin/dictionary";
-import { pillarLabel } from "@/lib/taxonomy";
-import { PILLARS, ARC_PHASES, ARC_PHASE_NOT_APPLICABLE } from "@/lib/taxonomy";
+import { AUDIENCE_TAGS, BLOG_CATEGORIES, MAX_TAGS, categoryKey, normalizeTag } from "@/lib/taxonomy";
 import { slugify } from "@/lib/slug";
 import type { BlogPost } from "@/lib/posts";
 
 interface Props {
   post?: BlogPost;
+  /** Tags already used on other posts, offered as suggestions. */
+  knownTags?: string[];
 }
 
 type Lang = "en" | "es";
@@ -23,7 +24,7 @@ interface LangFields {
   content: string;
 }
 
-export default function PostEditor({ post }: Props) {
+export default function PostEditor({ post, knownTags = [] }: Props) {
   const router = useRouter();
   const { locale, t: all } = useAdminI18n();
   const t = all.blog.editor;
@@ -40,8 +41,10 @@ export default function PostEditor({ post }: Props) {
 
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(isEditing);
-  const [pillar, setPillar] = useState(post?.pillar ?? PILLARS[0]);
-  const [arcPhase, setArcPhase] = useState(post?.arc_phase ?? ARC_PHASE_NOT_APPLICABLE);
+  // Posts saved before the categories existed hold an old pillar name; categoryKey maps it to the closest category.
+  const [category, setCategory] = useState(post ? categoryKey(post.pillar) : BLOG_CATEGORIES[0].key);
+  const [tags, setTags] = useState<string[]>(post?.tags ?? []);
+  const [tagInput, setTagInput] = useState("");
   const [featuredImageUrl, setFeaturedImageUrl] = useState(post?.featured_image_url ?? "");
   const [readingTime, setReadingTime] = useState(post?.reading_time_minutes?.toString() ?? "");
   const [published, setPublished] = useState(!!post?.published_at);
@@ -65,6 +68,16 @@ export default function PostEditor({ post }: Props) {
     setFields(saved);
     setLang(next);
     editor?.commands.setContent(saved[next].content || "<p></p>");
+  }
+
+  function addTag(raw: string) {
+    const tag = normalizeTag(raw);
+    setTagInput("");
+    if (tag && !tags.includes(tag) && tags.length < MAX_TAGS) setTags([...tags, tag]);
+  }
+
+  function toggleTag(tag: string) {
+    setTags((prev) => (prev.includes(tag) ? prev.filter((x) => x !== tag) : prev.length < MAX_TAGS ? [...prev, tag] : prev));
   }
 
   function updateField(field: "title" | "excerpt", value: string) {
@@ -97,8 +110,8 @@ export default function PostEditor({ post }: Props) {
       excerpt_en: saved.en.excerpt.trim(),
       content_en: saved.en.content,
       slug: slug.trim(),
-      pillar,
-      arc_phase: arcPhase === ARC_PHASE_NOT_APPLICABLE ? null : arcPhase,
+      pillar: category,
+      tags,
       featured_image_url: featuredImageUrl.trim(),
       reading_time_minutes: readingTime ? Number(readingTime) : null,
       published,
@@ -190,37 +203,79 @@ export default function PostEditor({ post }: Props) {
           />
         </label>
 
-        <div className="grid grid-cols-2 gap-4">
-          <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>{t.pillar}</span>
-            <select
-              value={pillar}
-              onChange={(e) => setPillar(e.target.value)}
-              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
-            >
-              {PILLARS.map((p) => (
-                <option key={p} value={p}>
-                  {pillarLabel(p, locale)}
-                </option>
-              ))}
-            </select>
-          </label>
+        <label className="flex flex-col gap-1.5 text-sm font-semibold max-w-[320px]">
+          <span>{t.category}</span>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
+          >
+            {BLOG_CATEGORIES.map((c) => (
+              <option key={c.key} value={c.key}>
+                {c[locale]}
+              </option>
+            ))}
+          </select>
+        </label>
 
-          <label className="flex flex-col gap-1.5 text-sm font-semibold">
-            <span>{t.arcPhase}</span>
-            <select
-              value={arcPhase}
-              onChange={(e) => setArcPhase(e.target.value)}
-              className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white"
-            >
-              <option value={ARC_PHASE_NOT_APPLICABLE}>{all.blog.arcPhases[ARC_PHASE_NOT_APPLICABLE] ?? ARC_PHASE_NOT_APPLICABLE}</option>
-              {ARC_PHASES.map((p) => (
-                <option key={all.blog.arcPhases[p] ?? p} value={p}>
-                  {p}
-                </option>
-              ))}
-            </select>
+        <fieldset className="flex flex-col gap-2.5">
+          <legend className="text-sm font-semibold mb-1.5">{t.audience}</legend>
+          <div className="flex flex-wrap gap-2">
+            {AUDIENCE_TAGS.map((tag) => (
+              <button
+                key={tag}
+                type="button"
+                aria-pressed={tags.includes(tag)}
+                onClick={() => toggleTag(tag)}
+                className={`font-mono text-xs uppercase tracking-wide px-3.5 py-2 rounded-full border ${
+                  tags.includes(tag) ? "bg-ink text-paper border-ink" : "border-[rgba(20,25,43,0.25)] bg-white"
+                }`}
+              >
+                {t.audienceLabels[tag] ?? tag}
+              </button>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="post-tag-input" className="text-sm font-semibold">
+            {t.tags}
           </label>
+          <p className="text-sm opacity-70 max-w-[60ch]">{t.tagsHint}</p>
+          {tags.filter((tag) => !(AUDIENCE_TAGS as readonly string[]).includes(tag)).length > 0 && (
+            <ul className="flex flex-wrap gap-2 my-1">
+              {tags
+                .filter((tag) => !(AUDIENCE_TAGS as readonly string[]).includes(tag))
+                .map((tag) => (
+                  <li key={tag} className="flex items-center gap-1.5 font-mono text-xs bg-white border border-[rgba(20,25,43,0.2)] rounded-full pl-3 pr-1.5 py-1">
+                    {tag}
+                    <button type="button" aria-label={fmt(t.removeTag, { tag })} onClick={() => toggleTag(tag)} className="w-5 h-5 rounded-full hover:bg-[rgba(20,25,43,0.1)]">
+                      ×
+                    </button>
+                  </li>
+                ))}
+            </ul>
+          )}
+          <input
+            id="post-tag-input"
+            list="post-known-tags"
+            value={tagInput}
+            placeholder={t.tagsPlaceholder}
+            onChange={(e) => setTagInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === ",") {
+                e.preventDefault();
+                addTag(tagInput);
+              }
+            }}
+            onBlur={() => tagInput.trim() && addTag(tagInput)}
+            className="font-body text-base px-3.5 py-3 rounded-[3px] border border-[rgba(20,25,43,0.15)] bg-white max-w-[320px]"
+          />
+          <datalist id="post-known-tags">
+            {knownTags.filter((tag) => !tags.includes(tag)).map((tag) => (
+              <option key={tag} value={tag} />
+            ))}
+          </datalist>
         </div>
 
         <ImageUploadField label={t.featuredImage} value={featuredImageUrl} onChange={setFeaturedImageUrl} />

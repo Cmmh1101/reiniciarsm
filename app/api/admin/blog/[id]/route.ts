@@ -4,7 +4,7 @@ import { CONTENT_CACHE_TAG } from "@/lib/supabaseAdmin";
 import { adminError } from "@/lib/admin/apiError";
 import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { hasLanguage, readLanguages } from "@/lib/postPayload";
+import { hasLanguage, readLanguages, readTags } from "@/lib/postPayload";
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
   const denied = await guardAdminWrite(request);
@@ -18,6 +18,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (!hasLanguage(es) && !hasLanguage(en)) {
     return adminError(400, "Write a title and content in at least one language.", "Escribe título y contenido en al menos un idioma.");
   }
+
+  const tags = readTags(body.tags);
 
   const supabase = createSupabaseAdminClient();
 
@@ -36,6 +38,12 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     return adminError(400, "Run migration 0018 in Supabase to save English content.", "Falta correr la migración 0018 en Supabase para guardar contenido en inglés.");
   }
 
+  // Tags exist after migration 0022 — only write them once the column is there (or when tags were added).
+  const hasTagsColumn = !!existing && "tags" in existing;
+  if (tags.length && !hasTagsColumn) {
+    return adminError(400, "Run migration 0022 in Supabase to save tags.", "Falta correr la migración 0022 en Supabase para guardar etiquetas.");
+  }
+
   const { data, error } = await supabase
     .from("blog_posts")
     .update({
@@ -44,10 +52,10 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       content: es.content,
       slug: body.slug,
       pillar: body.pillar,
-      arc_phase: body.arc_phase || null,
       featured_image_url: body.featured_image_url || null,
       reading_time_minutes: body.reading_time_minutes || null,
       published_at,
+      ...(hasTagsColumn ? { tags } : {}),
       ...(hasEnglishColumns ? { title_en: en.title, excerpt_en: en.excerpt || null, content_en: en.content } : {}),
     })
     .eq("id", params.id)

@@ -1,5 +1,6 @@
 import { createSupabaseAdminClient, createSupabasePublicReadClient } from "@/lib/supabaseAdmin";
 import type { Locale } from "@/lib/i18n/config";
+import { categoryKey } from "@/lib/taxonomy";
 
 // One row per article. title/excerpt/content hold the Spanish version (the original posts);
 // the *_en columns (migration 0018) hold the English one. The slug is shared by both languages.
@@ -11,6 +12,8 @@ export interface BlogPost {
   content: string;
   pillar: string;
   arc_phase: string | null;
+  /** Free-form labels (migration 0022); absent until that migration has run. */
+  tags?: string[] | null;
   featured_image_url: string | null;
   published_at: string | null;
   reading_time_minutes: number | null;
@@ -43,6 +46,23 @@ export function localizePost(post: BlogPost, locale: Locale): LocalizedPost {
     return { ...post, title: post.title_en ?? "", excerpt: post.excerpt_en ?? null, content: post.content_en ?? "", shown, languages };
   }
   return { ...post, shown, languages };
+}
+
+/** Narrows posts to one category and/or one tag — for category pages and audience landings (e.g. tag "schools"). */
+export function filterPosts<T extends BlogPost>(posts: T[], filter: { category?: string; tag?: string }): T[] {
+  return posts.filter(
+    (p) => (!filter.category || categoryKey(p.pillar) === filter.category) && (!filter.tag || (p.tags ?? []).includes(filter.tag))
+  );
+}
+
+/** Every tag used so far, most used first — suggestions for the editor. */
+export async function getKnownTags(): Promise<string[]> {
+  const supabase = createSupabaseAdminClient();
+  const { data, error } = await supabase.from("blog_posts").select("tags");
+  if (error || !data) return [];
+  const counts = new Map<string, number>();
+  for (const row of data as { tags: string[] | null }[]) for (const tag of row.tags ?? []) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([tag]) => tag);
 }
 
 export async function getPublishedPosts(limit?: number): Promise<BlogPost[]> {

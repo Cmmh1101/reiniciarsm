@@ -1,5 +1,6 @@
 import PostEditor from "@/components/admin/PostEditor";
+import { getKnownTags } from "@/lib/posts";
 
-export default function NewPostPage() {
-  return <PostEditor />;
+export default async function NewPostPage() {
+  return <PostEditor knownTags={await getKnownTags()} />;
 }

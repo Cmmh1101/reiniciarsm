@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsletterForm from "@/components/NewsletterForm";
 import { getLocalizedPosts } from "@/lib/posts";
-import { pillarLabel, productCategoryLabel } from "@/lib/taxonomy";
+import { categoryLabel, productCategoryLabel } from "@/lib/taxonomy";
 import { getActiveProducts, localizeProduct } from "@/lib/products";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -150,7 +150,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
             <div className="grid md:grid-cols-3 gap-7 mb-12">
               {posts.map((post) => (
                 <Link key={post.id} href={localizedPath(locale, "resourcePost", { slug: post.slug })} className="flex flex-col gap-2">
-                  <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">{pillarLabel(post.pillar, locale)}</span>
+                  <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">{categoryLabel(post.pillar, locale)}</span>
                   <span className="font-display text-lg leading-snug">{post.title}</span>
                   {post.excerpt && <span className="text-[13.5px] opacity-70">{post.excerpt}</span>}
                 </Link>

@@ -4,7 +4,7 @@ import { CONTENT_CACHE_TAG } from "@/lib/supabaseAdmin";
 import { adminError } from "@/lib/admin/apiError";
 import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { hasLanguage, readLanguages } from "@/lib/postPayload";
+import { hasLanguage, readLanguages, readTags } from "@/lib/postPayload";
 
 export async function POST(request: Request) {
   const denied = await guardAdminWrite(request);
@@ -19,6 +19,8 @@ export async function POST(request: Request) {
     return adminError(400, "Write a title and content in at least one language.", "Escribe título y contenido en al menos un idioma.");
   }
 
+  const tags = readTags(body.tags);
+
   const supabase = createSupabaseAdminClient();
   const { data, error } = await supabase
     .from("blog_posts")
@@ -31,7 +33,8 @@ export async function POST(request: Request) {
       ...(en.title || en.content ? { title_en: en.title, excerpt_en: en.excerpt || null, content_en: en.content } : {}),
       slug: body.slug,
       pillar: body.pillar,
-      arc_phase: body.arc_phase || null,
+      // The tags column exists after migration 0022 — only send it when there are tags to save.
+      ...(tags.length ? { tags } : {}),
       featured_image_url: body.featured_image_url || null,
       reading_time_minutes: body.reading_time_minutes || null,
       published_at: body.published ? new Date().toISOString() : null,

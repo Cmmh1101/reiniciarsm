@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getLocalizedPosts } from "@/lib/posts";
-import { pillarLabel } from "@/lib/taxonomy";
+import { categoryLabel } from "@/lib/taxonomy";
 import NewsletterForm from "@/components/NewsletterForm";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
@@ -44,7 +44,7 @@ export default async function ResourcesPage({ params }: { params: { locale: stri
                 <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#8a7458] to-[#3a4562]" />
               )}
               <span className="font-mono text-[10px] tracking-wide uppercase text-clay-deep">
-                {pillarLabel(post.pillar, locale)}
+                {categoryLabel(post.pillar, locale)}
                 {post.shown !== locale && <span className="opacity-70"> · {post.shown.toUpperCase()}</span>}
               </span>
               <h3 className="text-[19px] leading-snug font-display" lang={post.shown}>{post.title}</h3>

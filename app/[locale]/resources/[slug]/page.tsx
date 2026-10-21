@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsletterForm from "@/components/NewsletterForm";
 import { availableLocales, getLocalizedPosts, getPostBySlug, localizePost } from "@/lib/posts";
-import { pillarLabel } from "@/lib/taxonomy";
+import { categoryLabel } from "@/lib/taxonomy";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { localizedPath } from "@/lib/i18n/routes";
@@ -57,7 +57,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
           {common.backToResources}
         </Link>
         <div className="flex gap-2.5 mb-5 flex-wrap">
-          <span className="font-mono text-[10.5px] uppercase text-clay-soft border border-[rgba(237,230,216,0.14)] px-3 py-1.5 rounded-full">{pillarLabel(post.pillar, locale)}</span>
+          <span className="font-mono text-[10.5px] uppercase text-clay-soft border border-[rgba(237,230,216,0.14)] px-3 py-1.5 rounded-full">{categoryLabel(post.pillar, locale)}</span>
         </div>
         <h1 className="font-display text-[clamp(28px,4.4vw,46px)] max-w-[22ch] mb-4 leading-[1.1]">{post.title}</h1>
         {post.excerpt && <p className="opacity-70 text-[17px] max-w-[60ch]">{post.excerpt}</p>}
@@ -121,7 +121,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
                 ) : (
                   <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#6E7F5C] to-[#2f3a26]" />
                 )}
-                <span className="font-mono text-[10px] uppercase text-clay-deep">{pillarLabel(r.pillar, locale)}</span>
+                <span className="font-mono text-[10px] uppercase text-clay-deep">{categoryLabel(r.pillar, locale)}</span>
                 <h3 className="text-base leading-snug" lang={r.shown}>{r.title}</h3>
               </Link>
             ))}

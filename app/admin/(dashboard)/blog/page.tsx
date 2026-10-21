@@ -3,7 +3,7 @@ import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
 import { availableLocales, type BlogPost } from "@/lib/posts";
 import { getAdminDictionary } from "@/lib/admin/dictionary";
 import { getAdminLocale } from "@/lib/admin/i18n";
-import { pillarLabel } from "@/lib/taxonomy";
+import { categoryLabel } from "@/lib/taxonomy";
 
 async function getAllPosts(): Promise<BlogPost[]> {
   const supabase = createSupabaseAdminClient();
@@ -40,7 +40,7 @@ export default async function AdminBlogListPage() {
             <tr className="text-left border-b border-[rgba(20,25,43,0.12)]">
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.title}</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.languages}</th>
-              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.pillar}</th>
+              <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.category}</th>
               <th className="py-2 font-mono text-xs uppercase tracking-wide opacity-70">{t.columns.status}</th>
             </tr>
           </thead>
@@ -53,7 +53,7 @@ export default async function AdminBlogListPage() {
                   </Link>
                 </td>
                 <td className="py-3 font-mono text-xs opacity-70">{availableLocales(post).length ? [...availableLocales(post)].reverse().map((l) => l.toUpperCase()).join(" · ") : "—"}</td>
-                <td className="py-3 opacity-70">{pillarLabel(post.pillar, locale)}</td>
+                <td className="py-3 opacity-70">{categoryLabel(post.pillar, locale)}</td>
                 <td className="py-3">
                   {post.published_at ? (
                     <span className="text-sage-deep">{t.published}</span>
