@@ -1,4 +1,4 @@
-import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { createSupabaseAdminClient, createSupabasePublicReadClient } from "@/lib/supabaseAdmin";
 import { sendConfirmationEmail } from "@/lib/resend";
 import type { Product } from "@/lib/products";
 
@@ -47,7 +47,7 @@ export interface AdminReview {
 /** Per-product real counts for the storefront — raw numbers only, no padding. Callers decide
  * whether to render based on MIN_REVIEWS_TO_SHOW_RATING / MIN_PURCHASES_TO_SHOW_COUNT. */
 export async function getProductStats(): Promise<Map<string, ProductStats>> {
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabasePublicReadClient();
   const [{ data: reviews }, { data: purchases }] = await Promise.all([
     supabase.from("product_reviews").select("product_id, rating").eq("status", "approved"),
     supabase.from("product_purchases").select("product_id").eq("status", "completed"),
@@ -75,7 +75,7 @@ export async function getProductStats(): Promise<Map<string, ProductStats>> {
 }
 
 export async function getApprovedReviewsForProduct(productId: string): Promise<ApprovedReview[]> {
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabasePublicReadClient();
   const { data, error } = await supabase
     .from("product_reviews")
     .select("id, rating, comment, created_at, contacts(name)")

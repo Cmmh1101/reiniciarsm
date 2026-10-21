@@ -52,7 +52,7 @@ export default function ProductsGrid({ products, locale, copy }: { products: Pro
           <Link key={p.id} href={localizedPath(locale, "shopProduct", { slug: p.slug })} className="border border-[rgba(20,25,43,0.12)] rounded-[2px] overflow-hidden flex flex-col">
             {p.image_url ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={p.image_url} alt="" className="w-full aspect-[4/3] object-cover" />
+              <img loading="lazy" decoding="async" src={p.image_url} alt="" className="w-full aspect-[4/3] object-cover" />
             ) : (
               <div className="w-full aspect-[4/3] bg-gradient-to-br from-[#8a7458] to-[#c9a874]" />
             )}

@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LOCALES, isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
 
 // Staging deploys (Netlify branch / deploy previews) must not be indexed.
@@ -41,7 +42,7 @@ export default function LocaleLayout({ children, params }: { children: React.Rea
   const dict = getDictionary(locale);
 
   return (
-    <html lang={locale}>
+    <html className={fontVariables} lang={locale}>
       <body>
         <Analytics />
         <a

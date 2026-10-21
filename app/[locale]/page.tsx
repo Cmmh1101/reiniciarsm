@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NewsletterForm from "@/components/NewsletterForm";
@@ -10,8 +11,8 @@ import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
 import { localizedPath } from "@/lib/i18n/routes";
 
-// Posts and products publish through the admin panel at runtime — fetch fresh every request.
-export const dynamic = "force-dynamic";
+// Served as static HTML and refreshed in the background (and instantly when the admin saves) — see CONTENT_CACHE_SECONDS.
+export const revalidate = 60;
 
 export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
   if (!isLocale(params.locale)) return {};
@@ -46,8 +47,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
           </div>
         </div>
         <div className="aspect-[4/5] rounded-[2px] overflow-hidden max-w-[420px] w-full md:justify-self-end">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/carla/hero-home.jpg" alt={h.hero.portraitAlt} className="w-full h-full object-cover" />
+          <Image src="/images/carla/hero-home.jpg" alt={h.hero.portraitAlt} width={768} height={1376} priority sizes="(min-width: 768px) 420px, 90vw" className="w-full h-full object-cover" />
         </div>
       </header>
 
@@ -181,8 +181,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       {/* STORY */}
       <section className="px-page py-24 grid md:grid-cols-[0.8fr_1.2fr] gap-14 items-center">
         <div className="aspect-[4/5] rounded-[2px] overflow-hidden max-w-[400px] w-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/carla/hero-mi-historia.jpg" alt={h.hero.portraitAlt} className="w-full h-full object-cover" />
+          <Image src="/images/carla/hero-mi-historia.jpg" alt={h.hero.portraitAlt} width={768} height={1376} sizes="(min-width: 768px) 400px, 90vw" className="w-full h-full object-cover" />
         </div>
         <div>
           <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-4">{h.story.eyebrow}</p>

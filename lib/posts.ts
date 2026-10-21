@@ -1,4 +1,4 @@
-import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { createSupabaseAdminClient, createSupabasePublicReadClient } from "@/lib/supabaseAdmin";
 import type { Locale } from "@/lib/i18n/config";
 
 // One row per article. title/excerpt/content hold the Spanish version (the original posts);
@@ -46,7 +46,7 @@ export function localizePost(post: BlogPost, locale: Locale): LocalizedPost {
 }
 
 export async function getPublishedPosts(limit?: number): Promise<BlogPost[]> {
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabasePublicReadClient();
   let query = supabase
     .from("blog_posts")
     .select("*")
@@ -68,7 +68,7 @@ export async function getLocalizedPosts(locale: Locale, limit?: number): Promise
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabasePublicReadClient();
   const { data, error } = await supabase
     .from("blog_posts")
     .select("*")

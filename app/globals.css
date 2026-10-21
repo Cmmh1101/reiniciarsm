@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -17,9 +15,6 @@
   --sage: #6e7f5c;
   --sage-deep: #566647;
   --gold: #c9a227;
-  --font-display: "Bricolage Grotesque", "Inter", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
 }
 
 html {

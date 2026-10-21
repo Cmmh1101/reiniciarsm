@@ -3,6 +3,7 @@ import Analytics from "@/components/Analytics";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://carlamontano.io";
@@ -14,7 +15,7 @@ export const metadata: Metadata = { metadataBase: new URL(SITE_URL) };
 export default function UtilityLayout({ children }: { children: React.ReactNode }) {
   const dict = getDictionary("es");
   return (
-    <html lang="es">
+    <html className={fontVariables} lang="es">
       <body>
         <Analytics />
         <Header locale="es" nav={dict.nav} siteName={dict.site.name} />

@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAG } from "@/lib/supabaseAdmin";
 import { adminError } from "@/lib/admin/apiError";
 import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
@@ -26,6 +28,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       console.error("PATCH /api/admin/products/[id] (toggle) failed", error);
       return adminError(500, "Couldn't update the product.", "No se pudo actualizar el producto.");
     }
+    revalidateTag(CONTENT_CACHE_TAG);
     return NextResponse.json({ ok: true });
   }
 
@@ -87,5 +90,6 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     }
   }
 
+  revalidateTag(CONTENT_CACHE_TAG);
   return NextResponse.json({ ok: true });
 }

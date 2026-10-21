@@ -97,7 +97,7 @@ export default function StoryPage({ params }: { params: { locale: string } }) {
           </a>
         </div>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={CONTIGO_IMAGE_URL} alt={c.purposeAlt} className="w-full max-w-[700px] rounded-[3px] border border-[rgba(20,25,43,0.12)]" />
+        <img loading="lazy" decoding="async" src={CONTIGO_IMAGE_URL} alt={c.purposeAlt} className="w-full max-w-[700px] rounded-[3px] border border-[rgba(20,25,43,0.12)]" />
       </section>
 
       <section className="bg-paper-soft px-page py-24">

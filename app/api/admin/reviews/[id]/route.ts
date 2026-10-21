@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAG } from "@/lib/supabaseAdmin";
 import { adminError } from "@/lib/admin/apiError";
 import { guardAdminWrite } from "@/lib/adminRequest";
 import { setReviewStatus } from "@/lib/productReviews";
@@ -16,5 +18,6 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   const ok = await setReviewStatus(params.id, status);
   if (!ok) return adminError(500, "Couldn't update the review.", "No se pudo actualizar la reseña.");
 
+  revalidateTag(CONTENT_CACHE_TAG);
   return NextResponse.json({ ok: true });
 }

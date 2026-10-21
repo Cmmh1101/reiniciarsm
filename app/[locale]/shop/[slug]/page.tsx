@@ -11,8 +11,8 @@ import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
 import { localizedPath } from "@/lib/i18n/routes";
 
-// Products publish through the admin panel at runtime — fetch fresh every request.
-export const dynamic = "force-dynamic";
+// Served as static HTML and refreshed in the background (and instantly when the admin saves) — see CONTENT_CACHE_SECONDS.
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
   if (!isLocale(params.locale)) return {};

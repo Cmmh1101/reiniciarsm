@@ -8,8 +8,8 @@ import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { localizedPath } from "@/lib/i18n/routes";
 
-// Posts (and edits to them) publish through the admin CMS at runtime — fetch fresh every request.
-export const dynamic = "force-dynamic";
+// Served as static HTML and refreshed in the background (and instantly when the admin saves) — see CONTENT_CACHE_SECONDS.
+export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: { locale: string; slug: string } }): Promise<Metadata> {
   if (!isLocale(params.locale)) return {};
@@ -117,7 +117,7 @@ export default async function ResourcePostPage({ params }: { params: { locale: s
               <Link key={r.id} href={localizedPath(locale, "resourcePost", { slug: r.slug })} className="flex flex-col gap-2.5">
                 {r.featured_image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={r.featured_image_url} alt="" className="w-full aspect-[4/3] rounded-[2px] object-cover" />
+                  <img loading="lazy" decoding="async" src={r.featured_image_url} alt="" className="w-full aspect-[4/3] rounded-[2px] object-cover" />
                 ) : (
                   <div className="aspect-[4/3] rounded-[2px] bg-gradient-to-br from-[#6E7F5C] to-[#2f3a26]" />
                 )}

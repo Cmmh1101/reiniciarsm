@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAG } from "@/lib/supabaseAdmin";
 import { adminError } from "@/lib/admin/apiError";
 import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
@@ -43,5 +45,6 @@ export async function POST(request: Request) {
       : adminError(400, "Couldn't create the post.", "No se pudo crear el post.");
   }
 
+  revalidateTag(CONTENT_CACHE_TAG);
   return NextResponse.json(data);
 }

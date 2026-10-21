@@ -1,4 +1,4 @@
-import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
+import { createSupabaseAdminClient, createSupabasePublicReadClient } from "@/lib/supabaseAdmin";
 import type { Locale } from "@/lib/i18n/config";
 
 export interface Product {
@@ -19,7 +19,7 @@ export interface Product {
 }
 
 export async function getActiveProducts(): Promise<Product[]> {
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabasePublicReadClient();
   const { data, error } = await supabase.from("products").select("*").eq("active", true).order("created_at", { ascending: false });
   if (error) {
     console.error("getActiveProducts failed", error);
@@ -29,7 +29,7 @@ export async function getActiveProducts(): Promise<Product[]> {
 }
 
 export async function getProductBySlug(slug: string): Promise<Product | null> {
-  const supabase = createSupabaseAdminClient();
+  const supabase = createSupabasePublicReadClient();
   const { data, error } = await supabase.from("products").select("*").eq("slug", slug).eq("active", true).single();
   if (error) return null;
   return data;

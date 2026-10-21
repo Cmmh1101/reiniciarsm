@@ -19,3 +19,9 @@
   [headers.values]
     Cache-Control = "no-store, must-revalidate"
     Netlify-CDN-Cache-Control = "no-store"
+
+# Static images are fingerprint-free, so cache a day (browser) and let the CDN revalidate.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"

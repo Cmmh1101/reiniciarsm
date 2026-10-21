@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { CONTENT_CACHE_TAG } from "@/lib/supabaseAdmin";
 import { adminError } from "@/lib/admin/apiError";
 import { guardAdminWrite } from "@/lib/adminRequest";
 import { createSupabaseAdminClient } from "@/lib/supabaseAdmin";
@@ -58,6 +60,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
       : adminError(400, "Couldn't save the post.", "No se pudo guardar el post.");
   }
 
+  revalidateTag(CONTENT_CACHE_TAG);
   return NextResponse.json(data);
 }
 
@@ -69,5 +72,6 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
   const { error } = await supabase.from("blog_posts").delete().eq("id", params.id);
 
   if (error) return adminError(400, "Couldn't delete the post.", "No se pudo eliminar el post.");
+  revalidateTag(CONTENT_CACHE_TAG);
   return NextResponse.json({ ok: true });
 }

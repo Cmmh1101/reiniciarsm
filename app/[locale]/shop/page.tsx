@@ -7,8 +7,8 @@ import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { pageMetadata } from "@/lib/i18n/metadata";
 
-// Products publish through the admin panel at runtime — fetch fresh every request.
-export const dynamic = "force-dynamic";
+// Served as static HTML and refreshed in the background (and instantly when the admin saves) — see CONTENT_CACHE_SECONDS.
+export const revalidate = 60;
 
 export function generateMetadata({ params }: { params: { locale: string } }): Metadata {
   if (!isLocale(params.locale)) return {};
