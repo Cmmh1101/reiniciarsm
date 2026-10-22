@@ -93,9 +93,9 @@ software en supply chain 2021–2025), para que no haya dos versiones tuyas.
 
 **Bio (máx. 150 caracteres)**
 
-- **Bilingüe (recomendada) [DECIDIR]** (120):
+- **Bilingüe (recomendada) [DECIDIR]** (129):
   ```
-  Software engineer · Tecnología y educación
+  Software engineer · Tecnología, educación y carrera
   De la idea a la ejecución · Cambios y mindset
   Escuelas, negocios, comunidad ↓
   ```
@@ -156,41 +156,50 @@ idioma. **Enlaces del canal:** sitio, LinkedIn, Instagram, TikTok.
   entra en los subtítulos y en una publicación a la semana.
 - Responde siempre en el idioma en que te escriben.
 
-## De qué vas a hablar: seis temas, y cada uno trae un tipo de persona
+## De qué vas a hablar: tres territorios, y tu historia los une
 
-No publiques "de todo": publica estos seis, siempre los mismos, y cada pieza termina con **un** siguiente paso.
+Hay muchos canales solo de tecnología y muchos solo de trabajo remoto. Lo que casi nadie tiene es **alguien que
+cambió de vida de verdad** (educadora, migrante, mamá, sin título en tecnología), que hoy **construye y trabaja con
+escuelas y organizaciones**, y que acompaña a otros a hacerlo. Eso es tuyo. Por eso la tecnología aparece siempre
+como **herramienta**, y la persona es siempre el tema. Tu frase de marca lo dice: *conectar personas, ideas y
+tecnología*.
 
-| # | Tema | Ejemplos | A quién atrae | Siguiente paso |
-|---|---|---|---|---|
-| 1 | **Tecnología sin complicarte** | Una solución rápida, una herramienta, IA explicada simple | Personas con algo trabado | Tech SOS ($50) |
-| 2 | **Educación y tecnología (EdTech)** | Cómo se arma una escuela virtual, herramientas para escuelas y coaches, lo que veo en escuelas de distintos países | Escuelas, coaches y emprendedores de educación | Página de escuelas / contacto |
-| 3 | **De la idea a la ejecución** | Trabajar con equipos de tecnología, manejo de productos, cómo pasar de una idea a algo funcionando, detrás de cámara de lo que construyes | Emprendedores, freelancers, organizaciones | Contacto / Montano Systems |
-| 4 | **Bloqueos mentales** | Lo que nos frena para avanzar: miedo, culpa, perfeccionismo, "no es para mí" | Quien quiere cambiar y no se mueve | Diagnóstico de NEXT YOU |
-| 5 | **Mi vida y mis cambios** | Venezuela, la migración, ser mamá, reinventarte; crecimiento personal y profesional | Todos: es lo que genera confianza | Mi historia / seguir la cuenta |
-| 6 | **NEXT YOU y lo que construyo** | Cómo va la comunidad, programas educativos, lo que aprendo creando | Quien ya te sigue | Unirse a la comunidad |
+| Territorio | De qué hablas | A quién atrae | Siguiente paso |
+|---|---|---|---|
+| **1. Reinventarte** | **Cambio de carrera**, **trabajo remoto** (cómo lo conseguí, cómo es de verdad, cómo se sostiene), bloqueos mentales (miedo, culpa, "no es para mí"), migrar, empezar de nuevo, crecimiento personal y profesional | Quien quiere cambiar y no sabe por dónde empezar | Diagnóstico de NEXT YOU → comunidad |
+| **2. Construir** | De la idea a la ejecución, manejo de productos, trabajar con equipos de tecnología, tecnología e IA explicadas simple, lo que estás construyendo | Emprendedores, freelancers, organizaciones, personas con algo trabado | Tech SOS ($50) / contacto |
+| **3. Educación** | Cómo se arma una escuela virtual, EdTech, herramientas para escuelas y coaches, lo que ves en escuelas de distintos países, tus programas educativos | Escuelas, coaches y emprendedores de educación | Página de escuelas / contacto |
+
+**Tu historia no es un tema aparte: es el hilo.** Cada pieza de cualquier territorio puede abrir con algo vivido
+("cuando yo estaba en…"). Eso es lo que te distingue de los canales que solo explican.
+
+**Dos reglas para no volverte "solo tecnología" ni "solo trabajo remoto":**
+
+1. **Una publicación de cada territorio por semana.** Nunca dos semanas seguidas con el mismo.
+2. **El trabajo remoto y la tecnología son ejemplos dentro del cambio de carrera, no el tema.** Habla de lo que le
+   pasa a la persona (miedo, tiempo, dinero, familia) y usa lo remoto o lo tech como el camino.
 
 **Por red (qué pesa más en cada una):**
 
-- **LinkedIn:** temas 2, 3 y 1. Aquí consigues **escuelas y organizaciones**; publica casos y aprendizajes, no promociones.
-- **Instagram:** temas 5, 4 y 6. Historias, bloqueos y comunidad; es donde la gente te conoce.
-- **TikTok:** temas 1, 4 y 5. Videos cortos y tus Lives.
-- **YouTube:** después; los temas 3 y 2 en video largo.
+- **LinkedIn:** territorios 3 y 2 (aquí consigues **escuelas y organizaciones**), con tu historia como hilo.
+- **Instagram:** territorio 1 y tu historia; es donde la gente que quiere cambiar de carrera te conoce y entra a la comunidad.
+- **TikTok:** territorio 1 y 2 en piezas cortas, y tus Lives.
+- **YouTube:** después; el territorio 2 y 3 en video largo.
 
-**Ritmo para empezar (poco a poco): 3 publicaciones por semana, 10 a 20 minutos cada una.** Una de oferta
-(tema 1, 2 o 3), una de mente y vida (tema 4 o 5) y una de comunidad o proceso (tema 6). Grábalas o escríbelas
-en una sola sesión semanal y prográmalas.
+**Ritmo para empezar (poco a poco): 3 publicaciones por semana, 10 a 20 minutos cada una:** una de reinventarte,
+una de construir, una de educación. Escríbelas o grábalas en una sola sesión semanal y prográmalas.
 
 ## Primeros 7 días de publicaciones (una al día, 10 minutos)
 
-| Día | Pieza | Tema | Para qué |
+| Día | Pieza | Territorio | Para qué |
 |---|---|---|---|
-| 1 | "Estuve ausente. Esto es lo que hago ahora" (foto + 4 líneas, o video de 30 s) | 5 | Reabrir la conversación y dar el enlace |
-| 2 | Una solución rápida de algo tech (captura + 3 pasos) | 1 | Mostrar que resuelves, y que existe el Tech SOS |
-| 3 | Lo que he visto trabajando con escuelas y coaches (3 aprendizajes) | 2 | Atraer escuelas y emprendedores de educación |
-| 4 | Tu historia en un minuto: de mesera a ingeniera de software | 5 | Conexión humana |
-| 5 | "Lo que realmente frena a la gente no es la tecnología" (un bloqueo mental) + el diagnóstico | 4 | Llevar gente al diagnóstico y a tu lista |
-| 6 | De la idea a la ejecución: algo que estás construyendo, con capturas | 3 | Autoridad para emprendedores y organizaciones |
-| 7 | Anuncio de la comunidad NEXT YOU (precio fundador) | 6 | La oferta |
+| 1 | "Estuve ausente. Esto es lo que hago ahora" (foto + 4 líneas, o video de 30 s) | Historia | Reabrir la conversación y dar el enlace |
+| 2 | Una solución rápida de algo tech (captura + 3 pasos) | 2 | Mostrar que resuelves, y que existe el Tech SOS |
+| 3 | Lo que he visto trabajando con escuelas y coaches (3 aprendizajes) | 3 | Atraer escuelas y emprendedores de educación |
+| 4 | Tu historia en un minuto: de mesera a ingeniera de software, y cómo llegó el trabajo remoto | 1 | Conexión humana |
+| 5 | "Lo que realmente frena a la gente no es la tecnología" (un bloqueo mental) + el diagnóstico | 1 | Llevar gente al diagnóstico y a tu lista |
+| 6 | De la idea a la ejecución: algo que estás construyendo, con capturas | 2 | Autoridad para emprendedores y organizaciones |
+| 7 | Anuncio de la comunidad NEXT YOU (precio fundador) | 1 | La oferta |
 
 ## Ingresos rápidos: lo que sí mueve el dinero esta semana
 
