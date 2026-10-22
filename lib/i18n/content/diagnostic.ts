@@ -121,7 +121,19 @@ export interface DiagnosticUi {
   priorityPillar: string;
   allPhases: string;
   join: string;
+  /** Result screen: what the community gives this person, who they are and what it costs. */
+  nextEyebrow: string;
+  communityBody: (steps: string | null) => string;
+  founding: string;
+  joinNote: string;
+  howItWorks: string;
 }
+
+/** Where each phase sits on the 12-step path inside the community. */
+export const PHASE_STEPS: Record<Locale, Record<PhaseKey, string>> = {
+  es: { giro: "Pasos 1 a 4", ruta: "Pasos 5 a 8", ritmo: "Pasos 9 a 12" },
+  en: { giro: "Steps 1–4", ruta: "Steps 5–8", ritmo: "Steps 9–12" },
+};
 
 export const DIAGNOSTIC_UI: Record<Locale, DiagnosticUi> = {
   es: {
@@ -144,7 +156,13 @@ export const DIAGNOSTIC_UI: Record<Locale, DiagnosticUi> = {
     inPhase: "Estás en la fase:",
     priorityPillar: "Pilar prioritario:",
     allPhases: "te acompaña en las 3 fases",
-    join: "Únete a la Comunidad Next You",
+    join: "Unirme a la comunidad",
+    nextEyebrow: "Tu siguiente paso",
+    communityBody: (steps) =>
+      `${steps ? `Lo que describe tu resultado se trabaja en los ${steps} del camino de 12 pasos de la comunidad NEXT YOU. ` : "La comunidad NEXT YOU te acompaña en las tres etapas del camino de 12 pasos. "}Cada semana miras una clase corta, haces una tarea pequeña, cuentas cómo te fue y traes lo que te trabó al coaching en vivo — martes en español, jueves en inglés. No tienes que resolverlo sola ni solo.`,
+    founding: "Precio fundador: $19 al mes para los primeros 50 miembros, asegurado mientras sigas. Después $29.",
+    joinNote: "Irás a Skool, donde vive la comunidad.",
+    howItWorks: "Ver cómo funciona",
   },
   en: {
     eyebrow: "NEXT YOU Diagnostic",
@@ -166,6 +184,12 @@ export const DIAGNOSTIC_UI: Record<Locale, DiagnosticUi> = {
     inPhase: "You're in the phase:",
     priorityPillar: "Priority pillar:",
     allPhases: "supports you through all 3 phases",
-    join: "Explore NEXT YOU",
+    join: "Join the community",
+    nextEyebrow: "Your next step",
+    communityBody: (steps) =>
+      `${steps ? `What your result describes is worked on in ${steps} of the NEXT YOU community's 12-step path. ` : "The NEXT YOU community walks with you through all three stages of the 12-step path. "}Each week you watch one short lesson, do one small task, share how it went and bring what got you stuck to the live coaching — Tuesdays in Spanish, Thursdays in English. You don't have to figure it out alone.`,
+    founding: "Founding price: $19 a month for the first 50 members, locked in for as long as you stay. Then $29.",
+    joinNote: "You'll go to Skool, where the community lives.",
+    howItWorks: "See how it works",
   },
 };

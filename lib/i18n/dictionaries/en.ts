@@ -398,7 +398,7 @@ export const en = {
     cta: "Join the community",
     ctaNote: "You'll go to Skool, where the community lives.",
     moreTitle: "Not sure yet?",
-    quizLink: "Take the 2-minute quiz to find your next step",
+    quizLink: "Take the 8-question diagnostic to see where you are on the path",
     storyLink: "Read the story behind NEXT YOU",
   },
 

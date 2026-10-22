@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { PILLARS, PILLAR_PHASE, computeWinner, type Pillar, type QuizScores } from "@/lib/diagnostic";
-import { DIAGNOSTIC_UI, getPhaseText, getPillarText } from "@/lib/i18n/content/diagnostic";
+import { DIAGNOSTIC_UI, PHASE_STEPS, getPhaseText, getPillarText } from "@/lib/i18n/content/diagnostic";
+import { SKOOL_COMMUNITY_URL } from "@/lib/constants";
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath } from "@/lib/i18n/routes";
 
@@ -20,6 +21,15 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [winner, setWinner] = useState<Pillar | null>(null);
+
+  // Tag the link so we can tell how many members come from the diagnostic, and in which language.
+  const joinUrl = (() => {
+    const url = new URL(SKOOL_COMMUNITY_URL);
+    url.searchParams.set("utm_source", "carlamontano.io");
+    url.searchParams.set("utm_medium", "diagnostic");
+    url.searchParams.set("utm_campaign", locale);
+    return url.toString();
+  })();
 
   function start() {
     setCurrentQuestion(0);
@@ -222,12 +232,27 @@ export default function DiagnosticQuiz({ locale }: { locale: Locale }) {
               );
             })()}
             <p className="text-[rgba(237,230,216,0.8)] mb-7">{getPillarText(locale, winner.key).description}</p>
-            <Link
-              href={localizedPath(locale, "nextYou")}
-              className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform"
-            >
-              {ui.join}
-            </Link>
+            <div className="border-t border-[rgba(237,230,216,0.14)] pt-7">
+              <p className="font-mono text-xs uppercase tracking-widest text-clay-soft mb-3">{ui.nextEyebrow}</p>
+              <p className="text-[rgba(237,230,216,0.8)] mb-4 max-w-[60ch]">
+                {ui.communityBody(PILLAR_PHASE[winner.key] ? PHASE_STEPS[locale][PILLAR_PHASE[winner.key]!] : null)}
+              </p>
+              <p className="font-mono text-sm text-[#E1D6C2] mb-6 max-w-[60ch]">{ui.founding}</p>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                <a
+                  href={joinUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block font-body font-semibold text-[15px] px-7 py-3.5 rounded-[3px] bg-clay-deep text-white hover:-translate-y-px transition-transform"
+                >
+                  {ui.join} ↗
+                </a>
+                <Link href={localizedPath(locale, "nextYou")} className="text-sm underline">
+                  {ui.howItWorks}
+                </Link>
+              </div>
+              <p className="text-xs text-[rgba(237,230,216,0.7)] mt-4">{ui.joinNote}</p>
+            </div>
           </div>
         )}
       </div>

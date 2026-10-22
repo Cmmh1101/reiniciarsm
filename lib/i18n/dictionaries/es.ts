@@ -390,7 +390,7 @@ export const es: Dictionary = {
     cta: "Unirme a la comunidad",
     ctaNote: "Irás a Skool, donde vive la comunidad.",
     moreTitle: "¿Todavía no estás seguro/a?",
-    quizLink: "Haz el diagnóstico de 2 minutos para encontrar tu siguiente paso",
+    quizLink: "Haz el diagnóstico de 8 preguntas para ver en qué parte del camino estás",
     storyLink: "Lee la historia detrás de NEXT YOU",
   },
 

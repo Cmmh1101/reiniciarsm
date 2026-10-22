@@ -93,7 +93,7 @@ export default function NextYouPage({ params }: { params: { locale: string } }) 
       <section className="px-page pb-20">
         <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-3">{n.moreTitle}</p>
         <div className="flex flex-col gap-2 text-[15px]">
-          <Link href={localizedPath(locale, "nextStep")} className="underline w-fit">
+          <Link href={localizedPath(locale, "diagnostic")} className="underline w-fit">
             {n.quizLink} →
           </Link>
           <Link href={localizedPath(locale, "nextYouStory")} className="underline w-fit">
