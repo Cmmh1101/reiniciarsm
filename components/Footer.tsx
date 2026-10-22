@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath, type RouteKey } from "@/lib/i18n/routes";
@@ -39,8 +40,7 @@ export default function Footer({ locale, dict }: { locale: Locale; dict: Diction
       </div>
       <div className="flex justify-between gap-10 flex-wrap pb-9 border-b border-[rgba(237,230,216,0.14)]">
         <div className="font-display text-xl max-w-[28ch]">
-          {site.name}
-          <br />
+          <Image src="/images/brand/logo-light.png" alt={site.name} width={352} height={176} className="h-20 w-auto -ml-1" />
           <span className="font-mono text-[11px] opacity-70 leading-relaxed block mt-1">{site.descriptor}</span>
           <span className="font-body text-[13px] opacity-70 block mt-3">{site.tagline}</span>
         </div>

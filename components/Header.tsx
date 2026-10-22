@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -39,14 +40,9 @@ export default function Header({ locale, nav, siteName }: { locale: Locale; nav:
 
   return (
     <nav className="sticky top-0 z-50 bg-[rgba(237,230,216,0.92)] backdrop-blur-[10px] border-b border-[rgba(20,25,43,0.12)]">
-      <div className="flex justify-between items-center gap-4 px-page py-[16px]">
-        <Link href={localizedPath(locale, "home")} className="flex items-center gap-2.5 font-display font-semibold text-[18px] tracking-tight shrink-0" onClick={close}>
-          <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" aria-hidden="true">
-            <path d="M3 19 C 7 14, 6 8, 12 8 C 18 8, 15 15, 21 15" stroke="var(--clay)" strokeWidth="1.6" strokeLinecap="round" />
-            <circle cx="3" cy="19" r="1.6" fill="var(--ink)" />
-            <circle cx="21" cy="15" r="1.6" fill="var(--clay)" />
-          </svg>
-          {siteName}
+      <div className="flex justify-between items-center gap-4 px-page py-2">
+        <Link href={localizedPath(locale, "home")} className="shrink-0 block" onClick={close}>
+          <Image src="/images/brand/logo-dark.png" alt={siteName} width={352} height={176} priority className="h-14 sm:h-16 w-auto" />
         </Link>
 
         <div className="hidden lg:flex gap-5 xl:gap-6 font-mono text-[11.5px] tracking-wide uppercase">
