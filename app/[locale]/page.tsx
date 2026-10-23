@@ -47,7 +47,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
           </div>
         </div>
         <div className="aspect-[4/5] rounded-[2px] overflow-hidden max-w-[420px] w-full md:justify-self-end">
-          <Image src="/images/carla/hero-home.jpg" alt={h.hero.portraitAlt} width={768} height={1376} priority sizes="(min-width: 768px) 420px, 90vw" className="w-full h-full object-cover" />
+          <Image src="/images/carla/hero-home-real.jpg" alt={h.hero.portraitAlt} width={900} height={1125} priority sizes="(min-width: 768px) 420px, 90vw" className="w-full h-full object-cover" />
         </div>
       </header>
 
