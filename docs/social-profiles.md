@@ -173,6 +173,43 @@ tecnología*.
 **Tu historia no es un tema aparte: es el hilo.** Cada pieza de cualquier territorio puede abrir con algo vivido
 ("cuando yo estaba en…"). Eso es lo que te distingue de los canales que solo explican.
 
+### El hilo del territorio 3: "La educación nunca se fue, cambió de forma"
+
+Esta es tu historia más distintiva, y le da sentido a todo lo demás. Cuando cambiaste a tecnología creíste que
+dejabas la educación al 100 %, y en el camino descubriste que seguía en ti:
+
+| Etapa | Lo que hacías |
+|---|---|
+| Aula | Profesora, primero en Venezuela y luego en Estados Unidos |
+| Mentora | Mentorías a estudiantes de bootcamps de programación |
+| Programa educativo | Apoyo a un programa educativo de una fundación sin fines de lucro (escuela virtual) |
+| Hoy | Ayudas a escuelas y emprendedores a **implementar su escuela virtual, de inicio a apertura de clases**, y a usar tecnología en la enseñanza y el aprendizaje |
+
+Mensaje central de este territorio: **"Ya no doy clases en un salón, pero sigo en la educación: ayudo a que las
+escuelas usen la tecnología para enseñar y aprender mejor."**
+
+Ideas de publicación para este territorio (cada una abre con algo que viviste):
+
+1. "Creí que dejaba la educación atrás. Me equivoqué." (tu historia, 60 segundos)
+2. De profesora a mentora de bootcamps: qué aprendí enseñando a programar.
+3. Lo que se necesita para abrir una escuela virtual, paso a paso, desde cero hasta el primer día de clases.
+4. Los 5 errores más comunes al montar una escuela virtual.
+5. Tecnología en el aula: lo que ayuda de verdad a enseñar y a aprender, y lo que solo complica.
+6. Lo que veo trabajando con escuelas y coaches de distintos países.
+7. Cómo es apoyar un programa educativo de una fundación (sin nombrar a nadie sin su permiso).
+8. Qué le preguntaría a cualquier escuela antes de elegir una plataforma.
+
+### Si recomiendas una plataforma y ganas comisión
+
+Es una buena idea y puede ser tu ingreso más rápido con escuelas, pero tiene dos condiciones:
+
+- **Transparencia:** dile a la escuela que recibes una comisión. Una recomendación honesta y declarada convierte
+  mejor y protege tu nombre; una oculta lo pone en riesgo.
+- **Acuerdo por escrito con tu empleador:** revisa con tu empresa que tu contrato permite trabajo independiente
+  y comisiones por referidos, y deja por escrito cuánto ganas, por qué clientes y cuándo se paga. Eso es una
+  alianza; sin papel, es una conversación que se olvida. (No es asesoría legal; si el monto es grande, vale una
+  consulta.)
+
 **Dos reglas para no volverte "solo tecnología" ni "solo trabajo remoto":**
 
 1. **Una publicación de cada territorio por semana.** Nunca dos semanas seguidas con el mismo.
