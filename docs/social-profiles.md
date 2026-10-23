@@ -173,9 +173,10 @@ tecnología*.
 **Tu historia no es un tema aparte: es el hilo.** Cada pieza de cualquier territorio puede abrir con algo vivido
 ("cuando yo estaba en…"). Eso es lo que te distingue de los canales que solo explican.
 
-### El hilo del territorio 3: "La educación nunca se fue, cambió de forma"
+### El hilo de tu historia (alimenta los tres territorios) — empieza en la educación: "La educación nunca se fue, cambió de forma"
 
-Esta es tu historia más distintiva, y le da sentido a todo lo demás. Cuando cambiaste a tecnología creíste que
+Esta es tu historia más distintiva, y le da sentido a todo lo demás. Las escuelas virtuales son **una parte** de lo que
+haces hoy, no todo: junto a ellas están las aplicaciones y sistemas, y tu comunidad. Cuando cambiaste a tecnología creíste que
 dejabas la educación al 100 %, y en el camino descubriste que seguía en ti:
 
 | Etapa | Lo que hacías |
@@ -184,7 +185,7 @@ dejabas la educación al 100 %, y en el camino descubriste que seguía en ti:
 | **El salto** | **De profesora a ingeniera de software**: bootcamp mientras daba clases tiempo completo, y en 2021 tu primer trabajo remoto en software (supply chain, hasta 2025) |
 | **Ingeniera y mentora** | **Software engineer y, a la vez, mentora** de estudiantes de bootcamps de programación |
 | Programa educativo | Apoyo a un programa educativo de una fundación sin fines de lucro (escuela virtual) |
-| Hoy | Ayudas a escuelas y emprendedores a **implementar su escuela virtual, de inicio a apertura de clases**, y a usar tecnología en la enseñanza y el aprendizaje |
+| **Hoy (todo a la vez)** | **Educación:** ayudas a escuelas y emprendedores a implementar su escuela virtual, de inicio a apertura de clases. **Construir:** creas aplicaciones y sistemas. **Comunidad:** tienes NEXT YOU, donde apoyas a personas que buscan cambiar de carrera o reinventarse |
 
 Mensaje central de este territorio: **"Pasé de profesora a ingeniera de software, y descubrí que la educación nunca
 se fue: hoy ayudo a que las escuelas usen la tecnología para enseñar y aprender mejor."** Ser las dos cosas
