@@ -20,7 +20,7 @@ de carrera o de vida.
 
 | Elemento | Valor |
 |---|---|
-| Nombre | **Carla Montaño** (en Instagram y TikTok agrega la palabra que busca la gente: *Carla Montaño · Tech*) |
+| Nombre | Instagram: `Carla Montaño | Tech, Educación y Carrera` (41) · TikTok (máx. 30): `Carla Montaño | Tech & Carrera` · YouTube: `Carla Montaño` · LinkedIn: solo `Carla Montaño` (el nombre debe ser el real; las palabras clave van en el titular). El nombre de Instagram y TikTok es lo que la gente busca, así que lleva las palabras clave |
 | Usuario | **[DECIDIR]** `@carlamontano.io` en todas (igual al dominio). `@carlamontano` está ocupado en TikTok y YouTube. En LinkedIn tu URL es `carla-montano` |
 | Foto de perfil | La misma foto del inicio del sitio (`hero-home.jpg`), recortada en cuadrado, con la cara grande |
 | Portada / banner | Azul oscuro del sitio (`#14192B`) con el logo claro y la frase *Building solutions. Empowering people.* |
