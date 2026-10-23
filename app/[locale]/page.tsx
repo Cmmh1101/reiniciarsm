@@ -181,7 +181,7 @@ export default async function Home({ params }: { params: { locale: string } }) {
       {/* STORY */}
       <section className="px-page py-24 grid md:grid-cols-[0.8fr_1.2fr] gap-14 items-center">
         <div className="aspect-[4/5] rounded-[2px] overflow-hidden max-w-[400px] w-full">
-          <Image src="/images/carla/hero-mi-historia.jpg" alt={h.hero.portraitAlt} width={768} height={1376} sizes="(min-width: 768px) 400px, 90vw" className="w-full h-full object-cover" />
+          <Image src="/images/carla/mi-historia-home.jpg" alt={h.hero.portraitAlt} width={800} height={1000} sizes="(min-width: 768px) 400px, 90vw" className="w-full h-full object-cover" />
         </div>
         <div>
           <p className="font-mono text-xs uppercase tracking-widest opacity-70 mb-4">{h.story.eyebrow}</p>
