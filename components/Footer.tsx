@@ -19,9 +19,9 @@ const EXPLORE: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [
 
 const SOCIAL = [
   { label: "LinkedIn", href: LINKEDIN_URL },
-  { label: "YouTube", href: "https://www.youtube.com/@carlamontanotech" },
-  { label: "Instagram", href: "https://www.instagram.com/carlamontanotech/" },
-  { label: "TikTok", href: "https://www.tiktok.com/@carlamontanotech" },
+  { label: "YouTube", href: "https://www.youtube.com/@carlamontano-io" },
+  { label: "Instagram", href: "https://www.instagram.com/carlamontano.io/" },
+  { label: "TikTok", href: "https://www.tiktok.com/@carlamontano.io" },
 ];
 
 const linkClass = "no-underline opacity-75 text-[13.5px] hover:opacity-100 transition-opacity";
