@@ -181,17 +181,20 @@ dejabas la educación al 100 %, y en el camino descubriste que seguía en ti:
 | Etapa | Lo que hacías |
 |---|---|
 | Aula | Profesora, primero en Venezuela y luego en Estados Unidos |
+| **El salto** | **De profesora a ingeniera de software**: bootcamp mientras daba clases tiempo completo, y en 2021 tu primer trabajo remoto en software (supply chain, hasta 2025) |
 | Mentora | Mentorías a estudiantes de bootcamps de programación |
 | Programa educativo | Apoyo a un programa educativo de una fundación sin fines de lucro (escuela virtual) |
 | Hoy | Ayudas a escuelas y emprendedores a **implementar su escuela virtual, de inicio a apertura de clases**, y a usar tecnología en la enseñanza y el aprendizaje |
 
-Mensaje central de este territorio: **"Ya no doy clases en un salón, pero sigo en la educación: ayudo a que las
-escuelas usen la tecnología para enseñar y aprender mejor."**
+Mensaje central de este territorio: **"Pasé de profesora a ingeniera de software, y descubrí que la educación nunca
+se fue: hoy ayudo a que las escuelas usen la tecnología para enseñar y aprender mejor."** Ser las dos cosas
+(educadora e ingeniera) es lo que te hace distinta de quien solo sabe una.
 
 Ideas de publicación para este territorio (cada una abre con algo que viviste):
 
-1. "Creí que dejaba la educación atrás. Me equivoqué." (tu historia, 60 segundos)
-2. De profesora a mentora de bootcamps: qué aprendí enseñando a programar.
+1. "Pasé de profesora a ingeniera de software y creí que dejaba la educación atrás. Me equivoqué." (tu historia, 60 segundos)
+2. Lo que sé de enseñar me ayudó a ser mejor ingeniera, y lo que sé de software me hace mejor educadora (qué aprendí en los dos lados).
+2b. De ingeniera a mentora de bootcamps: qué aprendí enseñando a programar.
 3. Lo que se necesita para abrir una escuela virtual, paso a paso, desde cero hasta el primer día de clases.
 4. Los 5 errores más comunes al montar una escuela virtual.
 5. Tecnología en el aula: lo que ayuda de verdad a enseñar y a aprender, y lo que solo complica.
