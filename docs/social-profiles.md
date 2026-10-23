@@ -208,7 +208,7 @@ Ideas de publicación para este territorio (cada una abre con algo que viviste):
 - **Lo que enseñar me dio para manejar proyectos** (territorio 2): la experiencia como educadora te sirvió mucho para
   gestionar proyectos. Una pieza o un hilo: "Lo que aprendí en el aula y uso hoy para llevar un proyecto de la
   idea a la ejecución" (cuenta ejemplos reales tuyos).
-- **Maestría en ciencias de IT, mientras sigues trabajando** (territorios 1 y 2): formación formal para seguir
+- **Master of Science in Information Technology (MSIT, en línea), mientras sigues trabajando** (territorios 1 y 2): formación formal para seguir
   creciendo en tecnología, después de un camino sin título (bootcamp, trabajo, práctica). Mensaje: no son caminos
   opuestos; primero empezaste, y ahora te formas. Útil para quien duda entre "estudiar formalmente" o "aprender
   por mi cuenta".
