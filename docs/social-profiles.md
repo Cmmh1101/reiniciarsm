@@ -22,7 +22,7 @@ de carrera o de vida.
 |---|---|
 | Nombre | Instagram: `Carla Montaño | Tech, Educación y Carrera` (41) · TikTok (máx. 30): `Carla Montaño | Tech & Carrera` · YouTube: `Carla Montaño` · LinkedIn: solo `Carla Montaño` (el nombre debe ser el real; las palabras clave van en el titular). El nombre de Instagram y TikTok es lo que la gente busca, así que lleva las palabras clave |
 | Usuario | **Instagram y TikTok:** `@carlamontano.io` · **YouTube:** `@carlamontano-io` (el punto no estuvo disponible) · **LinkedIn:** `carla-montano` |
-| Foto de perfil | La misma foto del inicio del sitio (`hero-home.jpg`), recortada en cuadrado, con la cara grande |
+| Foto de perfil | `perfil-redes-cuadrado.jpg` (en tu carpeta `photos-carla`): la foto real del hero, recortada en cuadrado con la cara grande |
 | Portada / banner | Azul oscuro del sitio (`#14192B`) con el logo claro y la frase *Building solutions. Empowering people.* |
 | Enlace | Siempre uno: `https://carlamontano.io/live` con etiqueta de seguimiento (abajo) |
 
@@ -44,6 +44,34 @@ de carrera o de vida.
 ---
 
 ## 1. LinkedIn
+
+### Tu perfil personal, tu página de In Motion y el idioma [DECIDIR]
+
+**No crees una página nueva para tu marca personal.** En LinkedIn las personas siguen a personas, no a páginas: una
+página de marca personal casi no tiene alcance y te parte el esfuerzo en dos. Tu marca personal **es tu perfil**.
+
+| Qué | Para qué sirve | Qué hacer |
+|---|---|---|
+| **Tu perfil personal** (el de software engineer, ~3.000 seguidores) | Es tu marca. Ahí publicas y ahí te encuentran | **Evolucionarlo, no reemplazarlo.** Cambia titular, "Acerca de" y Destacados con el texto de abajo. Mantén el inglés como idioma principal |
+| **Versión en español del perfil** | Que quien navega LinkedIn en español te vea en español | Usa "Agregar perfil en otro idioma" (LinkedIn muestra a cada persona el idioma de su cuenta). Pega ahí el titular y el "Acerca de" en español |
+| **Página de In Motion Web Solutions** | Es tu **negocio**, no tu persona | No la abandones ni la conviertas en tu marca. Actualiza su descripción para escuelas, emprendedores y organizaciones, enlaza a `carlamontano.io/live`, y publica poco (comparte lo que publicas en tu perfil). Es el lugar de los servicios de páginas web y sistemas |
+
+**Sobre tus ~3.000 seguidores desarrolladores:** no los pierdes ni te estorban. Los desarrolladores también
+siguen, comentan y **te recomiendan** a quien busca páginas web y sistemas, y tu historia (de profesora a ingeniera,
+bootcamp, trabajo remoto, mentora de bootcamps) les interesa de verdad. La mezcla se hace **poco a poco**:
+
+1. **Esta semana:** titular, "Acerca de", Destacados y la página de In Motion (arriba).
+2. **Primeras 2 semanas:** publica primero lo que une a los dos públicos: tu historia, trabajo remoto, de la idea a la
+   ejecución. Después, un tema nuevo por semana: educación y EdTech.
+3. **Para atraer a quienes aún no te siguen** (escuelas, coaches, emprendedores de educación): envía 5 a 10
+   solicitudes de conexión al día **con una nota personal**, sigue a quienes trabajan en EdTech, y comenta con
+   sustancia en sus publicaciones. Así te llegan los clientes nuevos sin esperar a que el algoritmo te lo traiga.
+
+**Idioma de las publicaciones:** inglés primero (tus seguidores y las organizaciones del mundo); en español de vez en
+cuando, sobre todo cuando hables de la comunidad NEXT YOU. Para el público hispano, Instagram es el canal principal.
+
+**Un nombre para tu negocio:** en el sitio aparecen dos, In Motion Web Solutions y Montano Systems. Elige **uno** como
+el nombre del negocio de páginas web y sistemas, y úsalo igual en LinkedIn y en el sitio, para no confundir.
 
 **Titular (máx. 220 caracteres) [DECIDIR el idioma principal]**
 
