@@ -212,6 +212,9 @@ Ideas de publicación para este territorio (cada una abre con algo que viviste):
   creciendo en tecnología, después de un camino sin título (bootcamp, trabajo, práctica). Mensaje: no son caminos
   opuestos; primero empezaste, y ahora te formas. Útil para quien duda entre "estudiar formalmente" o "aprender
   por mi cuenta".
+- **Estudiar en línea (University of the People)** (territorios 1 y 3): lo que vives como estudiante en línea te sirve
+  para ayudar a escuelas a montar su escuela virtual: qué te motiva, qué te frustra, qué hace que sigas. Es el
+  mismo mundo que ayudas a construir.
 
 ### Si recomiendas una plataforma y ganas comisión
 
