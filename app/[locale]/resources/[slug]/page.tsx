@@ -7,6 +7,7 @@ import { categoryLabel } from "@/lib/taxonomy";
 import { isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { localizedPath } from "@/lib/i18n/routes";
+import { socialImages } from "@/lib/i18n/metadata";
 
 // Served as static HTML and refreshed in the background (and instantly when the admin saves) — see CONTENT_CACHE_SECONDS.
 export const revalidate = 60;
@@ -30,8 +31,18 @@ export async function generateMetadata({ params }: { params: { locale: string; s
     title,
     description,
     alternates: { canonical, languages },
-    openGraph: { title, description, url: canonical, locale: post.shown === "es" ? "es_ES" : "en_US", type: "article" },
-    twitter: { card: "summary_large_image", title, description },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      locale: post.shown === "es" ? "es_ES" : "en_US",
+      type: "article",
+      siteName: "Carla Montaño",
+      publishedTime: post.published_at ?? undefined,
+      authors: ["Carla Montaño"],
+      images: socialImages(post.shown, title, post.featured_image_url),
+    },
+    twitter: { card: "summary_large_image", title, description, images: socialImages(post.shown, title, post.featured_image_url).map((i) => i.url) },
   };
 }
 

@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: { params: { locale: string; s
     params: { slug: product.slug },
     title: `${product.name} — Carla Montaño`,
     description: product.description ?? getDictionary(params.locale).shop.meta.description,
+    image: product.image_url,
   });
 }
 

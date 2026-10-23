@@ -72,7 +72,7 @@ export const en = {
     meta: {
       title: "Carla Montaño — Technology & Solutions Consultant",
       description:
-        "Software engineer, technology consultant, educator and entrepreneur. Consulting, workshops, digital products and ventures that connect people, ideas and technology.",
+        "Software engineer and educator. I build websites and systems for schools, entrepreneurs and organizations, and guide people changing careers.",
     },
     hero: {
       eyebrow: "Technology & Solutions Consultant",
@@ -150,7 +150,7 @@ export const en = {
   about: {
     meta: {
       title: "About — Carla Montaño",
-      description: "Educator, software engineer and entrepreneur. The story behind the work.",
+      description: "From teacher to software engineer. My story, and how I help schools, entrepreneurs and career changers use technology today.",
     },
     eyebrow: "About",
     title: "Educator, engineer, entrepreneur.",
@@ -452,7 +452,7 @@ export const en = {
   resources: {
     meta: {
       title: "Resources — Carla Montaño",
-      description: "Articles, tutorials and stories about technology, learning, careers and building.",
+      description: "Articles on technology, education, remote work and changing careers, from a teacher who became a software engineer.",
     },
     eyebrow: "Resources",
     title: "Articles, tutorials and stories.",

@@ -64,7 +64,7 @@ export const es: Dictionary = {
     meta: {
       title: "Carla Montaño — Consultora de Tecnología y Soluciones",
       description:
-        "Ingeniera de software, consultora de tecnología, educadora y emprendedora. Consultoría, talleres, productos digitales y proyectos que conectan personas, ideas y tecnología.",
+        "Ingeniera de software y educadora. Creo páginas web y sistemas para escuelas, emprendedores y organizaciones, y acompaño a quienes cambian de carrera.",
     },
     hero: {
       eyebrow: "Consultora de Tecnología y Soluciones",
@@ -142,7 +142,7 @@ export const es: Dictionary = {
   about: {
     meta: {
       title: "Sobre mí — Carla Montaño",
-      description: "Educadora, ingeniera de software y emprendedora. La historia detrás del trabajo.",
+      description: "De profesora a ingeniera de software. Mi historia, y cómo ayudo hoy a escuelas, emprendedores y personas en cambio de carrera a usar la tecnología.",
     },
     eyebrow: "Sobre mí",
     title: "Educadora, ingeniera, emprendedora.",
@@ -444,7 +444,7 @@ export const es: Dictionary = {
   resources: {
     meta: {
       title: "Recursos — Carla Montaño",
-      description: "Artículos, tutoriales e historias sobre tecnología, aprendizaje, carrera y cómo construir cosas.",
+      description: "Artículos sobre tecnología, educación, trabajo remoto y cambio de carrera, de una profesora que se convirtió en ingeniera de software.",
     },
     eyebrow: "Recursos",
     title: "Artículos, tutoriales e historias.",

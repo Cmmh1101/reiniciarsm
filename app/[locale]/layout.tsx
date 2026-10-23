@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { LOCALES, isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
+import { INSTAGRAM_URL, LINKEDIN_URL, TIKTOK_URL, YOUTUBE_URL } from "@/lib/constants";
 import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
 
@@ -12,6 +13,22 @@ import "../globals.css";
 const isProduction = !process.env.CONTEXT || process.env.CONTEXT === "production";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://carlamontano.io";
+
+// Structured data so search engines connect the site with her profiles and understand who she is.
+function personJsonLd(locale: "en" | "es") {
+  const dict = getDictionary(locale);
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Carla Montaño",
+    url: `${SITE_URL}/${locale}`,
+    image: `${SITE_URL}/images/carla/hero-home-real.jpg`,
+    jobTitle: dict.site.descriptor,
+    description: dict.home.meta.description,
+    sameAs: [LINKEDIN_URL, YOUTUBE_URL, INSTAGRAM_URL, TIKTOK_URL],
+    knowsAbout: ["Software engineering", "Education technology", "Virtual schools", "Web development", "Career change", "Remote work"],
+  };
+}
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -44,6 +61,7 @@ export default function LocaleLayout({ children, params }: { children: React.Rea
   return (
     <html className={fontVariables} lang={locale}>
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd(locale)) }} />
         <Analytics />
         <a
           href="#main-content"

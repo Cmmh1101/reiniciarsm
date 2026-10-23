@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { Locale } from "@/lib/i18n/config";
 import { localizedPath, type RouteKey } from "@/lib/i18n/routes";
 import type { Dictionary } from "@/lib/i18n/dictionary";
-import { LINKEDIN_URL, MONTANO_SYSTEMS_URL } from "@/lib/constants";
+import { INSTAGRAM_URL, LINKEDIN_URL, MONTANO_SYSTEMS_URL, TIKTOK_URL, YOUTUBE_URL } from "@/lib/constants";
 import NewsletterForm from "@/components/NewsletterForm";
 
 const EXPLORE: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [
@@ -19,9 +19,9 @@ const EXPLORE: { route: RouteKey; label: keyof Dictionary["nav"] }[] = [
 
 const SOCIAL = [
   { label: "LinkedIn", href: LINKEDIN_URL },
-  { label: "YouTube", href: "https://www.youtube.com/@carlamontano-io" },
-  { label: "Instagram", href: "https://www.instagram.com/carlamontano.io/" },
-  { label: "TikTok", href: "https://www.tiktok.com/@carlamontano.io" },
+  { label: "YouTube", href: YOUTUBE_URL },
+  { label: "Instagram", href: INSTAGRAM_URL },
+  { label: "TikTok", href: TIKTOK_URL },
 ];
 
 const linkClass = "no-underline opacity-75 text-[13.5px] hover:opacity-100 transition-opacity";

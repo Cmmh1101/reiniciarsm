@@ -39,7 +39,7 @@ export interface StoryContent {
 const es: StoryContent = {
   metaTitle: "Mi historia — Carla Montaño",
   description:
-    "Fui madre joven en Venezuela. Emigré a Estados Unidos sin hablar inglés. Trabajé de mesera, limpié casas, cuidé bebés — mientras aprendía sola. Cambié de carrera y me convertí en Software Engineer sin título tradicional en tecnología. Conseguí empleo remoto — y renuncié. Volví a Venezuela. Emprendí de nuevo.",
+    "De mesera y profesora a ingeniera de software: cómo cambié de carrera, me mudé de país dos veces y construí una vida en la tecnología.",
   title: "No Empecé Sabiendo El Camino. Lo Construí Reiniciando Muchas Veces.",
   eyebrow: "Sobre mí",
   tagline: "Educadora → Software Engineer | Migrante | Madre de 3",
@@ -70,7 +70,7 @@ const es: StoryContent = {
     { year: "2021", title: "Bootcamp y primer empleo remoto", detail: "Software Engineer, sin título en tecnología." },
     { year: "2021–2025", title: "Ingeniera y mentora", detail: "Mentora de estudiantes de bootcamps y apoyo a un programa educativo: la educación seguía en mí." },
     { year: "2025", title: "Regreso a Venezuela", detail: "Renuncia, mudanza, empezar de nuevo." },
-    { year: "2026", title: "Next You", detail: "Nace Reiniciar Sin Mapa como movimiento." },
+    { year: "2026", title: "Next You", detail: "Nace NEXT YOU, la comunidad para reinventarte." },
   ],
   lessonsEyebrow: "Lo que aprendí",
   lessonsTitle: "Tres Cosas Que Sostienen Todo Lo Demás",
@@ -129,7 +129,7 @@ const es: StoryContent = {
 const en: StoryContent = {
   metaTitle: "My story — Carla Montaño",
   description:
-    "I became a mother young in Venezuela. I moved to the United States without speaking English. I waited tables, cleaned houses, cared for babies — all while teaching myself. I changed careers and became a Software Engineer without a traditional tech degree. I landed a remote job — and resigned. I went back to Venezuela. I started again.",
+    "From waitress and teacher to software engineer: how I changed careers, moved countries twice and built a life in technology.",
   title: "I Didn't Start Knowing The Way. I Built It By Restarting Many Times.",
   eyebrow: "About me",
   tagline: "Educator → Software Engineer | Immigrant | Mother of 3",
@@ -160,7 +160,7 @@ const en: StoryContent = {
     { year: "2021", title: "Bootcamp and first remote job", detail: "Software Engineer, without a tech degree." },
     { year: "2021–2025", title: "Engineer and mentor", detail: "Mentoring bootcamp students and supporting an educational program: education was still in me." },
     { year: "2025", title: "Return to Venezuela", detail: "Resigning, moving, starting over." },
-    { year: "2026", title: "Next You", detail: "Reiniciar Sin Mapa is born as a movement." },
+    { year: "2026", title: "Next You", detail: "NEXT YOU is born: the community for reinventing yourself." },
   ],
   lessonsEyebrow: "What I learned",
   lessonsTitle: "Three Things That Hold Everything Else Up",
