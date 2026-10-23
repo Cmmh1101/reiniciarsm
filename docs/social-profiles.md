@@ -182,7 +182,7 @@ dejabas la educación al 100 %, y en el camino descubriste que seguía en ti:
 |---|---|
 | Aula | Profesora, primero en Venezuela y luego en Estados Unidos |
 | **El salto** | **De profesora a ingeniera de software**: bootcamp mientras daba clases tiempo completo, y en 2021 tu primer trabajo remoto en software (supply chain, hasta 2025) |
-| Mentora | Mentorías a estudiantes de bootcamps de programación |
+| **Ingeniera y mentora** | **Software engineer y, a la vez, mentora** de estudiantes de bootcamps de programación |
 | Programa educativo | Apoyo a un programa educativo de una fundación sin fines de lucro (escuela virtual) |
 | Hoy | Ayudas a escuelas y emprendedores a **implementar su escuela virtual, de inicio a apertura de clases**, y a usar tecnología en la enseñanza y el aprendizaje |
 
@@ -194,7 +194,7 @@ Ideas de publicación para este territorio (cada una abre con algo que viviste):
 
 1. "Pasé de profesora a ingeniera de software y creí que dejaba la educación atrás. Me equivoqué." (tu historia, 60 segundos)
 2. Lo que sé de enseñar me ayudó a ser mejor ingeniera, y lo que sé de software me hace mejor educadora (qué aprendí en los dos lados).
-2b. De ingeniera a mentora de bootcamps: qué aprendí enseñando a programar.
+2b. Ser ingeniera de software y mentora de estudiantes de bootcamps al mismo tiempo: qué aprendí enseñando a programar mientras lo hacía a diario.
 3. Lo que se necesita para abrir una escuela virtual, paso a paso, desde cero hasta el primer día de clases.
 4. Los 5 errores más comunes al montar una escuela virtual.
 5. Tecnología en el aula: lo que ayuda de verdad a enseñar y a aprender, y lo que solo complica.
