@@ -92,7 +92,11 @@ Agrega: EdTech, Project Management, Solutions Engineering.
 1. `carlamontano.io/live` — "Start here"
 2. Tu mejor publicación de historia (cuando la tengas)
 3. La página de escuelas (`carlamontano.io/schools`)
-4. Lo que ya tienes sobre Hope for the Nations (si la fundación está de acuerdo en que aparezca)
+4. **School of Hope International** (`https://schoolofhopeinternational.org/`), con permiso de la fundación. Es tu mejor
+   prueba para escuelas: una escuela virtual bilingüe real. En el título/descripción de Destacados (se pueden editar)
+   escribe tu papel exacto, por ejemplo: *"Bilingual online high school for students worldwide. I supported the
+   foundation behind it in setting up its virtual school."* Ajusta la frase a lo que de verdad hiciste. Si ya tienes
+   el enlace de Hope for the Nations, reemplázalo por este, o déjalos juntos si cuentan cosas distintas.
 
 Quita "Little Italy East Memphis" de Destacados si ya no es parte de lo que ofreces.
 
