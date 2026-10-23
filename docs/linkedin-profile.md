@@ -50,7 +50,7 @@ Quité "Data Science Grad Student" y "Latina Tech Mom" del titular. La maestría
 > actually use.
 >
 > Through my company, In Motion Web Solutions, I build websites and web apps for small businesses, entrepreneurs, schools
-> and organizations. I'm also pursuing a master's degree to keep growing with formal education. **[CONFIRMAR el programa]**
+> and organizations. I'm also earning an online Master of Science in Information Technology (MSIT) at University of the People to keep growing with formal education.
 >
 > If you're hiring for software engineering or EdTech, or you need a website or system for a school or business,
 > let's talk. More about my work and what I'm building: carlamontano.io
@@ -69,7 +69,7 @@ Quité "Data Science Grad Student" y "Latina Tech Mom" del titular. La maestría
 > que la gente pueda usar de verdad.
 >
 > Con mi empresa, In Motion Web Solutions, creo páginas y aplicaciones web para negocios pequeños, emprendedores,
-> escuelas y organizaciones. Además curso una maestría para seguir creciendo con formación formal. **[CONFIRMAR el programa]**
+> escuelas y organizaciones. Además curso en línea una Maestría en Ciencias en Tecnología de la Información (MSIT) en University of the People para seguir creciendo con formación formal.
 >
 > Si estás contratando en ingeniería de software o EdTech, o necesitas una página o un sistema para una escuela o un
 > negocio, hablemos. Más sobre mi trabajo y lo que construyo: carlamontano.io
@@ -101,11 +101,11 @@ Quita "Little Italy East Memphis" de Destacados si ya no es parte de lo que ofre
 Actualiza la descripción: *"Websites, web apps and systems for schools, entrepreneurs and organizations."* Agrega el enlace al
 sitio. Publica poco: comparte lo que publicas en tu perfil.
 
-## Dos cosas que debes confirmar antes de pegar
+## Dos cosas antes de pegar
 
-1. **La maestría.** Tu LinkedIn dice **MS en Data Science en Eastern University (ene. 2025 – hoy)**, y en el sitio
-   publiqué **Master of Science in Information Technology (MSIT) en University of the People** porque así me lo dijiste.
-   Las dos cosas no pueden ser verdad a la vez. **Dime cuál es la correcta** y lo dejo igual en el sitio y en LinkedIn;
-   un reclutador o una escuela que compare los dos y vea diferente pierde confianza.
+1. **La maestría (resuelto).** La correcta es el **Master of Science in Information Technology (MSIT) en University of the
+   People**, que ya está en el sitio. En LinkedIn, en **Educación**, reemplaza la entrada de *Eastern University, MS Data
+   Science* por *University of the People, Master of Science in Information Technology (MSIT), 2025 – hoy* (confirma las
+   fechas), y en el "Acerca de" quita cualquier mención a Data Science.
 2. **"The Latina Tech Mom".** En tu "Acerca de" dices que la fundaste. ¿Sigue activa? Si NEXT YOU la reemplaza, quítala;
    si convive con ella, aclara en una frase cómo se relacionan.
