@@ -128,3 +128,64 @@ sitio. Publica poco: comparte lo que publicas en tu perfil.
 - **El titular de LinkedIn no es el título de tu puesto:** "Software Engineer" en el titular describe tu perfil
   profesional (5 años de ingeniería, y construyes aplicaciones y automatizaciones hoy). Eso está bien. Lo que debe
   coincidir con la realidad es la línea de tu puesto en Experiencia.
+
+## Descripciones de los puestos (EN) — para pegar
+
+> Solo uso datos de tu perfil, de tu sitio y de lo que me contaste. **[ADD: …]** = un dato que solo tú sabes y puedes
+> verificar (cifras, tecnologías, tamaño del equipo). Si no lo tienes, borra la línea; mejor una viñeta menos que una
+> inventada.
+
+**1. Dawere — título: `Continuous Improvement | Implementation, Automation & Applications (EdTech)`**
+
+```
+Continuous improvement and implementation for an EdTech company's online education platform, working with the Growth team.
+
+• Lead the technical implementation and adoption of the platform for schools and educational institutions, from initial setup to the first day of classes.
+• Train school teams and provide ongoing technical support after each implementation.
+• Design and build internal applications and automations that improve operational processes. [ADD: tools/technologies you use]
+• Work at the intersection of sales, product and technology to turn schools' needs into working solutions.
+• [ADD: one verifiable result, e.g. number of schools launched or hours saved per week]
+```
+
+**2. In Motion Web Solutions — título: `Founder & Full Stack Developer`**
+
+```
+I design and build websites and web applications for small businesses, entrepreneurs, schools and organizations, from informational sites to custom web apps and systems.
+
+• Plan, design and develop responsive websites and web apps end to end, from the first conversation to launch.
+• Offer code-based website templates for schools and organizations that clients own and run in their own accounts.
+• Build custom systems and automations for organizations that need more than a template. [ADD: one or two client examples you can name]
+• [ADD: one verifiable result]
+```
+
+**3. Parsity — `Full Stack Software Development Bootcamp Mentor`**
+
+```
+Mentor full stack students throughout their program.
+
+• Help students troubleshoot, debug and implement code, and clarify concepts so they can move forward on their own.
+• Draw on my teaching background to explain technical ideas clearly.
+• [ADD: number of students mentored since Nov 2022]
+```
+
+**4. Green Mountain — `Software Engineer` (Team Lead)**
+
+```
+Team Lead. Developed, maintained and enhanced software that powers LTL and parcel shipping solutions.
+
+• Led [ADD: team size] engineers on [ADD: product/feature].
+• Built and improved features with React.js and TypeScript [ADD: backend/other technologies].
+• [ADD: one verifiable result, e.g. performance, delivery or reliability improvement]
+```
+
+**5. Freedom Preparatory Academy — `Computer Science and Spanish Teacher`**
+
+```
+Taught computer science and Spanish to [ADD: grade levels].
+
+• Studied and built coding projects before and after school while teaching full time, which led to a full stack bootcamp and the move into software engineering.
+• [ADD: one thing you built or taught that you're proud of]
+```
+
+**Regla para los resultados:** una sola cifra verdadera pesa más que cinco frases bonitas. Si no tienes el número
+exacto, usa algo que sí puedas defender ("from setup to first day of classes").
