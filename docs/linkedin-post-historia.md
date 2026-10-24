@@ -52,7 +52,7 @@ If you're thinking about a change, I'd like to know: what's the one thing holdin
 
 **Primer comentario (el enlace va aquí):**
 ```
-More of my story and what I'm building now: https://carlamontano.io/en/about?utm_source=linkedin&utm_medium=post
+The full story, with what I'm building now: https://carlamontano.io/en/resources/de-profesora-a-ingeniera-de-software?utm_source=linkedin&utm_medium=post
 ```
 
 ## Versión en español
@@ -93,7 +93,7 @@ Si estás pensando en un cambio, quiero saber: ¿qué es lo único que te frena?
 
 **Primer comentario:**
 ```
-Más de mi historia y lo que construyo ahora: https://carlamontano.io/es/sobre-mi?utm_source=linkedin&utm_medium=post
+La historia completa, con lo que construyo ahora: https://carlamontano.io/es/recursos/de-profesora-a-ingeniera-de-software?utm_source=linkedin&utm_medium=post
 ```
 
 ## Cómo publicarlo para que funcione
