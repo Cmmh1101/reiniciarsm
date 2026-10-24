@@ -43,8 +43,6 @@ Three things I learned along the way:
 2. Motivation runs out within a week. Small, repeatable steps are what carry you.
 3. Nobody should restart alone.
 
-That last one is why I started NEXT YOU, a community for people reinventing their careers.
-
 If you're thinking about a change, I'd like to know: what's the one thing holding you back?
 
 #careerchange #edtech #softwareengineering
