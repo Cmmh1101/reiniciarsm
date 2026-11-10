@@ -292,7 +292,7 @@ Los perfiles ordenados no traen dinero por sí solos, y los quizzes tampoco: lo 
    padres y colegas de escuelas, contactos de LinkedIn). Mensaje corto: "Estoy abriendo espacios para Tech SOS esta
    semana (30 min, $50) para resolver algo tech que te tenga trabado. ¿Te sirve que te aparte uno?"
 2. **Una publicación en LinkedIn** anunciando los mismos espacios, con el enlace.
-3. **Escuelas, emprendedores y organizaciones de educación y coaching:** escribe a 5 de los que ya tienes en contacto con la oferta de página web o de taller (desde $250). Esta lista es tu mejor atajo: ya te conocen y están en el mundo que dominas.
+3. **Escuelas, emprendedores y organizaciones de educación y coaching:** escribe a 5 de los que ya tienes en contacto con la oferta de página web o de taller (a cotizar). Esta lista es tu mejor atajo: ya te conocen y están en el mundo que dominas.
 4. Cada pieza lleva **un solo enlace**: `carlamontano.io/live`.
 
 No hay garantía de resultados; lo que sí garantiza esto es que cada persona que llega ve cuál es el siguiente

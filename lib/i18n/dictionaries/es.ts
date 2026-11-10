@@ -213,10 +213,10 @@ export const es: Dictionary = {
       {
         key: "workshops",
         name: "Talleres y charlas",
-        price: "Desde $250",
-        priceNote: "sesión virtual estándar de 90 minutos",
+        price: "A consultar",
+        priceNote: "cotización según tu audiencia y formato",
         body: "Sesiones prácticas para equipos, escuelas y comunidades: tecnología e IA explicadas en lenguaje claro, con ejercicios que la gente puede usar ese mismo día.",
-        includes: ["Virtual o presencial (cotización bajo petición)", "Adaptado a tu audiencia", "Cotizaciones a medida para formatos más largos"],
+        includes: ["Virtual o presencial (cotización bajo petición)", "Adaptado a tu audiencia", "Duración y formato a medida"],
         cta: "Preguntar por un taller",
       },
     ],

@@ -221,10 +221,10 @@ export const en = {
       {
         key: "workshops",
         name: "Workshops & speaking",
-        price: "From $250",
-        priceNote: "standard 90-minute virtual session",
+        price: "On request",
+        priceNote: "quoted for your audience and format",
         body: "Practical sessions for teams, schools and communities: technology and AI explained in plain language, with exercises people can use the same day.",
-        includes: ["Virtual or in person (quote on request)", "Tailored to your audience", "Custom quotes for longer formats"],
+        includes: ["Virtual or in person (quote on request)", "Tailored to your audience", "Length and format tailored to you"],
         cta: "Ask about a workshop",
       },
     ],

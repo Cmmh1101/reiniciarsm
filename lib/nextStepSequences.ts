@@ -144,7 +144,7 @@ const T: Record<ProfileKey, Record<Locale, RawStep[]>> = {
       },
       {
         subject: "Bring your team up to speed",
-        body: "Sometimes the tools are fine and the team just needs to understand them. I run practical workshops on technology and AI in plain language, with exercises people can use the same day (from $250 for a 90-minute virtual session): {{workshop}}\n\nOr if you need something built: {{montano}}",
+        body: "Sometimes the tools are fine and the team just needs to understand them. I run practical workshops on technology and AI in plain language, with exercises people can use the same day. Tell me about your team and I'll send you a quote: {{workshop}}\n\nOr if you need something built: {{montano}}",
       },
     ],
     es: [
@@ -158,7 +158,7 @@ const T: Record<ProfileKey, Record<Locale, RawStep[]>> = {
       },
       {
         subject: "Pon a tu equipo al día",
-        body: "A veces las herramientas están bien y el equipo solo necesita entenderlas. Doy talleres prácticos sobre tecnología e IA en lenguaje claro, con ejercicios que la gente puede usar ese mismo día (desde $250 por una sesión virtual de 90 minutos): {{workshop}}\n\nO si necesitas que alguien lo construya: {{montano}}",
+        body: "A veces las herramientas están bien y el equipo solo necesita entenderlas. Doy talleres prácticos sobre tecnología e IA en lenguaje claro, con ejercicios que la gente puede usar ese mismo día. Cuéntame de tu equipo y te envío una cotización: {{workshop}}\n\nO si necesitas que alguien lo construya: {{montano}}",
       },
     ],
   },
